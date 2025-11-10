@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.Wpf", "Present
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{94C56638-2DD9-4667-AFBD-AD020AB554F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{E52F3FFD-DA72-4101-BFC4-4C48B40765A8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{2B213EEF-EFF3-4D5D-B8AD-90A95BFFAAF4}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{94C56638-2DD9-4667-AFBD-AD020AB554F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94C56638-2DD9-4667-AFBD-AD020AB554F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94C56638-2DD9-4667-AFBD-AD020AB554F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E52F3FFD-DA72-4101-BFC4-4C48B40765A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E52F3FFD-DA72-4101-BFC4-4C48B40765A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E52F3FFD-DA72-4101-BFC4-4C48B40765A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E52F3FFD-DA72-4101-BFC4-4C48B40765A8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B213EEF-EFF3-4D5D-B8AD-90A95BFFAAF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B213EEF-EFF3-4D5D-B8AD-90A95BFFAAF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B213EEF-EFF3-4D5D-B8AD-90A95BFFAAF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
