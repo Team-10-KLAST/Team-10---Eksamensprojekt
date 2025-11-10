@@ -11,8 +11,6 @@
   <ItemGroup>
     <Folder Include="Helpers\" />
     <Folder Include="Images\" />
-    <Folder Include="Ressources\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="Views\" />
   </ItemGroup>
 
