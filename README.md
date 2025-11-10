@@ -13,15 +13,14 @@
      -  Resources/                             (*Styles, farver, templates*)
      -  Assets/Images/                         (*Ikoner, billeder til UI*)
 
-- Application/                               (*Use cases /services*)
-   - Interfaces/                             (*Service kontrakter*)
-   -  Services/                             (*Service implementationer*)
- 
-- Domain/                                   (*Forretningslogik og domænemodeller*)
-     - Models/
-     - Interfaces/                          (*Interfaces til dataadgang*)
+- Application/                               (*Forretningslogik, kontrakter og domænemodeller*)
+   - Interfaces/
+        - Service                            (*Service kontrakter*)
+        - Repository                         (*Repository kontrakter*)
+   - Services/                               (*Service implementationer*)
+   - Models/
+
 
 - Data/                                   (*Infrastruktur og dataadgang*)
   - AdoNet/                               (*Repositories fx DeviceRepository*)
-  - EfCore/                              (*Hvis vi skifter*)
   - SqlConnectionFactory.cs               
