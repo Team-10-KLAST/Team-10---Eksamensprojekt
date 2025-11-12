@@ -22,7 +22,7 @@ namespace Presentation.Wpf
                 .Build();
 
             var connectionString = config.GetConnectionString("DefaultConnection");
-            DatabaseConnection.Instance(connectionString);
+            DatabaseConnection.Initialize(connectionString);
 
             var mainWindow = new MainWindow();
             mainWindow.Show();

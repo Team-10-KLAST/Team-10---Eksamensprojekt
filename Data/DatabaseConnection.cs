@@ -8,7 +8,7 @@ namespace Data
 {
     public sealed class DatabaseConnection
     {
-        private static DatabaseConnection _instance;
+        private static DatabaseConnection? _instance;
 
         private readonly string _connectionString;
         private DatabaseConnection(string connectionString)
@@ -16,7 +16,7 @@ namespace Data
             _connectionString = connectionString;
         }
 
-        public static void Instance(string connectionString)
+        public static void Initialize(string connectionString)
         {
             if (_instance == null)
             {
