@@ -16,9 +16,11 @@
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
-
     <!-- Eksempel på brug af base-styles i en specificeret style -->
-    <Style x:Key="BodyTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseBodyTextStyle}">
+
+  
+    
+    <Style x:Key="BodyTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextStyle}">
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
     </Style>
 

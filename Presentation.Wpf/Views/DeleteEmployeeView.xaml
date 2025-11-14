@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="Presentation.Wpf.Views.DeleteEmployeeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Presentation.Wpf.Views"
+             mc:Ignorable="d" 
+             Background="{StaticResource PageBackgroundBrush}"
+             d:DesignHeight="500" d:DesignWidth="400">
+    
+    <!-- Root layout -->
+    <Grid Margin="16" Background="{StaticResource PanelBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Employee info  -->
+            <RowDefinition Height="*"/>
+            <!-- Device info / confirmation -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Text="Delete employee"
+                   Style="{StaticResource BaseHeaderTextStyle}"
+                   Margin="0,0,0,16" />
+
+        <!-- Employee info section -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,16">
+            <TextBlock Text="Employee"
+                       Style="{StaticResource BaseTextStyle}" 
+                       FontWeight="SemiBold"/>
+            <!-- Placeholder for employee info TODO: bindings -->
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text= "Full name" Style="{StaticResource BaseTextStyle}"/>
+                <TextBlock Text="Email" Style="{StaticResource BaseTextStyle}"/>
+                <TextBlock Text="Department" Style="{StaticResource BaseTextStyle}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Device status + confirmation section -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,16" VerticalAlignment="Top">
+            <!-- Box that will later change color depending on device count -->
+            <Border x:Name="DeviceStatusBorder"
+                    CornerRadius="4"
+                    Padding="8"
+                    Background="{StaticResource SuccessBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1">
+            <TextBlock x:Name="DeviceStatusText"
+               Style="{StaticResource BaseTextStyle}"
+               Text="Employee has 0 assigned devices. Deletion is possible."
+               TextWrapping="Wrap" />
+            </Border>
+            
+            <!-- Employee deletion info -->
+            <StackPanel Margin="0,15,0,0">
+                <TextBlock Style="{StaticResource BaseTextStyle}" FontWeight="SemiBold"
+               Text="When you delete this employee:" />
+                <TextBlock Style="{StaticResource BaseTextStyle}"
+               Text="• User acces will be disabled" />
+                <TextBlock Style="{StaticResource BaseTextStyle}"
+               Text="• History is preserved for audit" />
+            </StackPanel>
+
+            <!-- DELETE confiramtion -->
+            <StackPanel>
+                <TextBlock Text="Type &quot;DELETE&quot; to confirm:"
+                           Margin="0,20,0,4"
+                           Style="{StaticResource BaseTextStyle}"/>
+                <!-- TODO: binding-->
+                <TextBox x:Name="DeleteConfirmationTextBox"
+                         Height="28"
+                         Width="460"
+                         HorizontalAlignment="Left"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"/>
+
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Buttons -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Cancel button -->
+            <Button Grid.Column="1"
+                    Margin="0,0,8,0"
+                    Padding="12,6"
+                    Content="Cancel"
+                    FontWeight="Bold"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1" />
+            <!-- Delete button  -->
+            <Button Grid.Column="2"
+                    Padding="12,6"
+                    Content="Delete employee"
+                    FontWeight="Bold"
+                    Background="{StaticResource ErrorBrush}"
+                    Foreground="{StaticResource HeaderTextDarkBrush}"
+                    IsEnabled="true" />
+        </Grid>
+    </Grid>
+</UserControl>
