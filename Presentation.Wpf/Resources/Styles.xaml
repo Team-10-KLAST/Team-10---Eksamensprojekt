@@ -18,12 +18,12 @@
     </Style>
 
     <!-- Eksempel på brug af base-styles i en specificeret style -->
-    <Style x:Key="BodyTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseBodyTextStyle}">
-        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
+    <Style x:Key="BodyTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextStyle}">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
     </Style>
 
     <Style x:Key="HeaderTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseHeaderTextStyle}">
-        <Setter Property="Foreground" Value="{StaticResource HeaderTextDarkBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource HeaderTextDarkBrush}" />
     </Style>
 
 </ResourceDictionary>
