@@ -11,7 +11,7 @@ using System.Threading.Tasks.Dataflow;
 using System.Data.SqlClient;
 using AssetManager.Model;
 
-namespace Application.Models
+namespace Application.Services
 {
     public class EmployeeService : IEmployeeService
     {
