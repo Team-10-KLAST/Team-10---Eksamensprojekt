@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 
 namespace Data
 {
@@ -35,6 +36,11 @@ namespace Data
                 throw new InvalidOperationException("DatabaseConnection is not initialized. Call Instance() first.");
             }
             return _instance;
+        }
+        public SqlConnection CreateConnection()
+        {
+            // Create and return a new SqlConnection using the stored connection string
+            return new SqlConnection(_connectionString);
         }
     }
 }
