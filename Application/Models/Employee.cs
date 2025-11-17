@@ -1,31 +1,34 @@
-﻿namespace Application.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Models
 {
-    public enum Department
-    {
-        Engineering,
-        Sales,
-        Accounting,
-        Administration
-    }
-
-    public enum Role
-    {
-        Manager,
-        Employee
-    }
-
     public class Employee
     {
-        public int EmployeeId { get; set; }
+        public int EmployeeId { get; set; }          // PK in Employee table
+        public string FirstName { get; set; } = "";
+        public string LastName { get; set; } = "";
+        public string Email { get; set; } = "";
 
-        public string FirstName { get; set; } = string.Empty;
+        // FK values that point to Department and Role tables.
+        public int DepartmentId { get; set; }
+        public int RoleId { get; set; }
 
-        public string LastName { get; set; } = string.Empty;
+        // Parameterless constructor. Needed for ADO.NET.
+        public Employee() { }
 
-        public string Email { get; set; } = string.Empty;
-
-        public Department Department { get; set; }
-
-        public Role Role { get; set; }
+        // Constructor with parameters (excluding EmployeeId).
+        public Employee(string firstName, string lastName, string email,
+                        int departmentId, int roleId)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            DepartmentId = departmentId;
+            RoleId = roleId;
+        }
     }
 }
