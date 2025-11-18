@@ -12,13 +12,9 @@
     <Grid Margin="16" Background="{StaticResource PanelBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Header -->
             <RowDefinition Height="Auto"/>
-            <!-- Employee info  -->
             <RowDefinition Height="*"/>
-            <!-- Device info / confirmation -->
             <RowDefinition Height="Auto"/>
-            <!-- Buttons -->
         </Grid.RowDefinitions>
 
         <!-- Header -->
@@ -31,52 +27,85 @@
             <TextBlock Text="Employee"
                        Style="{StaticResource BaseTextStyle}" 
                        FontWeight="SemiBold"/>
-            <!-- Placeholder for employee info TODO: bindings -->
+            
             <StackPanel Orientation="Vertical">
-                <TextBlock Text= "Full name" Style="{StaticResource BaseTextStyle}"/>
-                <TextBlock Text="Email" Style="{StaticResource BaseTextStyle}"/>
-                <TextBlock Text="Department" Style="{StaticResource BaseTextStyle}"/>
+                <TextBlock Text= "{Binding FullName}" Style="{StaticResource BaseTextStyle}"/>
+                <TextBlock Text="{Binding Email}" Style="{StaticResource BaseTextStyle}"/>
+                <TextBlock Text="{Binding Department}" Style="{StaticResource BaseTextStyle}"/>
             </StackPanel>
         </StackPanel>
 
         <!-- Device status + confirmation section -->
         <StackPanel Grid.Row="2" Margin="0,0,0,16" VerticalAlignment="Top">
-            <!-- Box that will later change color depending on device count -->
-            <Border x:Name="DeviceStatusBorder"
-                    CornerRadius="4"
+            <Border CornerRadius="4"
                     Padding="8"
-                    Background="{StaticResource SuccessBrush}"
                     BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1">
-            <TextBlock x:Name="DeviceStatusText"
-               Style="{StaticResource BaseTextStyle}"
-               Text="Employee has 0 assigned devices. Deletion is possible."
-               TextWrapping="Wrap" />
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="{StaticResource SuccessBrush}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasDevices}" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ErrorBrush}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <TextBlock Style="{StaticResource BaseTextStyle}"
+                           FontWeight="SemiBold"
+                           Text="{Binding DeviceStatusText}"
+                           TextWrapping="Wrap" />
             </Border>
-            
-            <!-- Employee deletion info -->
+
+            <!-- Selected Employee info section -->
             <StackPanel Margin="0,15,0,0">
-                <TextBlock Style="{StaticResource BaseTextStyle}" FontWeight="SemiBold"
-               Text="When you delete this employee:" />
-                <TextBlock Style="{StaticResource BaseTextStyle}"
-               Text="• User acces will be disabled" />
-                <TextBlock Style="{StaticResource BaseTextStyle}"
-               Text="• History is preserved for audit" />
+                <StackPanel.Resources>
+                    <Style TargetType= "TextBlock" BasedOn="{StaticResource BaseTextStyle}" />
+                </StackPanel.Resources>
+                <TextBlock FontWeight="SemiBold" Text="When you delete this employee:" />
+                <TextBlock Text= "• User acces will be disabled" />
+                <TextBlock Text="• History is preserved for audit" />
             </StackPanel>
 
-            <!-- DELETE confiramtion -->
+            <!-- Show DELETE confirmation, if employee has no devices -->
             <StackPanel>
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasDevices}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+
                 <TextBlock Text="Type &quot;DELETE&quot; to confirm:"
                            Margin="0,20,0,4"
-                           Style="{StaticResource BaseTextStyle}"/>
-                <!-- TODO: binding-->
-                <TextBox x:Name="DeleteConfirmationTextBox"
-                         Height="28"
-                         Width="460"
-                         HorizontalAlignment="Left"
-                         Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"/>
+                           Style="{StaticResource BaseTextStyle}" />
 
+                <TextBox Height="30" 
+                         HorizontalAlignment="Stretch"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Text="{Binding ConfirmationText, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Text="You must type DELETE exactly." 
+                           Foreground="Red"
+                           Margin="0,4,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowDeleteError}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                    
+                </TextBlock>
             </StackPanel>
         </StackPanel>
 
@@ -95,15 +124,16 @@
                     Content="Cancel"
                     FontWeight="Bold"
                     BorderBrush="{StaticResource BorderBrush}"
-                    BorderThickness="1" />
+                    BorderThickness="1" 
+                    Command="{Binding CancelCommand}"/>
             <!-- Delete button  -->
             <Button Grid.Column="2"
                     Padding="12,6"
                     Content="Delete employee"
                     FontWeight="Bold"
-                    Background="{StaticResource ErrorBrush}"
-                    Foreground="{StaticResource HeaderTextDarkBrush}"
-                    IsEnabled="true" />
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    Command="{Binding DeleteCommand}"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,31 +1,30 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System;
 using System.Windows.Input;
+using Application.Models;
+using Application.Interfaces;
 using Presentation.Wpf.Commands;
 
 namespace Presentation.Wpf.ViewModels;
 
-public class DeleteEmployeeViewModel : INotifyPropertyChanged
+public class DeleteEmployeeViewModel : OverlayPanelViewModelBase
 {
-    private DeleteEmployeeViewModel _selectedEmployee;
+    private readonly IEmployeeService _employeeService;
+
+    private Employee _selectedEmployee;
     private int _assignedDeviceCount;
     private string? _confirmationText;
 
-    public DeleteEmployeeViewModel(Employee selectedEmployee, int assignedDeviceCount)
+    public DeleteEmployeeViewModel(Employee selectedEmployee, int assignedDeviceCount, IEmployeeService employeeService)
     {
         _selectedEmployee = selectedEmployee;
         _assignedDeviceCount = assignedDeviceCount;
+        _employeeService = employeeService;
 
-        DeleteEmployeeCommand = new RelayCommand(
-            DeleteEmployee,
-            () => CanConfirmDelete);
-
-        CancelCommand = new RelayCommand(
-            Cancel);
+        DeleteEmployeeCommand = new RelayCommand(DeleteEmployee, () => CanConfirmDelete);
+        CancelCommand = new RelayCommand(Cancel);
     }
 
-
-    /* public Employee SelectedEmployee
+     public Employee SelectedEmployee
      {
          get => _selectedEmployee;
          set
@@ -36,7 +35,11 @@ public class DeleteEmployeeViewModel : INotifyPropertyChanged
                  OnPropertyChanged();
              }
          }
-     }*/
+     }
+
+    public string FullName => $"{SelectedEmployee.FirstName} {SelectedEmployee.LastName}";
+    public string Email => SelectedEmployee.Email;
+   // public string Department => SelectedEmployee.Department;
 
     public int AssignedDeviceCount
     {
@@ -72,6 +75,7 @@ public class DeleteEmployeeViewModel : INotifyPropertyChanged
                 _confirmationText = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(CanConfirmDelete));
+                OnPropertyChanged(nameof(ShowDeleteError));
                 CommandManager.InvalidateRequerySuggested();
             }
         }
@@ -80,31 +84,28 @@ public class DeleteEmployeeViewModel : INotifyPropertyChanged
     public bool CanConfirmDelete =>
     !HasDevices && ConfirmationText == "DELETE";
 
+    public bool ShowDeleteError =>
+        !HasDevices &&
+        !string.IsNullOrWhiteSpace(ConfirmationText) &&
+        ConfirmationText != "DELETE";
+
+
     public ICommand DeleteEmployeeCommand { get;  }
     public ICommand CancelCommand { get; }
 
-    // Event som view kan lytte til for at lukke overlayet, skal måske ikke bruges pga arv fra base? 
-    public event EventHandler? RequestClose;
 
     private void DeleteEmployee()
     {
-        // TODO: kald på service for at slette mployee
-        // _employeeService.DeleteEmployee(SelectedEmployee);
-
-        // Når sletning er gennemfærtm luk overlay
-        RequestClose?.Invoke(this, EventArgs.Empty);
+        // _employeeService.DeleteEmployee(SelectedEmployee.EmployeeId);
+        CloseOverlay();
     }
 
     private void Cancel()
-    {
-        // Luk overlay
-        RequestClose?.Invoke(this, EventArgs.Empty);
+    { 
+        CloseOverlay();
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+    
 
-    protected void OnPropertyChanged([CallerMemberName] string name = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
+    
 }
