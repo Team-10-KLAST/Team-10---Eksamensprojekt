@@ -6,18 +6,20 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Presentation.Wpf.Commands;
 using System.Collections.ObjectModel;
+using Application.Interfaces;
+using Application.Models;
 
 namespace Presentation.Wpf.ViewModels
 {
-    public class EmployeeViewModel : ViewModelBase
+    public class EmployeeViewModel : OverlayHostViewModel
     {
         private readonly IEmployeeService _employeeService;
-
-        public ObservableCollection<Employee> Employees { get; set; } = new();
+        // Den ene skal nok laves til en CollectionView for bedre performance ved filtrering
+        public ObservableCollection<EmployeeDisplayModel> Employees { get; set; } = new();
+        public ObservableCollection<EmployeeDisplayModel> AllEmployees { get; } = new();
         public ObservableCollection<string> Departments { get; set; } = new();
-        public OverlayHostViewModel OverlayHost { get; } = new OverlayHostViewModel();
 
-        private string _searchText;
+        private string _searchText = string.Empty;
         public string SearchText
         {
             get => _searchText;
@@ -28,7 +30,7 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
-        private string _selectedDepartment;
+        private string _selectedDepartment = "All";
         public string SelectedDepartment
         {
             get => _selectedDepartment;
@@ -49,92 +51,78 @@ namespace Presentation.Wpf.ViewModels
             _employeeService = employeeService;
 
             AddEmployeeCommand = new RelayCommand(OpenAddEmployeeOverlay);
-            DeleteEmployeeCommand = new RelayCommand<Employee>(OpenDeleteEmployeeOverlay);
+            DeleteEmployeeCommand = new RelayCommand<EmployeeDisplayModel>(OpenDeleteEmployeeOverlay);
 
             LoadEmployees();
         }
 
+        // skal lægge noget af logikken i service laget
         private void LoadEmployees()
         {
-            var employees = _employeeService.GetAllEmployees();
+            var displayModels = _employeeService.GetDisplayModels();
+
+            AllEmployees.Clear();
             Employees.Clear();
-            foreach (var employee in employees)
+            foreach (var e in displayModels)
             {
-                Employees.Add(employee);
+                AllEmployees.Add(e);
+                Employees.Add(e);
             }
-            // afdelinger
-            var uniqueDepartments = employees
-                .Select(e => e.Department)
-                .Where(d => !string.IsNullOrWhiteSpace(d))
+
+            var departmentNames = _employeeService.GetAllDepartments()
+                .Select(d => d.Name)
                 .Distinct()
-                .OrderBy(d => d);
+                .OrderBy(n => n);
 
             Departments.Clear();
-            Departments.Add("All"); 
-            foreach (var dept in uniqueDepartments)
+            Departments.Add("All");
+            foreach (var name in departmentNames)
             {
-                Departments.Add(dept);
+                Departments.Add(name);
             }
 
-            SelectedDepartment = "All"; 
+            SelectedDepartment = "All";
         }
 
 
-        //Skal måske lægge datafiltrering i EmployeeService?
+
+        //Skal lægge datafiltrering i EmployeeService?
         private void FilterEmployees()
         {
-            var allEmployees = _employeeService.GetAllEmployees();
-
-            var filtered = allEmployees.Where(e =>
-                (string.IsNullOrWhiteSpace(SearchText) || e.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase)) &&
-                (SelectedDepartment == "All" || e.Department == SelectedDepartment));
+            var filtered = AllEmployees.Where(e =>
+                (string.IsNullOrWhiteSpace(SearchText) || e.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)) &&
+                (SelectedDepartment == "All" || e.DepartmentName == SelectedDepartment));
 
             Employees.Clear();
-            foreach (var employee in filtered)
+            foreach (var e in filtered)
             {
-                Employees.Add(employee);
+                Employees.Add(e);
             }
         }
+
 
         private void OpenAddEmployeeOverlay()
         {
             var vm = new AddEmployeeViewModel(_employeeService);
             vm.RequestClose += (s, e) =>
             {
-                OverlayHost.CurrentOverlay = null;
+                CurrentOverlay = null;
                 LoadEmployees();
             };
-            OverlayHost.ShowOverlay(vm);
+            ShowOverlay(vm);
         }
 
-        private void OpenDeleteEmployeeOverlay(Employee employee)
+        private void OpenDeleteEmployeeOverlay(EmployeeDisplayModel displayModel)
         {
-            var vm = new DeleteEmployeeViewModel(employee, _employeeService);
+            var employee = _employeeService.GetEmployeeById(displayModel.EmployeeId);
+            var vm = new DeleteEmployeeViewModel(employee, 0, _employeeService);
             vm.RequestClose += (s, e) =>
             {
-                OverlayHost.CurrentOverlay = null;
+                CurrentOverlay = null;
                 LoadEmployees();
             };
-            OverlayHost.ShowOverlay(vm);
+            ShowOverlay(vm);
         }
-
-
-
-
-
-
-        //Metode der er brug for i EmployeeService
-        public List<Employee> SearchEmployees(string searchText)
-        {
-            if (string.IsNullOrWhiteSpace(searchText))
-                return GetAllEmployees();
-
-            return _repository.GetAll()
-                .Where(e =>
-                    e.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    e.Email.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-        }
-
     }
 }
+
