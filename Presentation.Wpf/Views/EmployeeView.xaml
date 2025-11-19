@@ -6,38 +6,29 @@
              xmlns:local="clr-namespace:Presentation.Wpf.Views" 
              xmlns:vm="clr-namespace:Presentation.Wpf.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid x:Name="LayoutRoot" Background="#F5F5F5">
-        <!-- Semi-transparent baggrund (luk ved klik) -->
-        <Rectangle Fill="#80000000"
-           Visibility="{Binding OverlayHost.IsOverlayOpen, Converter={StaticResource BoolToVisibilityConverter}}"
-           Panel.ZIndex="90"
-           Focusable="True"
-           Cursor="Hand">
-            <Rectangle.InputBindings>
-                <MouseBinding MouseAction="LeftClick" Command="{Binding OverlayHost.CloseOverlayCommand}" />
-            </Rectangle.InputBindings>
-        </Rectangle>
+             d:DesignHeight="450" d:DesignWidth="600">
 
-        <!-- Overlay panel -->
-        <Border Background="White"
-        HorizontalAlignment="Right"
-        VerticalAlignment="Stretch"
-        Visibility="{Binding OverlayHost.IsOverlayOpen, Converter={StaticResource BoolToVisibilityConverter}}"
-        Panel.ZIndex="100"
-        BorderBrush="#DDD"
-        BorderThickness="1"
-        Padding="16"
-        Width="{Binding ActualWidth, ElementName=LayoutRoot, Converter={StaticResource MultiplyDoubleConverter}, ConverterParameter=0.33}"
-        MaxWidth="900">
-           <ContentControl Content="{Binding OverlayHost.CurrentOverlay}" />
-        </Border>
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type vm:AddEmployeeViewModel}">
+            <local:AddEmployeeView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DeleteEmployeeViewModel}">
+            <local:DeleteEmployeeView />
+        </DataTemplate>
+    </UserControl.Resources>
 
-
+    <Grid x:Name="LayoutRoot">
         <!-- Main content -->
-        <StackPanel Margin="20" Panel.ZIndex="0" VerticalAlignment="Top">
+
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
             <!-- Header row with title and action buttons -->
-            <Grid Margin="0,0,0,20">
+            <Grid Grid.Row="0" Margin="0,0,0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" MinWidth="158" />
@@ -58,58 +49,83 @@
 
 
             <!-- Search and filter box -->
-            <Border Background="White" CornerRadius="4" Padding="10" Margin="0,0,0,20" BorderBrush="#DDD" BorderThickness="1">
+            <Border Grid.Row="1" Background="White" CornerRadius="4" Padding="10" Margin="0,0,0,20" BorderBrush="#DDD" BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
                     <TextBox Width="200"
-                             Margin="0,0,10,0"
-                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                             VerticalAlignment="Center"
-                             Height="30"
-                             Padding="5"
-                             Background="#FFF"
-                             BorderBrush="#CCC"
-                             BorderThickness="1" />
+                     Margin="0,0,10,0"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalAlignment="Center"
+                     Height="30"
+                     Padding="5"
+                     Background="#FFF"
+                     BorderBrush="#CCC"
+                     BorderThickness="1" />
 
                     <ComboBox Width="150"
-                              ItemsSource="{Binding Departments}"
-                              SelectedItem="{Binding SelectedDepartment}"
-                              DisplayMemberPath="Name"
-                              Margin="0,0,10,0"
-                              VerticalAlignment="Center"
-                              Height="30"
-                              Background="#FFF"
-                              BorderBrush="#CCC"
-                              BorderThickness="1" />
+                      ItemsSource="{Binding Departments}"
+                      SelectedItem="{Binding SelectedDepartment}"
+                      Margin="0,0,10,0"
+                      VerticalAlignment="Center"
+                      Height="30"
+                      Background="#FFF"
+                      BorderBrush="#CCC"
+                      BorderThickness="1" />
                 </StackPanel>
             </Border>
 
             <!-- Employee table -->
-            <DataGrid ItemsSource="{Binding Employees}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      HeadersVisibility="Column"
-                      GridLinesVisibility="Horizontal"
-                      Background="White"
-                      BorderBrush="#DDD"
-                      BorderThickness="1">
+            <DataGrid Grid.Row="2" ItemsSource="{Binding Employees}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              HeadersVisibility="Column"
+              GridLinesVisibility="Horizontal"
+              Background="White"
+              BorderBrush="#DDD"
+              BorderThickness="1">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
-                    <DataGridTextColumn Header="Role" Binding="{Binding Role}" />
-                    <DataGridTextColumn Header="Department" Binding="{Binding Department}" />
-                    <DataGridTextColumn Header="Devices" Binding="{Binding DeviceCount}" />
-                    <DataGridTextColumn Header="Last updated" Binding="{Binding LastUpdated}" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="*"/>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                    <DataGridTextColumn Header="Role" Binding="{Binding RoleName}" Width="*"/>
+                    <DataGridTextColumn Header="Department" Binding="{Binding DepartmentName}" Width="*"/>
+                    <DataGridTextColumn Header="Devices" Binding="{Binding DeviceCount}" Width="*"/>
+                    <DataGridTextColumn Header="Last updated" Binding="{Binding LastUpdated, StringFormat=\{0:yyyy-MM-dd HH:mm\}}" Width="*"/>
                     <DataGridTemplateColumn Header="Delete">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Delete"
-                                        Command="{Binding DataContext.DeleteEmployeeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                        CommandParameter="{Binding}" />
+                            Command="{Binding DataContext.DeleteEmployeeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding}" />
+
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-        </StackPanel>
+        </Grid>
+
+        <!-- Semi-transparent baggrund -->
+        <Rectangle Fill="#80000000"
+               Visibility="{Binding IsOverlayOpen, Converter={StaticResource BoolToVisibilityConverter}}"
+               Panel.ZIndex="90"
+               Focusable="True"
+               Cursor="Hand">
+            <Rectangle.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding CloseOverlayCommand}" />
+            </Rectangle.InputBindings>
+        </Rectangle>
+
+        <!-- Overlay panel -->
+        <Border Background="White"
+                HorizontalAlignment="Right"
+        VerticalAlignment="Stretch"
+        Visibility="{Binding IsOverlayOpen, Converter={StaticResource BoolToVisibilityConverter}}"
+        Panel.ZIndex="100"
+        BorderBrush="#DDD"
+        BorderThickness="1"
+        Padding="8"
+        Width="{Binding ActualWidth, ElementName=LayoutRoot, Converter={StaticResource MultiplyDoubleConverter}, ConverterParameter=0.33}"
+        MaxWidth="600">
+            <ContentControl Content="{Binding CurrentOverlay}" />
+        </Border>
     </Grid>
 </UserControl>

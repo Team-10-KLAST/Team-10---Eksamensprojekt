@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Application.Services;
+using Data;
+using Data.AdoNet;
 using Presentation.Wpf.ViewModels;
 
 namespace Presentation.Wpf.Views
@@ -24,7 +27,17 @@ namespace Presentation.Wpf.Views
         public EmployeeView()
         {
             InitializeComponent();
-            DataContext = new EmployeeViewModel(new EmployeeService());
+
+            var db = DatabaseConnection.GetInstance();
+
+            var employeeRepo = new EmployeeRepository(db);
+            var departmentRepo = new DepartmentRepository(db);
+            var roleRepo = new RoleRepository(db);
+
+            var service = new EmployeeService(employeeRepo, departmentRepo, roleRepo);
+            var viewModel = new EmployeeViewModel(service);
+
+            DataContext = viewModel;
         }
     }
 }
