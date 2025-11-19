@@ -1,33 +1,32 @@
 ﻿using Application.Interfaces;
+using Application.Interfaces.Repository;
+using Application.Models;
 using AssetManager.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using System.Data.SqlClient;
-using AssetManager.Model;
 
 namespace Application.Services
 {
-    public class EmployeeService : IEmployeeService
+    public class EmployeeService : IEmployeeService<Employee>
     {
-        /*private readonly string _connectionString;
-        public EmployeeService(string connectionString)
+        private readonly IRepository<Employee> _employeeRepository;
+        public EmployeeService(IRepository<Employee> employeeRepository)
         {
-            _connectionString = connectionString;
-        }----singleton??*/
-
-        //Adds new employee
+            _employeeRepository = employeeRepository;
+        }
         public void AddEmployee(Employee employee)
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
 
-            //Checks for existing email
+            //Checks for existing email fjern hardcode og brug stored procedure
             using var checkEmailCommand = new SqlCommand("SELECT COUNT(*) FROM Employee WHERE Email = @Email;", connection);
             checkEmailCommand.Parameters.AddWithValue("@Email", employee.Email);
             var emailExists = (int)checkEmailCommand.ExecuteScalar();
@@ -36,7 +35,7 @@ namespace Application.Services
                 throw new InvalidOperationException("Email already exists.");
             }
 
-            //Inserts new employee
+            //Inserts new employee anvend louis metode kald repository add metode
             string query = @"
                 INSERT INTO Employee (EmployeeId) 
                 VALUES (@EmployeeId);
@@ -48,7 +47,7 @@ namespace Application.Services
         }
 
         //Updates existing employee details (all fields except EmployeeId)
-        public void UpdateEmployee(Employee employee)
+        /*public void UpdateEmployee(Employee employee)
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -86,7 +85,7 @@ namespace Application.Services
             command.Parameters.AddWithValue("@EmployeeId", employee.EmployeeId);
 
             command.ExecuteNonQuery();
-        }
+        }*/
 
         //Deletes employee by ID incl. checking for active devices befores deletion
         public void DeleteEmployee(int employeeId)
@@ -190,7 +189,7 @@ namespace Application.Services
             return employee;
         }
         //Gets employee by email
-        public Employee GetEmployeeByEmail(string email)
+        /*public Employee GetEmployeeByEmail(string email)
         {
             Employee employee = null;
             string query = @"
@@ -253,7 +252,7 @@ namespace Application.Services
                 throw new InvalidOperationException("No employees found with the given lastname.");
             }
             return employees;
-        }
+        }*/
 
         //Gets employees by department
         public IEnumerable<Employee> GetByDepartment(Department department)
@@ -289,7 +288,7 @@ namespace Application.Services
         }
 
         //Gets employees by role
-        public IEnumerable<Employee> GetByRole(Role role)
+        /*public IEnumerable<Employee> GetByRole(Role role)
         {
             var employees = new List<Employee>();
             string query = @"
@@ -318,6 +317,6 @@ namespace Application.Services
                 throw new InvalidOperationException("No employees found in the given role.");
             }
             return employees;
-        }
+        }*/
     }
 }
