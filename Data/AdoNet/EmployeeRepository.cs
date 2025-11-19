@@ -10,152 +10,228 @@ namespace Data.AdoNet
 {
     public class EmployeeRepository : IRepository<Employee>
     {
-        // Shared DatabaseConnection singleton.
+        // Dependency on DatabaseConnection for creating connections.
         private readonly DatabaseConnection _databaseConnection;
-        
-        // Constructor with DatabaseConnection parameter.
+
+        // Stored procedure names.
+        private const string SpAddEmployee = "uspAddEmployee";
+        private const string SpUpdateEmployee = "uspUpdateEmployee";
+        private const string SpDeleteEmployee = "uspDeleteEmployee";
+        private const string SpGetAllEmployees = "uspGetAllEmployees";
+        private const string SpGetEmployeeById = "uspGetEmployeeById";
+
+        // Constructor. Dependency injection of DatabaseConnection. 
         public EmployeeRepository(DatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
         }
 
-        // Insert new employee and set generated EmployeeId
+        // Adds a new employee using a stored procedure.
         public void Add(Employee employee)
         {
-            const string sql = @"
-                INSERT INTO Employee (FirstName, LastName, Email, DepartmentID, RoleID)
-                VALUES (@FirstName, @LastName, @Email, @DepartmentID, @RoleID);
-                SELECT CAST(SCOPE_IDENTITY() AS INT);";
-
-            // Create DB connection from DatabaseConnection.
-            using (var connection = _databaseConnection.CreateConnection())
-            using (var command = new SqlCommand(sql, connection))
+            try
             {
-                // Connects the Employee object with the SQL statement..
-                command.Parameters.AddWithValue("@FirstName", employee.FirstName);
-                command.Parameters.AddWithValue("@LastName", employee.LastName);
-                command.Parameters.AddWithValue("@Email", employee.Email);
-                command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentId);
-                command.Parameters.AddWithValue("@RoleID", employee.RoleId);
+                // Create and open a connection.
+                using (var connection = _databaseConnection.CreateConnection())
+                // Create a SqlCommand that call the uspAddEmployee stored procedure.
+                using (var command = new SqlCommand(SpAddEmployee, connection))
+                {
+                    // Telling ADO.NET that we are calling a stored procedure
+                    command.CommandType = CommandType.StoredProcedure;
 
-                connection.Open();
+                    // Add parameters matching those in uspAddEmployee.
+                    command.Parameters.AddWithValue("@FirstName", employee.FirstName);
+                    command.Parameters.AddWithValue("@LastName", employee.LastName);
+                    command.Parameters.AddWithValue("@Email", employee.Email);
+                    command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentId);
+                    command.Parameters.AddWithValue("@RoleID", employee.RoleId);
 
-                // Get new identity value (EmployeeID).
-                var result = command.ExecuteScalar();
-                if (result == null)
-                    throw new DataException("Could not get generated EmployeeId.");
+                    connection.Open();
 
-                employee.EmployeeId = Convert.ToInt32(result);
+                    // Using the stored procedure to get the DB to return the new EmployeeID
+                    var result = command.ExecuteScalar();
+
+                    // Check if we get a valid result back
+                    if (result == null || result == DBNull.Value)
+                    {
+                        throw new DataException("Could not get generated EmployeeId from stored procedure.");
+                    }
+
+                    employee.EmployeeId = Convert.ToInt32(result);
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Wrap SQL exceptions in a DataException. 
+                throw new DataException("Database error while adding Employee.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Catch any other unexpected error and wrap it.
+                throw new DataException("Unexpected error while adding Employee.", ex);
             }
         }
 
-        // Update existing employee by EmployeeId.
+        // Updates an existing employee using a stored procedure.
         public void Update(Employee employee)
         {
-            const string sql = @"
-                UPDATE Employee
-                SET FirstName    = @FirstName,
-                    LastName     = @LastName,
-                    Email        = @Email,
-                    DepartmentID = @DepartmentID,
-                    RoleID       = @RoleID
-                WHERE EmployeeID = @EmployeeID;";
-
-            using (var connection = _databaseConnection.CreateConnection())
-            using (var command = new SqlCommand(sql, connection))
+            try
             {
-                command.Parameters.AddWithValue("@FirstName", employee.FirstName);
-                command.Parameters.AddWithValue("@LastName", employee.LastName);
-                command.Parameters.AddWithValue("@Email", employee.Email);
-                command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentId);
-                command.Parameters.AddWithValue("@RoleID", employee.RoleId);
-                command.Parameters.AddWithValue("@EmployeeID", employee.EmployeeId);
-
-                connection.Open();
-
-                // Number of affected rows.
-                var affected = command.ExecuteNonQuery();
-                if (affected == 0)
-                    // No row updated => id did not exist.
-                    throw new DataException($"No Employee with Id {employee.EmployeeId} to update.");
-            }
-        }
-
-        // Delete employee by EmployeeId.
-        public void Delete(int id)
-        {
-            const string sql = @"DELETE FROM Employee WHERE EmployeeID = @EmployeeID;";
-
-            using (var connection = _databaseConnection.CreateConnection())
-            using (var command = new SqlCommand(sql, connection))
-            {
-                command.Parameters.AddWithValue("@EmployeeID", id);
-
-                connection.Open();
-
-                var affected = command.ExecuteNonQuery();
-                if (affected == 0)
-                    // Id did not exist in table.
-                    throw new DataException($"No Employee with Id {id} to delete.");
-            }
-        }
-
-        // Get all employees.
-        public IEnumerable<Employee> GetAll()
-        {
-            const string sql = @"
-                SELECT EmployeeID, FirstName, LastName, Email, DepartmentID, RoleID
-                FROM Employee;";
-
-            var employees = new List<Employee>();
-
-            using (var connection = _databaseConnection.CreateConnection())
-            using (var command = new SqlCommand(sql, connection))
-            {
-                connection.Open();
-
-                using (var reader = command.ExecuteReader())
+                using (var connection = _databaseConnection.CreateConnection())
+                    // Create a SqlCommand that call the uspUpdateEmployee stored procedure
+                using (var command = new SqlCommand(SpUpdateEmployee, connection))
                 {
-                    while (reader.Read())
+                    // Telling ADO.NET that we are calling a stored procedure.
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Add parameters matching those in uspUpdateEmployee.
+                    command.Parameters.AddWithValue("@EmployeeID", employee.EmployeeId);
+                    command.Parameters.AddWithValue("@FirstName", employee.FirstName);
+                    command.Parameters.AddWithValue("@LastName", employee.LastName);
+                    command.Parameters.AddWithValue("@Email", employee.Email);
+                    command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentId);
+                    command.Parameters.AddWithValue("@RoleID", employee.RoleId);
+
+                    connection.Open();
+
+                    // Execute the update.
+                    var affected = command.ExecuteNonQuery();
+
+                    // If 0 rows affected, the EmployeeID did not exist.
+                    if (affected == 0)
                     {
-                        employees.Add(MapEmployee(reader));
+                        throw new DataException($"No Employee with Id {employee.EmployeeId} to update.");
                     }
                 }
             }
-
-            return employees;
+            catch (SqlException ex)
+            {
+                throw new DataException("Database error while updating Employee.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException("Unexpected error while updating Employee.", ex);
+            }
         }
 
-        // Get one employee by EmployeeId.
-        public Employee? GetById(int id)
+        // Deletes an employee by ID using a stored procedure.
+        public void Delete(int id)
         {
-            const string sql = @"
-                SELECT EmployeeID, FirstName, LastName, Email, DepartmentID, RoleID
-                FROM Employee
-                WHERE EmployeeID = @EmployeeID;";
-
-            using (var connection = _databaseConnection.CreateConnection())
-            using (var command = new SqlCommand(sql, connection))
+            try
             {
-                command.Parameters.AddWithValue("@EmployeeID", id);
-
-                connection.Open();
-
-                using (var reader = command.ExecuteReader())
+                using (var connection = _databaseConnection.CreateConnection())
+                    // Create a SqlCommand that call the uspDeleteEmployee stored procedure
+                using (var command = new SqlCommand(SpDeleteEmployee, connection))
                 {
-                    if (reader.Read())
-                        return MapEmployee(reader);
+                    // Telling ADO.NET that we are calling a stored procedure.
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Add EmployeeID parameter
+                    command.Parameters.AddWithValue("@EmployeeID", id);
+
+                    connection.Open();
+
+                    var affected = command.ExecuteNonQuery();
+
+                    // If 0 rows deleted, the EmployeeID did not exist.
+                    if (affected == 0)
+                    {
+                        throw new DataException($"No Employee with Id {id} to delete.");
+                    }
                 }
             }
-
-            // Not found.
-            return null;
+            catch (SqlException ex)
+            {
+                throw new DataException("Database error while deleting Employee.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException("Unexpected error while deleting Employee.", ex);
+            }
         }
 
-        // Take one row from the database and turn it into a single Employee object.
+        // GET ALL: Returns all employees using a stored procedure.
+        public IEnumerable<Employee> GetAll()
+        {
+            //  We build a list and return it.
+            var employees = new List<Employee>();
+
+            try
+            {
+                using (var connection = _databaseConnection.CreateConnection())
+                // Create a SqlCommand that will call the uspGetAllEmployees stored procedure.
+                using (var command = new SqlCommand(SpGetAllEmployees, connection))
+                {
+                    // Telling ADO.NET that we are calling a stored procedure.
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // Map each row to an Employee and add to the list.
+                            employees.Add(MapEmployee(reader));
+                        }
+                    }
+                }
+
+                return employees;
+            }
+            catch (SqlException ex)
+            {
+                throw new DataException("Database error while reading all Employees.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException("Unexpected error while reading all Employees.", ex);
+            }
+        }
+
+        // GET BY ID: Returns a single employee (or null) using a stored procedure.
+        public Employee? GetById(int id)
+        {
+            try
+            {
+                using (var connection = _databaseConnection.CreateConnection())
+                // Create a SqlCommand that will call the uspGetEmployeeById stored procedure.
+                using (var command = new SqlCommand(SpGetEmployeeById, connection))
+                {
+                    // Telling ADO.NET that we are calling a stored procedure.
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@EmployeeID", id);
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        // If we have a row, map it to Employee and return it.
+                        if (reader.Read())
+                        {
+                            return MapEmployee(reader);
+                        }
+                    }
+                }
+
+                // If no row found, return null.
+                return null;
+            }
+            catch (SqlException ex)
+            {
+                throw new DataException("Database error while reading Employee by Id.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException("Unexpected error while reading Employee by Id.", ex);
+            }
+        }
+
+        // Helper method to map a SqlDataReader row to an Employee object.
         private static Employee MapEmployee(SqlDataReader reader)
         {
-            // GetOrdinal finds the column index by name.
+            // Map each column to the Employee properties.
             return new Employee
             {
                 EmployeeId = reader.GetInt32(reader.GetOrdinal("EmployeeID")),
