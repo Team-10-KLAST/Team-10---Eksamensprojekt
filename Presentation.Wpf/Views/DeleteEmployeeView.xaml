@@ -29,9 +29,9 @@
                        FontWeight="SemiBold"/>
             
             <StackPanel Orientation="Vertical">
-                <TextBlock Text= "{Binding FullName}" Style="{StaticResource BaseTextStyle}"/>
-                <TextBlock Text="{Binding Email}" Style="{StaticResource BaseTextStyle}"/>
-                <TextBlock Text="{Binding Department}" Style="{StaticResource BaseTextStyle}"/>
+                <TextBlock Text= "{Binding SelectedEmployee.FullName}" Style="{StaticResource BaseTextStyle}"/>
+                <TextBlock Text="{Binding SelectedEmployee.Email}" Style="{StaticResource BaseTextStyle}"/>
+                <TextBlock Text="{Binding SelectedEmployee.Department}" Style="{StaticResource BaseTextStyle}"/>
             </StackPanel>
         </StackPanel>
 

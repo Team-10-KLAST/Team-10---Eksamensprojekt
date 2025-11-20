@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows.Input;
-using Application.Models;
+using Application.Models.DisplayModels;
 using Application.Interfaces;
 using Presentation.Wpf.Commands;
+using Application.Models;
 
 namespace Presentation.Wpf.ViewModels;
 
@@ -10,11 +11,11 @@ public class DeleteEmployeeViewModel : OverlayPanelViewModelBase
 {
     private readonly IEmployeeService _employeeService;
 
-    private Employee _selectedEmployee;
+    private EmployeeDisplayModel _selectedEmployee;
     private int _assignedDeviceCount;
     private string? _confirmationText;
 
-    public DeleteEmployeeViewModel(Employee selectedEmployee, int assignedDeviceCount, IEmployeeService employeeService)
+    public DeleteEmployeeViewModel(EmployeeDisplayModel selectedEmployee, int assignedDeviceCount, IEmployeeService employeeService)
     {
         _selectedEmployee = selectedEmployee;
         _assignedDeviceCount = assignedDeviceCount;
@@ -24,22 +25,27 @@ public class DeleteEmployeeViewModel : OverlayPanelViewModelBase
         CancelCommand = new RelayCommand(Cancel);
     }
 
-     public Employee SelectedEmployee
+     public EmployeeDisplayModel SelectedEmployee
      {
          get => _selectedEmployee;
          set
          {
              if (_selectedEmployee != value)
              {
-                 _selectedEmployee = value;
-                 OnPropertyChanged();
-             }
+                _selectedEmployee = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(FullName));
+                OnPropertyChanged(nameof(Email));
+                OnPropertyChanged(nameof(DepartmentName));
+                OnPropertyChanged(nameof(RoleName));
+            }
          }
      }
 
-    public string FullName => $"{SelectedEmployee.FirstName} {SelectedEmployee.LastName}";
+    public string FullName => SelectedEmployee.FullName;
     public string Email => SelectedEmployee.Email;
-   // public string Department => SelectedEmployee.Department;
+    public string DepartmentName => SelectedEmployee.DepartmentName;
+    public string RoleName => SelectedEmployee.RoleName;
 
     public int AssignedDeviceCount
     {
