@@ -11,13 +11,16 @@ namespace Data.AdoNet
 {
     public class DepartmentRepository : IRepository<Department>
     {
+        // Holds the database connection dependency
         private readonly DatabaseConnection _databaseConnection;
 
+        // Constructor injection of the DatabaseConnection
         public DepartmentRepository(DatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
         }
 
+        // Retrieves all departments from the database
         public IEnumerable<Department> GetAll()
         {
             const string procedure = "uspGetAllDepartments";
@@ -54,7 +57,7 @@ namespace Data.AdoNet
             }
         }
 
-        // Not implemented methods. Can be implemented later as needed.
+        // Not yet implemented methods. Can be implemented later as needed.
         void IRepository<Department>.Add(Department entity) => throw new NotImplementedException();
         void IRepository<Department>.Delete(int id) => throw new NotImplementedException();
         Department? IRepository<Department>.GetById(int id) => throw new NotImplementedException();

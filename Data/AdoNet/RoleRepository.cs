@@ -11,13 +11,16 @@ namespace Data.AdoNet
 {
     public class RoleRepository : IRepository<Role>
     {
+        // Holds the database connection dependency
         private readonly DatabaseConnection _databaseConnection;
 
+        // Constructor injection of the DatabaseConnection
         public RoleRepository(DatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
         }
 
+        // Retrieves all roles from the database
         public IEnumerable<Role> GetAll()
         {
             const string procedure = "uspGetAllRoles";
@@ -53,7 +56,7 @@ namespace Data.AdoNet
             }
         }
 
-        // Not implemented methods. Can be implemented later as needed.
+        // Not yet implemented methods. Can be implemented later as needed.
         void IRepository<Role>.Add(Role entity) => throw new NotImplementedException();
         void IRepository<Role>.Delete(int id) => throw new NotImplementedException();
         Role? IRepository<Role>.GetById(int id) => throw new NotImplementedException();

@@ -1,24 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
-using Presentation.Wpf.Commands;
-using System.Collections.ObjectModel;
 using Application.Interfaces;
 using Application.Models;
+using Application.Models.DisplayModels;
+using Presentation.Wpf.Commands;
 
 namespace Presentation.Wpf.ViewModels
 {
     public class EmployeeViewModel : OverlayHostViewModel
     {
         private readonly IEmployeeService _employeeService;
-        // Den ene skal nok laves til en CollectionView for bedre performance ved filtrering
-        public ObservableCollection<EmployeeDisplayModel> Employees { get; set; } = new();
-        public ObservableCollection<EmployeeDisplayModel> AllEmployees { get; } = new();
-        public ObservableCollection<string> Departments { get; set; } = new();
 
+        // Collection of all employees (unfiltered)
+        public ObservableCollection<EmployeeDisplayModel> AllEmployees { get; } = new();
+
+        // Collectionview for filtered employees
+        public ICollectionView EmployeesView { get; }
+
+        // Departments for filtering
+        public ObservableCollection<string> Departments { get; } = new();
+
+        // Search text used for filtering employees by name
         private string _searchText = string.Empty;
         public string SearchText
         {
@@ -26,26 +35,36 @@ namespace Presentation.Wpf.ViewModels
             set
             {
                 if (SetProperty(ref _searchText, value))
-                    FilterEmployees();
+                    EmployeesView.Refresh();
             }
         }
 
-        private string _selectedDepartment = "All";
+        // Selected department for filtering employees - "All departments" means no filtering
+        private const string AllDepartments = "All departments";
+        private string _selectedDepartment = AllDepartments;
         public string SelectedDepartment
         {
             get => _selectedDepartment;
             set
             {
                 if (SetProperty(ref _selectedDepartment, value))
-                    FilterEmployees();
+                    EmployeesView.Refresh();
             }
         }
 
+        // Error message property for displaying load errors
+        private string _errorMessage = string.Empty;
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set => SetProperty(ref _errorMessage, value);
+        }
 
+        // Commands
         public ICommand AddEmployeeCommand { get; }
         public ICommand DeleteEmployeeCommand { get; }
 
-
+        // Constructor
         public EmployeeViewModel(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
@@ -53,76 +72,77 @@ namespace Presentation.Wpf.ViewModels
             AddEmployeeCommand = new RelayCommand(OpenAddEmployeeOverlay);
             DeleteEmployeeCommand = new RelayCommand<EmployeeDisplayModel>(OpenDeleteEmployeeOverlay);
 
+            EmployeesView = CollectionViewSource.GetDefaultView(AllEmployees);
+            EmployeesView.Filter = EmployeeFilter;
+
             LoadEmployees();
         }
 
-        // skal lægge noget af logikken i service laget
+        // Loads employees and departments from the service layer
         private void LoadEmployees()
         {
-            var displayModels = _employeeService.GetDisplayModels();
-
-            AllEmployees.Clear();
-            Employees.Clear();
-            foreach (var e in displayModels)
+            try
             {
-                AllEmployees.Add(e);
-                Employees.Add(e);
+                AllEmployees.Clear();
+                foreach (var employeeDisplayModel in _employeeService.GetEmployeeDisplayModels())
+                    AllEmployees.Add(employeeDisplayModel);
+
+                var departmentNames = _employeeService.GetAllDepartments()
+                    .Select(department => department.Name)
+                    .Distinct()
+                    .OrderBy(departmentName => departmentName);
+
+                Departments.Clear();
+                Departments.Add(AllDepartments);
+                foreach (var departmentName in departmentNames)
+                    Departments.Add(departmentName);
+
+                SelectedDepartment = AllDepartments;
+                EmployeesView.Refresh();
             }
-
-            var departmentNames = _employeeService.GetAllDepartments()
-                .Select(d => d.Name)
-                .Distinct()
-                .OrderBy(n => n);
-
-            Departments.Clear();
-            Departments.Add("All");
-            foreach (var name in departmentNames)
+            catch (Exception)
             {
-                Departments.Add(name);
+                ErrorMessage = "Unable to load employees. Please try again later.";
             }
-
-            SelectedDepartment = "All";
         }
 
 
-
-        //Skal lægge datafiltrering i EmployeeService?
-        private void FilterEmployees()
+        // Filtering logic for the CollectionView - applies both search text and department filter
+        private bool EmployeeFilter(object obj)
         {
-            var filtered = AllEmployees.Where(e =>
-                (string.IsNullOrWhiteSpace(SearchText) || e.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)) &&
-                (SelectedDepartment == "All" || e.DepartmentName == SelectedDepartment));
+            if (obj is not EmployeeDisplayModel employeeDisplayModel) return false;
 
-            Employees.Clear();
-            foreach (var e in filtered)
-            {
-                Employees.Add(e);
-            }
+            bool matchesSearch = string.IsNullOrWhiteSpace(SearchText)
+                || employeeDisplayModel.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+
+            bool matchesDepartment = SelectedDepartment == AllDepartments
+                || employeeDisplayModel.DepartmentName == SelectedDepartment;
+
+            return matchesSearch && matchesDepartment;
         }
 
+        // Handles showing an overlay and reloading employees when the overlay is closed
+        private void ShowOverlayAndReload(OverlayPanelViewModelBase overlayViewModel)
+        {
+            overlayViewModel.RequestClose += (sender, eventArgs) =>
+            {
+                CurrentOverlay = null;
+                LoadEmployees();
+            };
+            ShowOverlay(overlayViewModel);
+        }
 
+        // Opens the Add Employee overlay
         private void OpenAddEmployeeOverlay()
         {
-            var vm = new AddEmployeeViewModel(_employeeService);
-            vm.RequestClose += (s, e) =>
-            {
-                CurrentOverlay = null;
-                LoadEmployees();
-            };
-            ShowOverlay(vm);
+            ShowOverlayAndReload(new AddEmployeeViewModel(_employeeService));
         }
 
+        // Opens the Delete Employee overlay for the selected employee
         private void OpenDeleteEmployeeOverlay(EmployeeDisplayModel displayModel)
         {
-            var employee = _employeeService.GetEmployeeById(displayModel.EmployeeId);
-            var vm = new DeleteEmployeeViewModel(employee, 0, _employeeService);
-            vm.RequestClose += (s, e) =>
-            {
-                CurrentOverlay = null;
-                LoadEmployees();
-            };
-            ShowOverlay(vm);
+            // OBS!!!!! Assigned device count is set to 0 for now; has to be modified later to fetch actual count
+            ShowOverlayAndReload(new DeleteEmployeeViewModel(displayModel, 0, _employeeService));
         }
     }
 }
-
