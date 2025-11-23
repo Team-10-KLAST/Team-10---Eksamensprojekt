@@ -17,7 +17,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PageBackgroundBrush}">
         <!-- Main content -->
 
         <Grid Margin="20">
@@ -36,52 +36,46 @@
 
                 <!-- Title and subtitle -->
                 <StackPanel Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="55" Margin="0,0,131,0">
-                    <TextBlock Text="Employees" FontSize="24" FontWeight="Bold" />
-                    <TextBlock Text="Create, find and manage employees." FontSize="14" Margin="0,4,0,0" />
+                    <TextBlock Text="Employees" Style="{StaticResource HeaderTextStyle}" />
+                    <TextBlock Text="Create, find and manage employees." Style="{StaticResource BodyTextStyle}" Margin="0,8,0,0"/>
                 </StackPanel>
 
                 <!-- Action buttons aligned to the right and vertically centered -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Height="20">
-                    <Button Content="Export" Command="{Binding ExportCommand}" Margin="0,0,10,0" />
-                    <Button Content="New employee" Command="{Binding AddEmployeeCommand}" />
+                    <Button Content="Export" Command="{Binding ExportCommand}" Margin="0,0,10,0" Style="{StaticResource PrimaryButtonStyle}"/>
+                    <Button Content="New employee" Command="{Binding AddEmployeeCommand}" Style="{StaticResource PrimaryButtonStyle}"/>
                 </StackPanel>
             </Grid>
 
 
             <!-- Search and filter box -->
-            <Border Grid.Row="1" Background="White" CornerRadius="4" Padding="10" Margin="0,0,0,20" BorderBrush="#DDD" BorderThickness="1">
+            <Border Grid.Row="1" Background="{StaticResource PanelBackgroundBrush}" CornerRadius="4" Padding="10" Margin="0,0,0,20" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
                     <TextBox Width="200"
                      Margin="0,0,10,0"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      VerticalAlignment="Center"
                      Height="30"
-                     Padding="5"
-                     Background="#FFF"
-                     BorderBrush="#CCC"
-                     BorderThickness="1" />
+                     Style="{StaticResource InputFieldStyle}" />
 
                     <ComboBox Width="150"
-                      ItemsSource="{Binding Departments}"
-                      SelectedItem="{Binding SelectedDepartment}"
-                      Margin="0,0,10,0"
-                      VerticalAlignment="Center"
-                      Height="30"
-                      Background="#FFF"
-                      BorderBrush="#CCC"
-                      BorderThickness="1" />
+          ItemsSource="{Binding Departments}"
+          SelectedItem="{Binding SelectedDepartment}"
+          Margin="0,0,10,0"
+          VerticalAlignment="Center"
+          Height="30"
+          IsEditable="False"
+          Style="{StaticResource InputFieldComboStyle}"/>
                 </StackPanel>
             </Border>
 
             <!-- Employee table -->
-            <DataGrid Grid.Row="2" ItemsSource="{Binding Employees}"
+            <DataGrid Grid.Row="2" ItemsSource="{Binding EmployeesView}"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
               HeadersVisibility="Column"
               GridLinesVisibility="Horizontal"
-              Background="White"
-              BorderBrush="#DDD"
-              BorderThickness="1">
+              Style="{StaticResource EmployeeDataGridStyle}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="*"/>
                     <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
@@ -94,7 +88,8 @@
                             <DataTemplate>
                                 <Button Content="Delete"
                             Command="{Binding DataContext.DeleteEmployeeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                            CommandParameter="{Binding}" />
+                            CommandParameter="{Binding}" 
+                                        Style="{StaticResource PrimaryButtonStyle}" />
 
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -102,6 +97,14 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
+
+        <!-- Error message -->
+        <TextBlock Text="{Binding ErrorMessage}"
+                   Foreground="{StaticResource ErrorBrush}"
+                   Style="{StaticResource BodyTextStyle}"
+                   Margin="20,0,0,10"
+                   VerticalAlignment="Bottom"
+                   HorizontalAlignment="Left" />
 
         <!-- Semi-transparent baggrund -->
         <Rectangle Fill="#80000000"
@@ -115,7 +118,7 @@
         </Rectangle>
 
         <!-- Overlay panel -->
-        <Border Background="White"
+        <Border Background="{DynamicResource PanelBackgroundBrush}"
                 HorizontalAlignment="Right"
         VerticalAlignment="Stretch"
         Visibility="{Binding IsOverlayOpen, Converter={StaticResource BoolToVisibilityConverter}}"

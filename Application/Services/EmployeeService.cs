@@ -1,7 +1,4 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Repository;
-using Application.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -10,16 +7,24 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Application.Interfaces;
+using Application.Interfaces.Repository;
+using Application.Models;
+using Application.Models.DisplayModels;
 
 namespace Application.Services
 {
     public class EmployeeService : IEmployeeService
     {
         private readonly IRepository<Employee> _employeeRepository;
+        private readonly IRepository<Department> _departmentRepository;
+        private readonly IRepository<Role> _roleRepository;
 
-        public EmployeeService(IRepository<Employee> employeeRepository)
+        public EmployeeService(IRepository<Employee> employeeRepository, IRepository<Department> departmentRepository, IRepository<Role> roleRepository)
         {
             _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
+            _roleRepository = roleRepository;
         }
 
         //Adds a new employee
@@ -75,11 +80,41 @@ namespace Application.Services
             return _employeeRepository.GetById(id);
         }
 
-        //Gets employees by department
+        // Gets all departments and roles
+        public IEnumerable<Department> GetAllDepartments() => _departmentRepository.GetAll();
+        public IEnumerable<Role> GetAllRoles() => _roleRepository.GetAll();
+
+        // Gets employee display models with full details for EmployeeViewModel
+        public IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels()
+        {
+            var employees = _employeeRepository.GetAll();
+            var departments = _departmentRepository.GetAll().ToDictionary(d => d.DepartmentId, d => d.Name);
+            var roles = _roleRepository.GetAll().ToDictionary(r => r.RoleId, r => r.Name);
+
+            var displayModels = new List<EmployeeDisplayModel>();
+
+            foreach (var employee in employees)
+            {
+                var display = new EmployeeDisplayModel
+                {
+                    EmployeeId = employee.EmployeeId,
+                    FullName = $"{employee.FirstName} {employee.LastName}",
+                    Email = employee.Email,
+                    DepartmentName = departments.TryGetValue(employee.DepartmentId, out var deptName) ? deptName : "Unknown",
+                    RoleName = roles.TryGetValue(employee.RoleId, out var roleName) ? roleName : "Unknown"
+                };
+
+                displayModels.Add(display);
+            }
+
+            return displayModels;
+        }
+
+        /*//Gets employees by department
         public IEnumerable<Employee> GetEmployeesByDepartment(Department department)
         {
             return _employeeRepository.GetByDepartment(department); //-- skal det laves til en filtreret liste i stedet metoden GetByDepartment?
-        }
+        }*/
 
         //Updates existing employee details (all fields except EmployeeId)
         /*public void UpdateEmployee(Employee employee)
