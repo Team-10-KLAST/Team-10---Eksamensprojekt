@@ -87,27 +87,27 @@ namespace Application.Services
         // Gets employee display models with full details for EmployeeViewModel
         public IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels()
         {
-            var employees = _employeeRepository.GetAll();
-            var departments = _departmentRepository.GetAll().ToDictionary(d => d.DepartmentId, d => d.Name);
-            var roles = _roleRepository.GetAll().ToDictionary(r => r.RoleId, r => r.Name);
+            var allEmployees = _employeeRepository.GetAll();
+            var departments = _departmentRepository.GetAll().ToDictionary(department => department.DepartmentId, department => department.Name);
+            var roles = _roleRepository.GetAll().ToDictionary(role => role.RoleId, role => role.Name);
 
-            var displayModels = new List<EmployeeDisplayModel>();
+            var employeeDisplayModels = new List<EmployeeDisplayModel>();
 
-            foreach (var employee in employees)
+            foreach (var employee in allEmployees)
             {
-                var display = new EmployeeDisplayModel
+                var employeeDisplayModel = new EmployeeDisplayModel
                 {
                     EmployeeId = employee.EmployeeId,
                     FullName = $"{employee.FirstName} {employee.LastName}",
                     Email = employee.Email,
-                    DepartmentName = departments.TryGetValue(employee.DepartmentId, out var deptName) ? deptName : "Unknown",
+                    DepartmentName = departments.TryGetValue(employee.DepartmentId, out var departmentName) ? departmentName : "Unknown",
                     RoleName = roles.TryGetValue(employee.RoleId, out var roleName) ? roleName : "Unknown"
                 };
 
-                displayModels.Add(display);
+                employeeDisplayModels.Add(employeeDisplayModel);
             }
 
-            return displayModels;
+            return employeeDisplayModels;
         }
 
         /*//Gets employees by department
