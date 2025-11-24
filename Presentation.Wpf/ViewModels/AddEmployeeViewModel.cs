@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 using Presentation.Wpf.Commands;
 using System.Windows.Input;
 using Application.Models;
+using Data;
+using Microsoft.Data.SqlClient;
+using System.Net.Mail;
 
 namespace Presentation.Wpf.ViewModels
 {
-    public class AddEmployeeViewModel : ViewModelBase
+    public class AddEmployeeViewModel : OverlayPanelViewModelBase
     {
         //form fields
 
@@ -36,15 +39,15 @@ namespace Presentation.Wpf.ViewModels
             set => SetProperty(ref _email, value);
         }
 
-        private Department _selectedDepartment;
-        public Department SelectedDepartment
+        private string _selectedDepartment;
+        public string SelectedDepartment
         {
             get => _selectedDepartment;
             set => SetProperty(ref _selectedDepartment, value);
         }
 
-        private Role _selectedRole;
-        public Role SelectedRole
+        private string _selectedRole;
+        public string SelectedRole
         {
             get => _selectedRole;
             set => SetProperty(ref _selectedRole, value);
@@ -52,26 +55,25 @@ namespace Presentation.Wpf.ViewModels
 
         //Collections for Departments and roles
 
-        public ObservableCollection<Department> Departments { get; }
-        public ObservableCollection<Role> Roles { get; }
+        public ObservableCollection<string> Departments { get; }
+        public ObservableCollection<string> Roles { get; }
 
         //Commands
 
         public ICommand SaveCommand { get; }
-        public ICommand CancelCommand {get;}
+        public ICommand CancelCommand { get; }
 
         //Constructor
 
         public AddEmployeeViewModel()
         {
             // Insert values into the Collections of Department and Role
-            Departments = new ObservableCollection<Department>(
-                (Department[])Enum.GetValues(typeof(Department))
-            );
+            Departments = new ObservableCollection<string>();
+            LoadDepartments();
 
-            Roles = new ObservableCollection<Role>(
-                (Role[])Enum.GetValues(typeof(Role))
-            );
+
+            Roles = new ObservableCollection<string>();
+            LoadRoles();
 
             // Default department and role
             SelectedDepartment = Departments.Count > 0 ? Departments[0] : default;
@@ -87,18 +89,19 @@ namespace Presentation.Wpf.ViewModels
         {
             // Create new Employee object from form fields
             Employee newEmployee = new Employee
-            {                
+            {
                 FirstName = this.FirstName,
                 LastName = this.LastName,
                 Email = this.Email,
-                Department = this.SelectedDepartment,
-                Role = this.SelectedRole
-            };            
+                DepartmentId = GetIDFromName(Departments, this.SelectedDepartment),
+                RoleId = GetIDFromName(Roles, this.SelectedRole)
+            };
 
             //trigger a save to repository
 
             //Clear form after saving
             ClearFields();
+            CloseOverlay();
         }
 
         private void ClearFields()
@@ -110,16 +113,71 @@ namespace Presentation.Wpf.ViewModels
 
         private bool CanSaveEmployee()
         {
-            // Basic validation
-            return !string.IsNullOrWhiteSpace(FirstName)
-                && !string.IsNullOrWhiteSpace(LastName)
-                && !string.IsNullOrWhiteSpace(Email);
+            if (string.IsNullOrWhiteSpace(FirstName) ||
+                string.IsNullOrWhiteSpace(LastName) ||
+                string.IsNullOrWhiteSpace(Email))
+            {
+                return false;
+            }
+
+            // Validate email format
+            try
+            {
+                var addr = new MailAddress(Email);
+                return addr.Address == Email;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private void Cancel()
         {
             ClearFields();
-            //RequestClose?.Invoke(this, EventArgs.Empty);  Not yet implemented
+            CloseOverlay();
+        }
+
+        private void LoadDepartments()
+        {
+            var db = DatabaseConnection.GetInstance();
+            using (SqlConnection conn = db.CreateConnection())
+            {
+                conn.Open();
+                string query = "SELECT DepartmentName FROM Department ORDER BY DepartmentID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Departments.Add(reader.GetString(0));
+                    }
+                }
+            }
+        }
+        private void LoadRoles()
+        {
+            var db = DatabaseConnection.GetInstance();
+            using (SqlConnection conn = db.CreateConnection())
+            {
+                conn.Open();
+                string query = "SELECT RoleName FROM Role ORDER BY RoleID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Roles.Add(reader.GetString(0));
+                    }
+                }
+            }
+        }
+        private int GetIDFromName(ObservableCollection<string> collection, string name)
+        {
+            int ID = collection.IndexOf(name);
+
+            // Because DepartmentID starts at 1, not 0
+            return ID >= 0 ? ID + 1 : -1;
         }
     }
 }
