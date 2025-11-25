@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="Presentation.Wpf.Views.ProcessRequestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Presentation.Wpf.Views"
+             mc:Ignorable="d" 
+             Background="{StaticResource PageBackgroundBrush}"
+             d:DesignHeight="500" d:DesignWidth="400">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Text="Process Request"
+                   Style="{StaticResource HeaderTextStyle}"
+                   Margin="0,0,0,20" />
+
+        <!-- Form Fields -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Top" 
+                    Orientation="Vertical" Margin="0,0,0,20">
+
+            <!-- Tentative Assignee -->
+            <TextBlock Text="Tentative assignee (email)" 
+                       Style="{StaticResource BodyTextStyle}" 
+                       Margin="0,0,0,5"/>
+            <TextBox Text="{Binding PlaceholderTentativeAssigneeEmail}" 
+                     Style="{StaticResource ReadonlyInputFieldStyle}" />
+
+
+            <!-- Type -->
+            <TextBlock Text="Type" Style="{StaticResource BodyTextStyle}" 
+                       Margin="0,10,0,5"/>
+            <TextBox Text="{Binding PlaceholderDeviceType}" 
+                     Style="{StaticResource ReadonlyInputFieldStyle}" />
+
+
+            <!-- OS -->
+            <TextBlock Text="OS" Style="{StaticResource BodyTextStyle}" 
+                       Margin="0,10,0,5"/>
+            <TextBox Text="{Binding PlaceholderOperatingSystem}" 
+                     Style="{StaticResource ReadonlyInputFieldStyle}" />
+
+
+            <!-- Location -->
+            <TextBlock Text="Location (country)" 
+                       Style="{StaticResource BodyTextStyle}" 
+                       Margin="0,10,0,5"/>
+            <TextBox Text="{Binding PlaceholderLocation}" 
+                     Style="{StaticResource ReadonlyInputFieldStyle}" />
+
+            <!-- Approver -->
+            <TextBlock Text="Approver (asset manager)" 
+                       Style="{StaticResource BodyTextStyle}" 
+                       Margin="0,10,0,5"/>
+            <TextBox Text="{Binding PlaceholderApprover}" 
+                     Style="{StaticResource ReadonlyInputFieldStyle}" />
+
+            <!-- Reject Reason -->
+            <TextBlock Text="Reject reason" 
+                       Style="{StaticResource BodyTextStyle}" 
+                       Margin="0,10,0,5"/>
+            <TextBox Text="{Binding PlaceholderRejectReason}" 
+                     Style="{StaticResource InputFieldStyle}" 
+                     AcceptsReturn="True" 
+                     Height="80" />
+        </StackPanel>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" 
+                    HorizontalAlignment="Right">
+            <Button Content="Reject"
+                    Style="{StaticResource RejectButtonStyle}"
+                    Command="{Binding RejectCommand}" />
+
+            <Button Content="Approve &amp; Plan"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Command="{Binding ApproveCommand}" />
+        </StackPanel>
+    </Grid>
+</UserControl>
+

@@ -50,6 +50,31 @@
         <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
     </Style>
 
+    <!-- Readonly Input Field Style -->
+    <Style x:Key="ReadonlyInputFieldStyle" TargetType="TextBox" BasedOn="{StaticResource InputFieldStyle}">
+        <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="Focusable" Value="False" />
+    </Style>
+
+    <!-- Reject/Delete Button Style -->
+    <Style x:Key="RejectButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ErrorBrush}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#B52A37" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- ComboBox style -->
     <Style TargetType="ComboBox" x:Key="InputFieldComboStyle">
         <Setter Property="Background" Value="{DynamicResource InputFieldBackgroundBrush}" />
