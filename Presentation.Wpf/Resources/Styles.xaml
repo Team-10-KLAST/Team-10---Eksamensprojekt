@@ -192,6 +192,17 @@
         <!-- Inner padding -->
         <Setter Property="Padding" Value="16" />
     </Style>
+
+    <!-- Circular icon container -->
+    <Style x:Key="StatusIconCircleStyle"
+           TargetType="Border">
+        <!-- Fixed size and circle shape -->
+        <Setter Property="Width" Value="48" />
+        <Setter Property="Height" Value="48" />
+        <Setter Property="CornerRadius" Value="24" />
+
+        <!-- Align left and center vertically in parent layout -->
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
 </ResourceDictionary>
-    
-    
