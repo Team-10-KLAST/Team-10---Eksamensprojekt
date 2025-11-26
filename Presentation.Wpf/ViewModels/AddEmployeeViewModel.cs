@@ -11,6 +11,7 @@ using Application.Models;
 using Data;
 using Microsoft.Data.SqlClient;
 using System.Net.Mail;
+using Application.Services;
 
 namespace Presentation.Wpf.ViewModels
 {
@@ -36,7 +37,20 @@ namespace Presentation.Wpf.ViewModels
         public string Email
         {
             get => _email;
-            set => SetProperty(ref _email, value);
+            set
+            {
+                if (SetProperty(ref _email, value))
+                {                    
+                    ValidateEmailFormat(value);
+                }
+            }
+        }
+
+        private string _emailErrorMsg = string.Empty;
+        public string EmailErrorMsg
+        {
+            get => _emailErrorMsg;
+            set => SetProperty(ref _emailErrorMsg, value);
         }
 
         private string _selectedDepartment;
@@ -96,19 +110,49 @@ namespace Presentation.Wpf.ViewModels
                 DepartmentId = GetIDFromName(Departments, this.SelectedDepartment),
                 RoleId = GetIDFromName(Roles, this.SelectedRole)
             };
+                        
+            EmployeeService employeeService = new EmployeeService();
+            employeeService.AddEmployee(newEmployee);
 
-            //trigger a save to repository
-
-            //Clear form after saving
             ClearFields();
             CloseOverlay();
         }
 
         private void ClearFields()
         {
-            FirstName = LastName = Email = string.Empty;
+            FirstName = LastName = Email = EmailErrorMsg = string.Empty;
             SelectedDepartment = Departments[0];
             SelectedRole = Roles[0];
+        }
+
+        private bool ValidateEmailFormat(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                EmailErrorMsg = string.Empty;
+                return false;
+            }
+
+            try
+            {
+                var addr = new MailAddress(email);
+                bool isValid = addr.Address.Equals(email, StringComparison.OrdinalIgnoreCase);
+
+                if (isValid)
+                {
+                    EmailErrorMsg = string.Empty;
+                }
+                else
+                {
+                    EmailErrorMsg = "Email format is incorrect";
+                }
+                return isValid;
+            }
+            catch (FormatException)
+            {
+                EmailErrorMsg = "Email format is incorrect";
+                return false;
+            }
         }
 
         private bool CanSaveEmployee()
@@ -120,16 +164,7 @@ namespace Presentation.Wpf.ViewModels
                 return false;
             }
 
-            // Validate email format
-            try
-            {
-                var addr = new MailAddress(Email);
-                return addr.Address == Email;
-            }
-            catch
-            {
-                return false;
-            }
+            return ValidateEmailFormat(Email);
         }
 
         private void Cancel()
