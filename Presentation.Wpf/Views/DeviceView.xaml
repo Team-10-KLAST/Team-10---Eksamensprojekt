@@ -1,0 +1,156 @@
+﻿<UserControl x:Class="Presentation.Wpf.Views.DeviceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="600"
+             Background="{StaticResource PageBackgroundBrush}">
+
+    <!-- Scales the entire DeviceView when the window size changes. -->
+    <Viewbox Stretch="Uniform">
+        <!-- Fixed design canvas that is scaled by the Viewbox -->
+        <Grid Width="1000" Height="600" Margin="24">
+
+            <!-- 
+                Main layout:
+                Row 0: Header (title + "Register device" button)
+                Row 1: Search / filter bar
+                Row 2: Device table
+            -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- HEADER SECTION     -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <!-- Left: title -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Right: primary action button -->
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Page title for the device overview -->
+                <TextBlock Text="Devices"
+                           Style="{StaticResource HeaderTextStyle}"
+                           VerticalAlignment="Center" />
+
+                <!-- Main action for creating a new device request -->
+                <Button Grid.Column="1"
+                        Content="Register device"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom" />
+            </Grid>
+
+            <!-- SEARCH / FILTER TOOLBAR    -->
+            <Grid Grid.Row="1" Margin="0,24,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <!-- Sorting & filter dropdowns -->
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Right-side spacer -->
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Free-text search for device id, type or owner -->
+                <TextBox Grid.Column="0"
+                         Style="{StaticResource InputFieldStyle}"
+                         VerticalAlignment="Center"
+                         Margin="0,0,16,0"
+                         Text="Search id, type or owner" />
+
+                <!-- Sort field selection (which column to sort by) -->
+                <ComboBox Grid.Column="1"
+                          Style="{StaticResource InputFieldComboStyle}"
+                          Width="150"
+                          VerticalAlignment="Center"
+                          Margin="0,0,8,0"
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="Sort: Date/type" />
+                    <ComboBoxItem Content="Sort: Device id" />
+                    <ComboBoxItem Content="Sort: Owner" />
+                </ComboBox>
+
+                <!-- Sort direction selection (ascending/descending) -->
+                <ComboBox Grid.Column="2"
+                          Style="{StaticResource InputFieldComboStyle}"
+                          Width="70"
+                          VerticalAlignment="Center"
+                          Margin="0,0,8,0"
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="↓" />
+                    <ComboBoxItem Content="↑" />
+                </ComboBox>
+
+                <!-- Filter by device type -->
+                <ComboBox Grid.Column="3"
+                          Style="{StaticResource InputFieldComboStyle}"
+                          Width="140"
+                          VerticalAlignment="Center"
+                          Margin="0,0,8,0"
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="Laptop" />
+                    <ComboBoxItem Content="Phone" />
+                    <ComboBoxItem Content="Other" />
+                </ComboBox>
+
+                <!-- Filter by device status -->
+                <ComboBox Grid.Column="4"
+                          Style="{StaticResource InputFieldComboStyle}"
+                          Width="140"
+                          VerticalAlignment="Center"
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="Status" />
+                    <ComboBoxItem Content="In use" />
+                    <ComboBoxItem Content="Not in use" />
+                    <ComboBoxItem Content="Received" />
+                    <ComboBoxItem Content="Ordered" />
+                </ComboBox>
+            </Grid>
+
+            <!--  DEVICE TABLE / DATAGRID -->
+            <Border Grid.Row="2"
+                    Style="{StaticResource CardBorderStyle}">
+                
+                <DataGrid AutoGenerateColumns="False"
+                          HeadersVisibility="Column"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserResizeRows="False"
+                          IsReadOnly="True"
+                          Style="{StaticResource EmployeeDataGridStyle}">
+
+                   
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Device" Binding="{Binding DeviceId}" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" />
+                        <DataGridTextColumn Header="OS" Binding="{Binding Os}" />
+                        <DataGridTextColumn Header="Owner" Binding="{Binding Owner}" />
+                        <DataGridTextColumn Header="Location" Binding="{Binding Location}" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" />
+                        <DataGridTextColumn Header="Registered" Binding="{Binding RegisteredDate}" />
+                        <DataGridTextColumn Header="Expires" Binding="{Binding ExpiryDate}" />
+
+                        <!-- Actions column -->
+                        <DataGridTemplateColumn Header="Actions">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Open"
+                                            Style="{StaticResource PrimaryButtonStyle}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+    </Viewbox>
+</UserControl>

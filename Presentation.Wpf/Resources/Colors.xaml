@@ -3,7 +3,7 @@
 
     <!-- Colors -->
     <Color x:Key="PageBackgroundColor">#F5F7FA</Color>
-    <Color x:Key="PanelBackgroundColor">#E6F0FA</Color>
+    <Color x:Key="PanelBackgroundColor">#FFFFFF</Color>
     <Color x:Key="HeaderBackgroundColor">#003F7D</Color>    
     <Color x:Key="PrimaryTextColor">#2D2D2D</Color>
     <Color x:Key="SecondaryTextColor">#6E6E6E</Color>
