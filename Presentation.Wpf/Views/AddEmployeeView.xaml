@@ -38,7 +38,11 @@
                      Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      Margin="0,0,0,0"/>
 
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="Email*" Margin="0,0,0,0"/>
+            <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="Email*" Margin="0,0,0,0"/>
+                <TextBlock Text="{Binding EmailErrorMsg}"/>
+            </StackPanel>
+            
             <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                      Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      Margin="0,0,0,0"/>

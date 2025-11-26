@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using System.Data.SqlClient;
 using AssetManager.Model;
+using Application.Models;
 
 namespace Application.Services
 {
