@@ -25,4 +25,121 @@
         <Setter Property="Foreground" Value="{DynamicResource HeaderTextDarkBrush}" />
     </Style>
 
+    <!-- Primary Button Style -->
+    <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource PrimaryActionBrush}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource PrimaryActionHoverBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Input field styles -->
+    <Style TargetType="TextBox" x:Key="InputFieldStyle">
+        <Setter Property="Background" Value="{DynamicResource InputFieldBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InputFieldBorderBrush}" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+    </Style>
+
+    <!-- Readonly Input Field Style -->
+    <Style x:Key="ReadonlyInputFieldStyle" TargetType="TextBox" BasedOn="{StaticResource InputFieldStyle}">
+        <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="Focusable" Value="False" />
+    </Style>
+
+    <!-- Reject/Delete Button Style -->
+    <Style x:Key="RejectButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ErrorBrush}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#B52A37" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ComboBox style -->
+    <Style TargetType="ComboBox" x:Key="InputFieldComboStyle">
+        <Setter Property="Background" Value="{DynamicResource InputFieldBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InputFieldBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryActionHoverBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ToggleButton style (styrer pilen i ComboBox) -->
+    <Style TargetType="ToggleButton">
+        <Setter Property="Background" Value="{DynamicResource InputFieldBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InputFieldBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Padding" Value="5" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryActionHoverBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <!-- DataGrid style -->
+    <Style TargetType="DataGrid" x:Key="EmployeeDataGridStyle">
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+        <Setter Property="RowBackground" Value="{DynamicResource PanelBackgroundBrush}" />
+        <Setter Property="AlternatingRowBackground" Value="{DynamicResource PageBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="AlternationCount" Value="2" />
+        <Setter Property="RowStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                    <Style.Triggers>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource PrimaryActionHoverBrush}" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                        <!-- Selected -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource PrimaryActionBrush}" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

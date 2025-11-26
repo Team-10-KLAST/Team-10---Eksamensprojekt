@@ -1,55 +1,123 @@
-﻿using Application.Interfaces;
-using AssetManager.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using System.Data.SqlClient;
-using AssetManager.Model;
+using Application.Interfaces;
+using Application.Interfaces.Repository;
 using Application.Models;
+using Application.Models.DisplayModels;
 
 namespace Application.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        /*private readonly string _connectionString;
-        public EmployeeService(string connectionString)
+        private readonly IRepository<Employee> _employeeRepository;
+        private readonly IRepository<Department> _departmentRepository;
+        private readonly IRepository<Role> _roleRepository;
+
+        public EmployeeService(IRepository<Employee> employeeRepository, IRepository<Department> departmentRepository, IRepository<Role> roleRepository)
         {
-            _connectionString = connectionString;
-        }----singleton??*/
-
-        //Adds new employee
-        public void AddEmployee(Employee employee)
-        {
-            using var connection = new SqlConnection(_connectionString);
-            connection.Open();
-
-            //Checks for existing email
-            using var checkEmailCommand = new SqlCommand("SELECT COUNT(*) FROM Employee WHERE Email = @Email;", connection);
-            checkEmailCommand.Parameters.AddWithValue("@Email", employee.Email);
-            var emailExists = (int)checkEmailCommand.ExecuteScalar();
-            if (emailExists > 0)
-            {
-                throw new InvalidOperationException("Email already exists.");
-            }
-
-            //Inserts new employee
-            string query = @"
-                INSERT INTO Employee (EmployeeId) 
-                VALUES (@EmployeeId);
-                SELECT SCOPE_IDENTITY();";
-            var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@EmployeeId", employee.EmployeeId);
-
-            employee.EmployeeId = Convert.ToInt32(command.ExecuteScalar());
+            _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
+            _roleRepository = roleRepository;
         }
 
+        //Adds a new employee
+        public void AddEmployee(Employee employee)
+        {
+            if (string.IsNullOrWhiteSpace(employee.FirstName))
+            {
+                throw new ArgumentException("Firstname field cannot be empty.");
+            }
+            
+            if (string.IsNullOrWhiteSpace(employee.LastName))
+            {
+                throw new ArgumentException("Lastname field cannot be empty.");
+            }
+            
+            if (string.IsNullOrWhiteSpace(employee.Email))
+            {
+                throw new ArgumentException("Email field cannot be empty.");
+            }
+            
+            if (employee.DepartmentId == null)
+            {
+                throw new ArgumentException("Department field cannot be empty.");
+            }
+            
+            if (employee.RoleId == null)
+            {
+                throw new ArgumentException("Role field cannot be empty.");
+            }
+            
+            _employeeRepository.Add(employee);
+        }
+
+        //Deletes employee by ID
+        public void DeleteEmployee(int employeeId)
+        {
+            _employeeRepository.Delete(employeeId);
+        }
+
+        //Gets all employees
+        public IEnumerable<Employee> GetAllEmployees()
+        {
+            return _employeeRepository.GetAll();
+        }
+
+        //Gets employee by unique ID
+        public Employee GetEmployeeById(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("Invalid employee ID.");
+            }
+            return _employeeRepository.GetById(id);
+        }
+
+        // Gets all departments and roles
+        public IEnumerable<Department> GetAllDepartments() => _departmentRepository.GetAll();
+        public IEnumerable<Role> GetAllRoles() => _roleRepository.GetAll();
+
+        // Gets employee display models with full details for EmployeeViewModel
+        public IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels()
+        {
+            var allEmployees = _employeeRepository.GetAll();
+            var departments = _departmentRepository.GetAll().ToDictionary(department => department.DepartmentId, department => department.Name);
+            var roles = _roleRepository.GetAll().ToDictionary(role => role.RoleId, role => role.Name);
+
+            var employeeDisplayModels = new List<EmployeeDisplayModel>();
+
+            foreach (var employee in allEmployees)
+            {
+                var employeeDisplayModel = new EmployeeDisplayModel
+                {
+                    EmployeeId = employee.EmployeeId,
+                    FullName = $"{employee.FirstName} {employee.LastName}",
+                    Email = employee.Email,
+                    DepartmentName = departments.TryGetValue(employee.DepartmentId, out var departmentName) ? departmentName : "Unknown",
+                    RoleName = roles.TryGetValue(employee.RoleId, out var roleName) ? roleName : "Unknown"
+                };
+
+                employeeDisplayModels.Add(employeeDisplayModel);
+            }
+
+            return employeeDisplayModels;
+        }
+
+        /*//Gets employees by department
+        public IEnumerable<Employee> GetEmployeesByDepartment(Department department)
+        {
+            return _employeeRepository.GetByDepartment(department); //-- skal det laves til en filtreret liste i stedet metoden GetByDepartment?
+        }*/
+
         //Updates existing employee details (all fields except EmployeeId)
-        public void UpdateEmployee(Employee employee)
+        /*public void UpdateEmployee(Employee employee)
         {
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
@@ -87,111 +155,9 @@ namespace Application.Services
             command.Parameters.AddWithValue("@EmployeeId", employee.EmployeeId);
 
             command.ExecuteNonQuery();
-        }
-
-        //Deletes employee by ID incl. checking for active devices befores deletion
-        public void DeleteEmployee(int employeeId)
-        {
-            using var connection = new SqlConnection(_connectionString);
-            connection.Open();
-
-            //Checks for employee existence
-            string findQuery = @"
-                SELECT COUNT(*) FROM Employee 
-                WHERE EmployeeId = @EmployeeId;";
-            using var findCommand = new SqlCommand(findQuery, connection);
-            findCommand.Parameters.AddWithValue("@EmployeeId", employeeId);
-            int employeeExists = (int)findCommand.ExecuteScalar();
-            if (employeeExists == 0)
-            {
-                throw new InvalidOperationException("No employee found by the given employee id.");
-            }
-
-            // Checks for active devices assigned to the employee
-            string checkQuery = @"
-                SELECT COUNT(*) FROM Device 
-                WHERE AssignedEmployeeId = @EmployeeId AND IsActive = 1;"; //IsActive indicates active assignment from fra Device TABLE
-            using var checkCommand = new SqlCommand(checkQuery, connection);
-            checkCommand.Parameters.AddWithValue("@EmployeeId", employeeId);
-            int activeDeviceCount = (int)checkCommand.ExecuteScalar();
-            if (activeDeviceCount > 0)
-            {
-                throw new InvalidOperationException("Chosen employee has active devices. Deletion not possible.");
-            }
-
-            // Deletes the employee if no active devices are found
-            string deleteQuery = @"
-                DELETE FROM Employee
-                WHERE EmployeeId = @EmployeeId;";
-
-            using var deleteCommand = new SqlCommand(deleteQuery, connection);
-            deleteCommand.Parameters.AddWithValue("@EmployeeId", employeeId);
-            deleteCommand.ExecuteNonQuery();
-        }
-
-        //Gets all employees
-        public IEnumerable<Employee> GetAllEmployees()
-        {
-            var employees = new List<Employee>();
-            string query = @"
-                SELECT e.EmployeeId, e.Role, e.Department, e.FirstName, e.LastName, e.Email 
-                FROM Employee e
-                JOIN (SELECT EmployeeId, CONCAT(FirstName, ' ', LastName) AS FullName FROM Employee) f ON e.EmployeeId = f.EmployeeId";
-
-            using var connection = new SqlConnection(_connectionString);
-            var command = new SqlCommand(query, connection);
-
-            connection.Open();
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                employees.Add(new Employee(
-                    (int)reader["EmployeeId"],
-                    (Role)reader["Role"],
-                    (Department)reader["Department"],
-                    (string)reader["FirstName"],
-                    (string)reader["LastName"],
-                    (string)reader["Email"]
-                ));
-            }
-            return employees;
-        }
-
-        //Gets employee by unique ID
-        public Employee GetEmployeeById(int id)
-        {
-            Employee employee = null;
-            string query = @"
-                SELECT e.EmployeeId, e.Role, e.Department, e.FirstName, e.LastName, e.Email 
-                FROM Employee e
-                JOIN (SELECT EmployeeId, CONCAT(FirstName, ' ', LastName) AS FullName FROM Employee) f ON e.EmployeeId = f.EmployeeId
-                WHERE e.EmployeeId = @EmployeeId;";
-
-            using var connection = new SqlConnection(_connectionString);
-            var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@EmployeeId", id);
-
-            connection.Open();
-            using var reader = command.ExecuteReader();
-            if (reader.Read())
-            {
-                employee = new Employee(
-                    (int)reader["EmployeeId"],
-                    (Role)reader["Role"],
-                    (Department)reader["Department"],
-                    (string)reader["FirstName"],
-                    (string)reader["LastName"],
-                    (string)reader["Email"]
-                );
-            }
-            else
-            {
-                throw new InvalidOperationException("No employee found with the given employee id.");
-            }
-            return employee;
-        }
+        }*/
         //Gets employee by email
-        public Employee GetEmployeeByEmail(string email)
+        /*public Employee GetEmployeeByEmail(string email)
         {
             Employee employee = null;
             string query = @"
@@ -254,43 +220,11 @@ namespace Application.Services
                 throw new InvalidOperationException("No employees found with the given lastname.");
             }
             return employees;
-        }
+        }*/
 
-        //Gets employees by department
-        public IEnumerable<Employee> GetByDepartment(Department department)
-        {
-            var employees = new List<Employee>();
-            string query = @"
-                SELECT e.EmployeeId, e.Role, e.Department, e.FirstName, e.LastName, e.Email 
-                FROM Employee e
-                JOIN (SELECT EmployeeId, CONCAT(FirstName, ' ', LastName) AS FullName FROM Employee) f ON e.EmployeeId = f.EmployeeId
-                WHERE e.Department = @Department;";
-
-            using var connection = new SqlConnection(_connectionString);
-            var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Department", department);
-            connection.Open();
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                employees.Add(new Employee(
-                    (int)reader["EmployeeId"],
-                    (Role)reader["Role"],
-                    (Department)reader["Department"],
-                    (string)reader["FirstName"],
-                    (string)reader["LastName"],
-                    (string)reader["Email"]
-                ));
-            }
-            if (employees.Count == 0)
-            {
-                throw new InvalidOperationException("No employees found in the given department.");
-            }
-            return employees;
-        }
 
         //Gets employees by role
-        public IEnumerable<Employee> GetByRole(Role role)
+        /*public IEnumerable<Employee> GetByRole(Role role)
         {
             var employees = new List<Employee>();
             string query = @"
@@ -319,6 +253,6 @@ namespace Application.Services
                 throw new InvalidOperationException("No employees found in the given role.");
             }
             return employees;
-        }
+        }*/
     }
 }

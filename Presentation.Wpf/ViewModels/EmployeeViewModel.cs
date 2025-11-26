@@ -1,140 +1,148 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
+using Application.Interfaces;
+using Application.Models;
+using Application.Models.DisplayModels;
 using Presentation.Wpf.Commands;
-using System.Collections.ObjectModel;
 
 namespace Presentation.Wpf.ViewModels
 {
-    public class EmployeeViewModel : ViewModelBase
+    public class EmployeeViewModel : OverlayHostViewModel
     {
         private readonly IEmployeeService _employeeService;
 
-        public ObservableCollection<Employee> Employees { get; set; } = new();
-        public ObservableCollection<string> Departments { get; set; } = new();
-        public OverlayHostViewModel OverlayHost { get; } = new OverlayHostViewModel();
+        // Collection of all employees (unfiltered)
+        public ObservableCollection<EmployeeDisplayModel> AllEmployees { get; } = new();
 
-        private string _searchText;
+        // Collectionview for filtered employees
+        public ICollectionView EmployeesView { get; }
+
+        // Departments for filtering
+        public ObservableCollection<string> Departments { get; } = new();
+
+        // Search text used for filtering employees by name
+        private string _searchText = string.Empty;
         public string SearchText
         {
             get => _searchText;
             set
             {
                 if (SetProperty(ref _searchText, value))
-                    FilterEmployees();
+                    EmployeesView.Refresh();
             }
         }
 
-        private string _selectedDepartment;
+        // Selected department for filtering employees - "All departments" means no filtering
+        private const string AllDepartments = "All departments";
+        private string _selectedDepartment = AllDepartments;
         public string SelectedDepartment
         {
             get => _selectedDepartment;
             set
             {
                 if (SetProperty(ref _selectedDepartment, value))
-                    FilterEmployees();
+                    EmployeesView.Refresh();
             }
         }
 
+        // Error message property for displaying load errors
+        private string _errorMessage = string.Empty;
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set => SetProperty(ref _errorMessage, value);
+        }
 
+        // Commands
         public ICommand AddEmployeeCommand { get; }
         public ICommand DeleteEmployeeCommand { get; }
 
-
+        // Constructor
         public EmployeeViewModel(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
 
             AddEmployeeCommand = new RelayCommand(OpenAddEmployeeOverlay);
-            DeleteEmployeeCommand = new RelayCommand<Employee>(OpenDeleteEmployeeOverlay);
+            DeleteEmployeeCommand = new RelayCommand<EmployeeDisplayModel>(OpenDeleteEmployeeOverlay);
+
+            EmployeesView = CollectionViewSource.GetDefaultView(AllEmployees);
+            EmployeesView.Filter = EmployeeFilter;
 
             LoadEmployees();
         }
 
+        // Loads employees and departments from the service layer
         private void LoadEmployees()
         {
-            var employees = _employeeService.GetAllEmployees();
-            Employees.Clear();
-            foreach (var employee in employees)
+            try
             {
-                Employees.Add(employee);
-            }
-            // afdelinger
-            var uniqueDepartments = employees
-                .Select(e => e.Department)
-                .Where(d => !string.IsNullOrWhiteSpace(d))
-                .Distinct()
-                .OrderBy(d => d);
+                AllEmployees.Clear();
+                foreach (var employeeDisplayModel in _employeeService.GetEmployeeDisplayModels())
+                    AllEmployees.Add(employeeDisplayModel);
 
-            Departments.Clear();
-            Departments.Add("All"); 
-            foreach (var dept in uniqueDepartments)
+                var departmentNames = _employeeService.GetAllDepartments()
+                    .Select(department => department.Name)
+                    .Distinct()
+                    .OrderBy(departmentName => departmentName);
+
+                Departments.Clear();
+                Departments.Add(AllDepartments);
+                foreach (var departmentName in departmentNames)
+                    Departments.Add(departmentName);
+
+                SelectedDepartment = AllDepartments;
+                EmployeesView.Refresh();
+            }
+            catch (Exception)
             {
-                Departments.Add(dept);
+                ErrorMessage = "Unable to load employees. Please try again later.";
             }
-
-            SelectedDepartment = "All"; 
         }
 
 
-        //Skal måske lægge datafiltrering i EmployeeService?
-        private void FilterEmployees()
+        // Filtering logic for the CollectionView - applies both search text and department filter
+        private bool EmployeeFilter(object obj)
         {
-            var allEmployees = _employeeService.GetAllEmployees();
+            if (obj is not EmployeeDisplayModel employeeDisplayModel) return false;
 
-            var filtered = allEmployees.Where(e =>
-                (string.IsNullOrWhiteSpace(SearchText) || e.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase)) &&
-                (SelectedDepartment == "All" || e.Department == SelectedDepartment));
+            bool matchesSearch = string.IsNullOrWhiteSpace(SearchText)
+                || employeeDisplayModel.FullName.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
 
-            Employees.Clear();
-            foreach (var employee in filtered)
-            {
-                Employees.Add(employee);
-            }
+            bool matchesDepartment = SelectedDepartment == AllDepartments
+                || employeeDisplayModel.DepartmentName == SelectedDepartment;
+
+            return matchesSearch && matchesDepartment;
         }
 
+        // Handles showing an overlay and reloading employees when the overlay is closed
+        private void ShowOverlayAndReload(OverlayPanelViewModelBase overlayViewModel)
+        {
+            overlayViewModel.RequestClose += (sender, eventArgs) =>
+            {
+                CurrentOverlay = null;
+                LoadEmployees();
+            };
+            ShowOverlay(overlayViewModel);
+        }
+
+        // Opens the Add Employee overlay
         private void OpenAddEmployeeOverlay()
         {
-            var vm = new AddEmployeeViewModel(_employeeService);
-            vm.RequestClose += (s, e) =>
-            {
-                OverlayHost.CurrentOverlay = null;
-                LoadEmployees();
-            };
-            OverlayHost.ShowOverlay(vm);
+            ShowOverlayAndReload(new AddEmployeeViewModel(_employeeService));
         }
 
-        private void OpenDeleteEmployeeOverlay(Employee employee)
+        // Opens the Delete Employee overlay for the selected employee
+        private void OpenDeleteEmployeeOverlay(EmployeeDisplayModel displayModel)
         {
-            var vm = new DeleteEmployeeViewModel(employee, _employeeService);
-            vm.RequestClose += (s, e) =>
-            {
-                OverlayHost.CurrentOverlay = null;
-                LoadEmployees();
-            };
-            OverlayHost.ShowOverlay(vm);
+            // OBS!!!!! Assigned device count is set to 0 for now; has to be modified later to fetch actual count
+            ShowOverlayAndReload(new DeleteEmployeeViewModel(displayModel, 0, _employeeService));
         }
-
-
-
-
-
-
-        //Metode der er brug for i EmployeeService
-        public List<Employee> SearchEmployees(string searchText)
-        {
-            if (string.IsNullOrWhiteSpace(searchText))
-                return GetAllEmployees();
-
-            return _repository.GetAll()
-                .Where(e =>
-                    e.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    e.Email.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-        }
-
     }
 }
