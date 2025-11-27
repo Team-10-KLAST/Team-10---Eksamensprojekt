@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,11 +50,7 @@ namespace Data.AdoNet
             }
             catch (SqlException exception)
             {
-                throw new Exception("An error occurred while retrieving departments from the database.", exception);
-            }
-            catch (Exception exception)
-            {
-                throw new Exception("An unexpected error occurred in DepartmentRepository.GetAll().", exception);
+                throw new DataException("An error occurred while retrieving departments from the database.", exception);
             }
         }
 
