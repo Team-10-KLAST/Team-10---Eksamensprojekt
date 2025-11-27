@@ -12,16 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Application.Interfaces;
 using Presentation.Wpf.ViewModels;
 
 namespace Presentation.Wpf.Views
 {
     public partial class AddEmployeeView : UserControl
     {
-        public AddEmployeeView()
+        public AddEmployeeView(IEmployeeService employeeService)
         {
             InitializeComponent();
         }
-
     }
 }
