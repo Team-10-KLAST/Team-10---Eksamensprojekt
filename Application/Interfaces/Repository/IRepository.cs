@@ -12,6 +12,6 @@ namespace Application.Interfaces.Repository
         IEnumerable<T> GetAll();
 
         // Get entity by primary key.
-        T? GetById(int id);
+        T? GetByID(int id);
     }
 }

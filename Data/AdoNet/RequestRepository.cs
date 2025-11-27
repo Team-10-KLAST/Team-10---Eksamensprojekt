@@ -63,7 +63,7 @@ namespace Data.AdoNet
         }
 
         // Retrieves a request by its ID using a stored procedure
-        public Request? GetById(int id)
+        public Request? GetByID(int id)
         {
             if (id <= 0)
                 throw new ArgumentOutOfRangeException(nameof(id), "RequestID must be greater than zero.");

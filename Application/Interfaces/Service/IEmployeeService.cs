@@ -12,9 +12,9 @@ namespace Application.Interfaces
     {
         void AddEmployee(Employee employee); //--adds a new employee
         /*void UpdateEmployee(Employee employee); //--updates an existing employee*/
-        void DeleteEmployee(int employeeId); //--deletes an employee by unique ID
+        void DeleteEmployee(int employeeID); //--deletes an employee by unique ID
         IEnumerable<Employee> GetAllEmployees(); //--retrieves all employees
-        Employee GetEmployeeById(int employeeId); //--finds employee by unique ID
+        Employee GetEmployeeByID(int employeeID); //--finds employee by unique ID
         IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels();
         IEnumerable<Department> GetAllDepartments();
         IEnumerable<Role> GetAllRoles();

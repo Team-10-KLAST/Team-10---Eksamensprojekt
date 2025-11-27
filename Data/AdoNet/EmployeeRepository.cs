@@ -43,8 +43,8 @@ namespace Data.AdoNet
                     command.Parameters.AddWithValue("@FirstName", employee.FirstName);
                     command.Parameters.AddWithValue("@LastName", employee.LastName);
                     command.Parameters.AddWithValue("@Email", employee.Email);
-                    command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentId);
-                    command.Parameters.AddWithValue("@RoleID", employee.RoleId);
+                    command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentID);
+                    command.Parameters.AddWithValue("@RoleID", employee.RoleID);
 
                     connection.Open();
 
@@ -57,7 +57,7 @@ namespace Data.AdoNet
                         throw new DataException("Could not get generated EmployeeId from stored procedure.");
                     }
 
-                    employee.EmployeeId = Convert.ToInt32(result);
+                    employee.EmployeeID = Convert.ToInt32(result);
                 }
             }
             catch (SqlException ex)
@@ -85,12 +85,12 @@ namespace Data.AdoNet
                     command.CommandType = CommandType.StoredProcedure;
 
                     // Add parameters matching those in uspUpdateEmployee.
-                    command.Parameters.AddWithValue("@EmployeeID", employee.EmployeeId);
+                    command.Parameters.AddWithValue("@EmployeeID", employee.EmployeeID);
                     command.Parameters.AddWithValue("@FirstName", employee.FirstName);
                     command.Parameters.AddWithValue("@LastName", employee.LastName);
                     command.Parameters.AddWithValue("@Email", employee.Email);
-                    command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentId);
-                    command.Parameters.AddWithValue("@RoleID", employee.RoleId);
+                    command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentID);
+                    command.Parameters.AddWithValue("@RoleID", employee.RoleID);
 
                     connection.Open();
 
@@ -100,7 +100,7 @@ namespace Data.AdoNet
                     // If 0 rows affected, the EmployeeID did not exist.
                     if (affected == 0)
                     {
-                        throw new DataException($"No Employee with Id {employee.EmployeeId} to update.");
+                        throw new DataException($"No Employee with Id {employee.EmployeeID} to update.");
                     }
                 }
             }
@@ -190,7 +190,7 @@ namespace Data.AdoNet
         }
 
         // GET BY ID: Returns a single employee (or null) using a stored procedure.
-        public Employee? GetById(int id)
+        public Employee? GetByID(int id)
         {
             try
             {
@@ -234,12 +234,12 @@ namespace Data.AdoNet
             // Map each column to the Employee properties.
             return new Employee
             {
-                EmployeeId = reader.GetInt32(reader.GetOrdinal("EmployeeID")),
+                EmployeeID = reader.GetInt32(reader.GetOrdinal("EmployeeID")),
                 FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                 LastName = reader.GetString(reader.GetOrdinal("LastName")),
                 Email = reader.GetString(reader.GetOrdinal("Email")),
-                DepartmentId = reader.GetInt32(reader.GetOrdinal("DepartmentID")),
-                RoleId = reader.GetInt32(reader.GetOrdinal("RoleID"))
+                DepartmentID = reader.GetInt32(reader.GetOrdinal("DepartmentID")),
+                RoleID = reader.GetInt32(reader.GetOrdinal("RoleID"))
             };
         }
     }

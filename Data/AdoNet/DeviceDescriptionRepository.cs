@@ -61,7 +61,7 @@ namespace Data.AdoNet
         }
 
         // Retrieves a devicedescription by its ID using a stored procedure
-        public DeviceDescription? GetById(int id)
+        public DeviceDescription? GetByID(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("The ID must be a positive integer.", nameof(id));

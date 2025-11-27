@@ -41,7 +41,7 @@ namespace Data.AdoNet
                     {
                         roles.Add(new Role
                         {
-                            RoleId = reader.GetInt32(reader.GetOrdinal("RoleID")),
+                            RoleID = reader.GetInt32(reader.GetOrdinal("RoleID")),
                             Name = reader.GetString(reader.GetOrdinal("RoleName"))
                         });
                     }
@@ -56,7 +56,7 @@ namespace Data.AdoNet
         // Not yet implemented methods. Can be implemented later as needed.
         void IRepository<Role>.Add(Role entity) => throw new NotImplementedException();
         void IRepository<Role>.Delete(int id) => throw new NotImplementedException();
-        Role? IRepository<Role>.GetById(int id) => throw new NotImplementedException();
+        Role? IRepository<Role>.GetByID(int id) => throw new NotImplementedException();
         void IRepository<Role>.Update(Role entity) => throw new NotImplementedException();
     }
 }

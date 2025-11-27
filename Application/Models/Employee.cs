@@ -8,27 +8,28 @@ namespace Application.Models
 {
     public class Employee
     {
-        public int EmployeeId { get; set; }          // PK in Employee table
+        public int EmployeeID { get; set; }          // PK in Employee table
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
         public string Email { get; set; } = "";
 
         // FK values that point to Department and Role tables.
-        public int DepartmentId { get; set; }
-        public int RoleId { get; set; }
+        public int DepartmentID { get; set; }
+        public int RoleID { get; set; }
+        
 
         // Parameterless constructor. Needed for ADO.NET.
         public Employee() { }
 
-        // Constructor with parameters (excluding EmployeeId).
+        // Constructor with parameters (excluding EmployeeID).
         public Employee(string firstName, string lastName, string email,
-                        int departmentId, int roleId)
+                        int departmentID, int roleID)
         {
             FirstName = firstName;
             LastName = lastName;
             Email = email;
-            DepartmentId = departmentId;
-            RoleId = roleId;
+            DepartmentID = departmentID;
+            RoleID = roleID;
         }
     }
 }
