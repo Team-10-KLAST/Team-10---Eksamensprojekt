@@ -42,7 +42,7 @@ namespace Data.AdoNet
                 {
                     departments.Add(new Department
                     {
-                        DepartmentId = reader.GetInt32(reader.GetOrdinal("DepartmentID")),
+                        DepartmentID = reader.GetInt32(reader.GetOrdinal("DepartmentID")),
                         Name = reader.GetString(reader.GetOrdinal("DepartmentName"))
                     });
                 }
@@ -57,7 +57,7 @@ namespace Data.AdoNet
         // Not yet implemented methods. Can be implemented later as needed.
         void IRepository<Department>.Add(Department entity) => throw new NotImplementedException();
         void IRepository<Department>.Delete(int id) => throw new NotImplementedException();
-        Department? IRepository<Department>.GetById(int id) => throw new NotImplementedException();
+        Department? IRepository<Department>.GetByID(int id) => throw new NotImplementedException();
         void IRepository<Department>.Update(Department entity) => throw new NotImplementedException();
     }
 

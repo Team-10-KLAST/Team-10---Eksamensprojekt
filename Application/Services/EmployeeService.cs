@@ -45,12 +45,12 @@ namespace Application.Services
                 throw new ArgumentException("Email field cannot be empty.");
             }
             
-            if (employee.DepartmentId == null)
+            if (employee.DepartmentID == null)
             {
                 throw new ArgumentException("Department field cannot be empty.");
             }
             
-            if (employee.RoleId == null)
+            if (employee.RoleID == null)
             {
                 throw new ArgumentException("Role field cannot be empty.");
             }
@@ -59,9 +59,9 @@ namespace Application.Services
         }
 
         //Deletes employee by ID
-        public void DeleteEmployee(int employeeId)
+        public void DeleteEmployee(int employeeID)
         {
-            _employeeRepository.Delete(employeeId);
+            _employeeRepository.Delete(employeeID);
         }
 
         //Gets all employees
@@ -71,13 +71,13 @@ namespace Application.Services
         }
 
         //Gets employee by unique ID
-        public Employee GetEmployeeById(int id)
+        public Employee GetEmployeeByID(int id)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("Invalid employee ID.");
             }
-            return _employeeRepository.GetById(id);
+            return _employeeRepository.GetByID(id);
         }
 
         // Gets all departments and roles
@@ -88,8 +88,8 @@ namespace Application.Services
         public IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels()
         {
             var allEmployees = _employeeRepository.GetAll();
-            var departments = _departmentRepository.GetAll().ToDictionary(department => department.DepartmentId, department => department.Name);
-            var roles = _roleRepository.GetAll().ToDictionary(role => role.RoleId, role => role.Name);
+            var departments = _departmentRepository.GetAll().ToDictionary(department => department.DepartmentID, department => department.Name);
+            var roles = _roleRepository.GetAll().ToDictionary(role => role.RoleID, role => role.Name);
 
             var employeeDisplayModels = new List<EmployeeDisplayModel>();
 
@@ -97,11 +97,11 @@ namespace Application.Services
             {
                 var employeeDisplayModel = new EmployeeDisplayModel
                 {
-                    EmployeeId = employee.EmployeeId,
+                    EmployeeID = employee.EmployeeID,
                     FullName = $"{employee.FirstName} {employee.LastName}",
                     Email = employee.Email,
-                    DepartmentName = departments.TryGetValue(employee.DepartmentId, out var departmentName) ? departmentName : "Unknown",
-                    RoleName = roles.TryGetValue(employee.RoleId, out var roleName) ? roleName : "Unknown"
+                    DepartmentName = departments.TryGetValue(employee.DepartmentID, out var departmentName) ? departmentName : "Unknown",
+                    RoleName = roles.TryGetValue(employee.RoleID, out var roleName) ? roleName : "Unknown"
                 };
 
                 employeeDisplayModels.Add(employeeDisplayModel);

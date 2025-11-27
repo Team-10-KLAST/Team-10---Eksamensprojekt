@@ -102,7 +102,7 @@ public class DeleteEmployeeViewModel : OverlayPanelViewModelBase
 
     private void DeleteEmployee()
     {
-        // _employeeService.DeleteEmployee(SelectedEmployee.EmployeeId);
+        // _employeeService.DeleteEmployee(SelectedEmployee.EmployeeID);
         CloseOverlay();
     }
 

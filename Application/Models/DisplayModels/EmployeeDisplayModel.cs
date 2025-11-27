@@ -8,7 +8,7 @@ namespace Application.Models.DisplayModels
 {
     public class EmployeeDisplayModel
     {
-        public int EmployeeId { get; set; }
+        public int EmployeeID { get; set; }
 
         public string FullName { get; set; } = "";
 
