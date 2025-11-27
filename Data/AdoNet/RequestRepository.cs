@@ -28,6 +28,7 @@ namespace Data.AdoNet
         private const string SpUpdateRequest = "uspUpdateRequest";
         private const string SpDeleteRequest = "uspDeleteRequest";
 
+        // Retrieves all requests from the database using a stored procedure
         public IEnumerable<Request> GetAll()
         {
             var requests = new List<Request>();
@@ -61,6 +62,7 @@ namespace Data.AdoNet
             }
         }
 
+        // Retrieves a request by its ID using a stored procedure
         public Request? GetById(int id)
         {
             if (id <= 0)
@@ -96,6 +98,7 @@ namespace Data.AdoNet
             }
         }
 
+        // Adds a new request to the database using a stored procedure
         public void Add(Request request)
         {
             try
@@ -126,6 +129,7 @@ namespace Data.AdoNet
             }
         }
 
+        // Updates an existing request in the database using a stored procedure
         public void Update(Request request)
         {
             if (request.RequestID <= 0)
@@ -157,6 +161,7 @@ namespace Data.AdoNet
             }
         }
 
+        // Deletes a request from the database using a stored procedure
         public void Delete(int id)
         {
             if (id <= 0)
