@@ -220,11 +220,11 @@ namespace Data.AdoNet
             }
             catch (SqlException ex)
             {
-                throw new DataException("Database error while reading Employee by Id.", ex);
+                throw new DataException("Database error while reading Employee by ID.", ex);
             }
             catch (Exception ex)
             {
-                throw new DataException("Unexpected error while reading Employee by Id.", ex);
+                throw new DataException("Unexpected error while reading Employee by ID.", ex);
             }
         }
 
