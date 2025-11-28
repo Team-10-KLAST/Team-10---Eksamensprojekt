@@ -49,7 +49,7 @@
                 <TextBlock Text="Type" 
                            Style="{StaticResource BaseHeaderTextStyle}"
                            FontSize="12"/>
-                <TextBox Background="{StaticResource InputFieldBackgroundBrush}"
+                <ComboBox Background="{StaticResource InputFieldBackgroundBrush}"
                          BorderBrush="{StaticResource InputFieldBorderBrush}"
                          Width="375"
                          Height="30"
@@ -61,7 +61,7 @@
                 <TextBlock Text="OS" 
                            Style="{StaticResource BaseHeaderTextStyle}"
                            FontSize="12"/>
-                <TextBox Background="{StaticResource InputFieldBackgroundBrush}"
+                <ComboBox Background="{StaticResource InputFieldBackgroundBrush}"
                          BorderBrush="{StaticResource InputFieldBorderBrush}"
                          Width="375"
                          Height="30"
@@ -74,7 +74,7 @@
                 <TextBlock Text="Ownership" 
                            Style="{StaticResource BaseHeaderTextStyle}"
                            FontSize="12"/>
-                <TextBox Background="{StaticResource InputFieldBackgroundBrush}"
+                <ComboBox Background="{StaticResource InputFieldBackgroundBrush}"
                          BorderBrush="{StaticResource InputFieldBorderBrush}"
                          Width="375"
                          Height="30"
@@ -87,7 +87,7 @@
                  <TextBlock Text="Location (country)" 
                             Style="{StaticResource BaseHeaderTextStyle}"
                             FontSize="12"/>
-                <TextBox Background="{StaticResource InputFieldBackgroundBrush}"
+                <ComboBox Background="{StaticResource InputFieldBackgroundBrush}"
                          BorderBrush="{StaticResource InputFieldBorderBrush}"
                          Width="375"
                          Height="30"
@@ -152,6 +152,7 @@
                         HorizontalAlignment="Right">
                 
                 <Button Content="Cancel"
+                        Style="{StaticResource RejectButtonStyle}"
                         Width="65"
                         Height="25"
                         BorderBrush="{StaticResource BorderBrush}"
@@ -159,6 +160,7 @@
                         Margin="0,5,5,5"/>
 
                 <Button Content="Register"
+                        Style="{StaticResource PrimaryButtonStyle}"
                         Width="65"
                         Height="25"
                         BorderBrush="{StaticResource BorderBrush}"
