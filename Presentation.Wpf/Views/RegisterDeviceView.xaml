@@ -20,11 +20,12 @@
         <!-- Header-->
         <Grid Grid.Row = "0"
               Background="{StaticResource HeaderBackgroundBrush}">
-            <TextBlock Text="Register Device"
+            <TextBlock Text="Register device"
                        FontSize="20"
                        FontWeight="Bold"
                        Height="30"
-                       Style="{StaticResource HeaderTextStyle}"/>
+                       Style="{StaticResource BaseHeaderTextStyle}"
+                       Foreground="{StaticResource HeaderTextBrush}"/>
         </Grid>
         
         <!-- Form-->
