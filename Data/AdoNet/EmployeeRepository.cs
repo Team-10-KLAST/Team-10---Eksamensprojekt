@@ -123,17 +123,14 @@ namespace Data.AdoNet
                     // Create a SqlCommand that call the uspDeleteEmployee stored procedure
                 using (var command = new SqlCommand(SpDeleteEmployee, connection))
                 {
-                    // Telling ADO.NET that we are calling a stored procedure.
                     command.CommandType = CommandType.StoredProcedure;
 
-                    // Add EmployeeID parameter
                     command.Parameters.AddWithValue("@EmployeeID", id);
 
                     connection.Open();
 
                     var affected = command.ExecuteNonQuery();
 
-                    // If 0 rows deleted, the EmployeeID did not exist.
                     if (affected == 0)
                     {
                         throw new DataException($"No Employee with Id {id} to delete.");
@@ -159,10 +156,8 @@ namespace Data.AdoNet
             try
             {
                 using (var connection = _databaseConnection.CreateConnection())
-                // Create a SqlCommand that will call the uspGetAllEmployees stored procedure.
                 using (var command = new SqlCommand(SpGetAllEmployees, connection))
                 {
-                    // Telling ADO.NET that we are calling a stored procedure.
                     command.CommandType = CommandType.StoredProcedure;
 
                     connection.Open();
@@ -171,7 +166,6 @@ namespace Data.AdoNet
                     {
                         while (reader.Read())
                         {
-                            // Map each row to an Employee and add to the list.
                             employees.Add(MapEmployee(reader));
                         }
                     }
@@ -195,10 +189,8 @@ namespace Data.AdoNet
             try
             {
                 using (var connection = _databaseConnection.CreateConnection())
-                // Create a SqlCommand that will call the uspGetEmployeeById stored procedure.
                 using (var command = new SqlCommand(SpGetEmployeeById, connection))
                 {
-                    // Telling ADO.NET that we are calling a stored procedure.
                     command.CommandType = CommandType.StoredProcedure;
 
                     command.Parameters.AddWithValue("@EmployeeID", id);
@@ -207,7 +199,6 @@ namespace Data.AdoNet
 
                     using (var reader = command.ExecuteReader())
                     {
-                        // If we have a row, map it to Employee and return it.
                         if (reader.Read())
                         {
                             return MapEmployee(reader);
@@ -215,7 +206,6 @@ namespace Data.AdoNet
                     }
                 }
 
-                // If no row found, return null.
                 return null;
             }
             catch (SqlException ex)
