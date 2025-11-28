@@ -1,0 +1,20 @@
+﻿using System;
+
+namespace Application.Models
+{
+    public enum DecisionStatus
+    {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
+
+    public class Decision
+    {
+        public int DecisionID { get; set; }
+        public DecisionStatus DecisionStatus { get; set; } = DecisionStatus.PENDING;
+        public DateOnly DecisionDate { get; set; }
+        public string Comments { get; set; } = "";
+        public int LoanID { get; set; }
+    }
+}
