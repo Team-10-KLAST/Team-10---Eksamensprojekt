@@ -71,7 +71,7 @@ namespace Data.AdoNet
             try
             {
                 using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(SpGetRequestById, connection)
+                using var command = new SqlCommand(SpGetRequestByID, connection)
                 {
                     CommandType = System.Data.CommandType.StoredProcedure
                 };
