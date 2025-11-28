@@ -20,7 +20,7 @@ namespace Data.AdoNet
 
         // Stored procedure names
         private const string SpGetAllLoans = "uspGetAllLoans";
-        private const string SpGetLoanById = "uspGetLoanById";
+        private const string SpGetLoanByID = "uspGetLoanByID";
         private const string SpAddLoan = "uspAddLoan";
         private const string SpUpdateLoan = "uspUpdateLoan";
         private const string SpDeleteLoan = "uspDeleteLoan";
@@ -73,7 +73,7 @@ namespace Data.AdoNet
         }
 
         // Retrieves a single loan by its LoanID using a stored procedure
-        public Loan? GetById(int loanID)
+        public Loan? GetByID(int loanID)
         {
             if (loanID <= 0)
                 throw new ArgumentOutOfRangeException(nameof(loanID), "LoanID must be greater than zero.");

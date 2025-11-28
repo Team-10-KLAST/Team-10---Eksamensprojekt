@@ -23,7 +23,7 @@ namespace Data.AdoNet
 
         //Stored procedure names
         private const string SpGetAllDeviceDescriptions = "uspGetAllDeviceDescriptions";
-        private const string SpGetDeviceDescriptionById = "uspGetDeviceDescriptionById";
+        private const string SpGetDeviceDescriptionByID = "uspGetDeviceDescriptionByID";
 
         // Retrieves all devicedescriptions from the database using a stored procedure
         public IEnumerable<DeviceDescription> GetAll()
@@ -69,7 +69,7 @@ namespace Data.AdoNet
             try
             {
                 using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(SpGetDeviceDescriptionById, connection)
+                using var command = new SqlCommand(SpGetDeviceDescriptionByID, connection)
                 {
                     CommandType = System.Data.CommandType.StoredProcedure
                 };

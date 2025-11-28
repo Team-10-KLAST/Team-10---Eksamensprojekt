@@ -18,7 +18,7 @@ namespace Data.AdoNet
         private const string SpUpdateEmployee = "uspUpdateEmployee";
         private const string SpDeleteEmployee = "uspDeleteEmployee";
         private const string SpGetAllEmployees = "uspGetAllEmployees";
-        private const string SpGetEmployeeById = "uspGetEmployeeById";
+        private const string SpGetEmployeeByID = "uspGetEmployeeByID";
 
         // Constructor. Dependency injection of DatabaseConnection. 
         public EmployeeRepository(DatabaseConnection databaseConnection)

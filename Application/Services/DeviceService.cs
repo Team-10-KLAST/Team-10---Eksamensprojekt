@@ -27,7 +27,7 @@ namespace Application.Services
                 throw new ArgumentOutOfRangeException(nameof(deviceID), "DeviceID must be greater than zero.");
             }
 
-            return _deviceRepository.GetById(deviceID);
+            return _deviceRepository.GetByID(deviceID);
         }
 
         // Gets all devices in the system

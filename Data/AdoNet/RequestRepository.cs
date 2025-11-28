@@ -23,7 +23,7 @@ namespace Data.AdoNet
 
         //Stored procedure names
         private const string SpGetAllRequests = "uspGetAllRequests";
-        private const string SpGetRequestById = "uspGetRequestById";
+        private const string SpGetRequestByID = "uspGetRequestByID";
         private const string SpAddRequest = "uspAddRequest";
         private const string SpUpdateRequest = "uspUpdateRequest";
         private const string SpDeleteRequest = "uspDeleteRequest";

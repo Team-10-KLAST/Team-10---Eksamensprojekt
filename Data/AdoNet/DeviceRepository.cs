@@ -20,7 +20,7 @@ namespace Data.AdoNet
 
         // Stored procedure names
         private const string SpGetAllDevices = "uspGetAllDevices";
-        private const string SpGetDeviceById = "uspGetDeviceById";
+        private const string SpGetDeviceByID = "uspGetDeviceByID";
         private const string SpAddDevice = "uspAddDevice";
         private const string SpUpdateDevice = "uspUpdateDevice";
         private const string SpDeleteDevice = "uspDeleteDevice";
@@ -75,7 +75,7 @@ namespace Data.AdoNet
         }
 
         // Retrieves a single device by its ID using a stored procedure
-        public Device? GetById(int id)
+        public Device? GetByID(int id)
         {
             if (id <= 0)
                 throw new ArgumentOutOfRangeException(nameof(id), "DeviceID must be greater than zero.");
@@ -83,7 +83,7 @@ namespace Data.AdoNet
             try
             {
                 using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(SpGetDeviceById, connection)
+                using var command = new SqlCommand(SpGetDeviceByID, connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
