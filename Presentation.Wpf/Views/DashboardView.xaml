@@ -104,11 +104,15 @@
                                        Foreground="{StaticResource SecondaryTextBrush}" />
                         </StackPanel>
 
-                        <TextBlock Grid.Column="2"
-                                   Text="→"
-                                   FontSize="20"
-                                   VerticalAlignment="Center"
-                                   Foreground="{StaticResource SecondaryTextBrush}" />
+                        <Button Grid.Column="2"
+                                Content="→"
+                                FontSize="20"
+                                VerticalAlignment="Center"
+                                Foreground="{StaticResource SecondaryTextBrush}"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding OpenRegisterDeviceCommand}" />
                     </Grid>
                 </Border>
 
@@ -146,11 +150,15 @@
                                        Foreground="{StaticResource SecondaryTextBrush}" />
                         </StackPanel>
 
-                        <TextBlock Grid.Column="2"
-                                   Text="→"
-                                   FontSize="20"
-                                   VerticalAlignment="Center"
-                                   Foreground="{StaticResource SecondaryTextBrush}" />
+                        <Button Grid.Column="2"
+                                Content="→"
+                                FontSize="20"
+                                VerticalAlignment="Center"
+                                Foreground="{StaticResource SecondaryTextBrush}"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding OpenRegisterEmployeeCommand}" />
                     </Grid>
                 </Border>
             </Grid>
@@ -205,52 +213,48 @@
 
                             <Button Grid.Column="2"
                                     Margin="0,0,8,0"
-                                    Content="2 items"
+                                    Content="{Binding PendingRequestsCount, StringFormat={}{0} items}"
                                     Style="{StaticResource PrimaryButtonStyle}"
                                     Background="{StaticResource PanelBackgroundBrush}"
                                     Foreground="{StaticResource PrimaryTextBrush}" />
 
                             <Button Grid.Column="3"
                                     Content="Approve all"
-                                    Style="{StaticResource PrimaryButtonStyle}" Click="Button_Click" />
+                                    Style="{StaticResource PrimaryButtonStyle}" />
                         </Grid>
 
-                        <!-- Items (mildertidig) -->
-                        <StackPanel Grid.Row="1" Margin="0,12,0,0">
-                            <Border Style="{StaticResource StatusItemCardBorderStyle}">
-                                <StackPanel>
-                                    <TextBlock Text="REQ-501 · Laptop · Windows"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="13"
-                                               FontWeight="SemiBold"
-                                               Foreground="{StaticResource PrimaryTextBrush}" />
-                                    <TextBlock Text="Tai Ngo · Denmark · 22.11.2025, 10.10.00"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="12"
-                                               Foreground="{StaticResource SecondaryTextBrush}" />
-                                    <TextBlock Text="REQ-502 · Laptop · Windows"                                               FontFamily="{StaticResource PrimaryFont}" 
-                                               FontSize="13" 
-                                               FontWeight="SemiBold" 
-                                               Foreground="{StaticResource PrimaryTextBrush}" />                                    <TextBlock Text="Sabine · Denmark · 23.11.2025, 10.10.00"                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="12"
-                                               Foreground="{StaticResource SecondaryTextBrush}" />
-                                </StackPanel>
-                            </Border>
-
-                            <Border Style="{StaticResource StatusItemCardBorderStyle}">
-                                <StackPanel>
-                                    <TextBlock Text="REQ-502 · Phone · iOS"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="13"
-                                               FontWeight="SemiBold"
-                                               Foreground="{StaticResource PrimaryTextBrush}" />
-                                    <TextBlock Text="eva@decisionfocus.com · Denmark · 22.11.2025, 11.05.00"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="12"
-                                               Foreground="{StaticResource SecondaryTextBrush}" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
+                        <ScrollViewer Grid.Row="1"
+                                      Margin="0,12,0,0"
+                                      VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding PendingRequests}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource StatusItemCardBorderStyle}">
+                                            <Button Command="{Binding DataContext.OpenProcessRequestCommand, 
+                                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Padding="0">
+                                                <StackPanel>
+                                                    <!-- Første linje: fx "REQ-501 ..." -->
+                                                    <TextBlock Text="{Binding HeaderText}"
+                                                               FontFamily="{StaticResource PrimaryFont}"
+                                                               FontSize="13"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{StaticResource PrimaryTextBrush}" />
+                                                    <!-- Anden linje: fx dato / ekstra info -->
+                                                    <TextBlock Text="{Binding SubText}"
+                                                               FontFamily="{StaticResource PrimaryFont}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource SecondaryTextBrush}" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                     </Grid>
                 </Border>
 
@@ -292,7 +296,7 @@
 
                             <Button Grid.Column="2"
                                     Margin="0,0,8,0"
-                                    Content="1 items"
+                                    Content="{Binding PlannedDevicesCount, StringFormat={}{0} items}"
                                     Style="{StaticResource PrimaryButtonStyle}"
                                     Background="{StaticResource PanelBackgroundBrush}"
                                     Foreground="{StaticResource PrimaryTextBrush}" />
@@ -302,21 +306,37 @@
                                     Style="{StaticResource PrimaryButtonStyle}" />
                         </Grid>
 
-                        <StackPanel Grid.Row="1" Margin="0,12,0,0">
-                            <Border Style="{StaticResource StatusItemCardBorderStyle}">
-                                <StackPanel>
-                                    <TextBlock Text="DEV-101 · Laptop · Windows"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="13"
-                                               FontWeight="SemiBold"
-                                               Foreground="{StaticResource PrimaryTextBrush}" />
-                                    <TextBlock Text="– · Denmark · 19.11.2025, 11.45.00"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="12"
-                                               Foreground="{StaticResource SecondaryTextBrush}" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
+                        <ScrollViewer Grid.Row="1"
+                                      Margin="0,12,0,0"
+                                      VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding PlannedDevices}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource StatusItemCardBorderStyle}">
+                                            <Button Command="{Binding DataContext.OpenUpdateDeviceCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Padding="0">
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding HeaderText}"
+                                                               FontFamily="{StaticResource PrimaryFont}"
+                                                               FontSize="13"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{StaticResource PrimaryTextBrush}" />
+                                                    <TextBlock Text="{Binding SubText}"
+                                                               FontFamily="{StaticResource PrimaryFont}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource SecondaryTextBrush}" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+
                     </Grid>
                 </Border>
 
@@ -358,31 +378,47 @@
 
                             <Button Grid.Column="2"
                                     Margin="0,0,8,0"
-                                    Content="1 items"
+                                    Content="{Binding OrderedDevicesCount, StringFormat={}{0} items}"
                                     Style="{StaticResource PrimaryButtonStyle}"
                                     Background="{StaticResource PanelBackgroundBrush}"
                                     Foreground="{StaticResource PrimaryTextBrush}" />
+
 
                             <Button Grid.Column="3"
                                     Content="Approve all"
                                     Style="{StaticResource PrimaryButtonStyle}" />
                         </Grid>
 
-                        <StackPanel Grid.Row="1" Margin="0,12,0,0">
-                            <Border Style="{StaticResource StatusItemCardBorderStyle}">
-                                <StackPanel>
-                                    <TextBlock Text="DEV-202 · Phone · Android"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="13"
-                                               FontWeight="SemiBold"
-                                               Foreground="{StaticResource PrimaryTextBrush}" />
-                                    <TextBlock Text="– · Denmark · 20.11.2025, 10.20.00"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="12"
-                                               Foreground="{StaticResource SecondaryTextBrush}" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
+                        <ScrollViewer Grid.Row="1"
+                                      Margin="0,12,0,0"
+                                      VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding OrderedDevices}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource StatusItemCardBorderStyle}">
+                                            <Button Command="{Binding DataContext.OpenUpdateDeviceCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Padding="0">
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding HeaderText}"
+                                                               FontFamily="{StaticResource PrimaryFont}"
+                                                               FontSize="13"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{StaticResource PrimaryTextBrush}" />
+                                                    <TextBlock Text="{Binding SubText}"
+                                                               FontFamily="{StaticResource PrimaryFont}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource SecondaryTextBrush}" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                     </Grid>
                 </Border>
 
@@ -424,31 +460,48 @@
 
                             <Button Grid.Column="2"
                                     Margin="0,0,8,0"
-                                    Content="1 items"
+                                    Content="{Binding ReceivedDevicesCount, StringFormat={}{0} items}"
                                     Style="{StaticResource PrimaryButtonStyle}"
                                     Background="{StaticResource PanelBackgroundBrush}"
                                     Foreground="{StaticResource PrimaryTextBrush}" />
+
 
                             <Button Grid.Column="3"
                                     Content="Approve all"
                                     Style="{StaticResource PrimaryButtonStyle}" />
                         </Grid>
 
-                        <StackPanel Grid.Row="1" Margin="0,12,0,0">
-                            <Border Style="{StaticResource StatusItemCardBorderStyle}">
-                                <StackPanel>
-                                    <TextBlock Text="DEV-303 · Laptop · Windows"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="13"
-                                               FontWeight="SemiBold"
-                                               Foreground="{StaticResource PrimaryTextBrush}" />
-                                    <TextBlock Text="– · Denmark · 22.11.2025, 17.12.00"
-                                               FontFamily="{StaticResource PrimaryFont}"
-                                               FontSize="12"
-                                               Foreground="{StaticResource SecondaryTextBrush}" />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
+                        <ScrollViewer Grid.Row="1"
+                                      Margin="0,12,0,0"
+                                      VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding ReceivedDevices}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource StatusItemCardBorderStyle}">
+                                            <Button Command="{Binding DataContext.OpenUpdateDeviceCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Padding="0">
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding HeaderText}"
+                                                               FontFamily="{StaticResource PrimaryFont}"
+                                                               FontSize="13"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{StaticResource PrimaryTextBrush}" />
+                                                    <TextBlock Text="{Binding SubText}"
+                                                               FontFamily="{StaticResource PrimaryFont}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource SecondaryTextBrush}" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+
                     </Grid>
                 </Border>
             </Grid>

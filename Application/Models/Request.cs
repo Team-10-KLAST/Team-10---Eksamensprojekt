@@ -6,12 +6,18 @@ using System.Threading.Tasks;
 
 namespace Application.Models
 {
+    public enum RequestStatus
+    {
+        PENDING,
+        CLOSED
+    }
     public class Request
     {
         public int RequestID { get; set; }
         public DateOnly RequestDate { get; set; }
         public string Justification { get; set; } = "";
         public string RequestStatus { get; set; } = "";
+        public RequestStatus Status { get; set; } = Models.RequestStatus.PENDING;
 
 
         // Parameterless constructor. Needed for ADO.NET.
