@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,11 @@ namespace Application.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly IRepository<Employee> _employeeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IRepository<Department> _departmentRepository;
         private readonly IRepository<Role> _roleRepository;
 
-        public EmployeeService(IRepository<Employee> employeeRepository, IRepository<Department> departmentRepository, IRepository<Role> roleRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IRepository<Department> departmentRepository, IRepository<Role> roleRepository)
         {
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
@@ -118,6 +119,15 @@ namespace Application.Services
                    .ToList();
         }
 
+        public Employee GetEmployeeByEmail(string email)
+        {
+            var addr = new MailAddress(email);
+            if (addr.Address.Equals(email, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("Invalid employee Email.");
+            }
+            return _employeeRepository.GetByEmail(email);
+        }
 
         /*//Gets employees by department
         public IEnumerable<Employee> GetEmployeesByDepartment(Department department)
