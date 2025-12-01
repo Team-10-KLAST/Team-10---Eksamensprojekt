@@ -135,6 +135,7 @@ namespace Presentation.Wpf.ViewModels
                 RequestDate = DateOnly.FromDateTime(DateTime.Now),
                 RequestStatus = "Pending"
             };
+            _requestService.SubmitRequest(request);
         }
 
         private bool CanSubmitRequest()
@@ -161,7 +162,7 @@ namespace Presentation.Wpf.ViewModels
             }
             catch (FormatException)
             {
-                EmailErrorMsg = "Email doesn't exist, ask HR for help";
+                EmailErrorMsg = "Invalid email";
                 return false;
             }
         }

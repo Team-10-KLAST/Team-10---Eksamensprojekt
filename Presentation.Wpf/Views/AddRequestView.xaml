@@ -36,9 +36,12 @@
                 </Grid.ColumnDefinitions>
                 <!-- Left -->
                 <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Requester (e-mail)"
                 Style="{StaticResource BaseTextStyle}" 
                 FontWeight="SemiBold"/>
+                     <TextBlock Text="{Binding EmailErrorMsg}" Foreground="Red"/>
+                    </StackPanel>
                     <TextBox Height="33"
                 HorizontalAlignment="Stretch"
                 Background="{StaticResource InputFieldBackgroundBrush}"
