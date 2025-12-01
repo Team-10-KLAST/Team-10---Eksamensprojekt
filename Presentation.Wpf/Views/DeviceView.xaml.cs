@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Application.Services;  
+using Data;                    
+using Data.AdoNet;
+using Presentation.Wpf.ViewModels;  
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace Presentation.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for DeviceView.xaml
-    /// </summary>
     public partial class DeviceView : UserControl
     {
         public DeviceView()
         {
             InitializeComponent();
+
+            var db = DatabaseConnection.GetInstance();
+
+            var deviceRepo = new DeviceRepository(db);
+
+            var deviceService = new DeviceService(deviceRepo);
+
+            var viewModel = new DeviceViewModel(deviceService);
+
+            DataContext = viewModel;
         }
     }
 }

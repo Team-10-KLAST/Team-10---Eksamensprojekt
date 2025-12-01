@@ -52,7 +52,7 @@ namespace Data.AdoNet
                         DeviceDescriptionID = reader.GetInt32(reader.GetOrdinal("DeviceDescriptionID")),
 
                         // Reads the status text from the result set
-                        DeviceStatus = reader.GetString(reader.GetOrdinal("Status")),
+                        DeviceStatus = reader.GetString(reader.GetOrdinal("DeviceStatus")),
 
                         // Reads the price as a decimal value
                         Price = reader.GetDecimal(reader.GetOrdinal("Price")),
@@ -101,7 +101,7 @@ namespace Data.AdoNet
                     {
                         DeviceID = reader.GetInt32(reader.GetOrdinal("DeviceID")),
                         DeviceDescriptionID = reader.GetInt32(reader.GetOrdinal("DeviceDescriptionID")),
-                        DeviceStatus = reader.GetString(reader.GetOrdinal("Status")),
+                        DeviceStatus = reader.GetString(reader.GetOrdinal("DeviceStatus")),
                         Price = reader.GetDecimal(reader.GetOrdinal("Price")),
                         PurchaseDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("PurchaseDate"))),
                         ExpectedEndDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("ExpectedEndDate")))
@@ -133,7 +133,7 @@ namespace Data.AdoNet
                 };
 
                 command.Parameters.Add("@DeviceDescriptionID", SqlDbType.Int).Value = device.DeviceDescriptionID;
-                command.Parameters.Add("@Status", SqlDbType.NVarChar, 50).Value = device.DeviceStatus;
+                command.Parameters.Add("@DeviceStatus", SqlDbType.NVarChar, 50).Value = device.DeviceStatus;
                 command.Parameters.Add("@Price", SqlDbType.Decimal).Value = device.Price;
                 command.Parameters.Add("@PurchaseDate", SqlDbType.Date).Value =
                     device.PurchaseDate.ToDateTime(new TimeOnly(0, 0));
@@ -175,7 +175,7 @@ namespace Data.AdoNet
 
                 command.Parameters.Add("@DeviceID", SqlDbType.Int).Value = device.DeviceID;
                 command.Parameters.Add("@DeviceDescriptionID", SqlDbType.Int).Value = device.DeviceDescriptionID;
-                command.Parameters.Add("@Status", SqlDbType.NVarChar, 50).Value = device.DeviceStatus;
+                command.Parameters.Add("@DeviceStatus", SqlDbType.NVarChar, 50).Value = device.DeviceStatus;
                 command.Parameters.Add("@Price", SqlDbType.Decimal).Value = device.Price;
                 command.Parameters.Add("@PurchaseDate", SqlDbType.Date).Value =
                     device.PurchaseDate.ToDateTime(new TimeOnly(0, 0));
