@@ -111,7 +111,7 @@
         <!-- Status history -->
         <StackPanel Grid.Row="3" Margin="0,0,0,16">
             <TextBlock Text="Status history" Style="{StaticResource BodyTextStyle}" Margin="0,0,0,5"/>
-            <TextBox Text="{Binding StatusHistoryString}" Height="105" IsReadOnly="True"/>
+            <TextBox Text="{Binding StatusHistoryString}" Height="105" IsReadOnly="True" TextChanged="TextBox_TextChanged"/>
         </StackPanel>
 
         <!-- Action Buttons -->
