@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Presentation.Wpf.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,14 +16,13 @@ using System.Windows.Shapes;
 
 namespace Presentation.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for DeviceView.xaml
-    /// </summary>
     public partial class DeviceView : UserControl
     {
         public DeviceView()
         {
             InitializeComponent();
+
+            DataContext = new DeviceViewModel();
         }
     }
 }

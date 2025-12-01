@@ -65,7 +65,7 @@
                          Style="{StaticResource InputFieldStyle}"
                          VerticalAlignment="Center"
                          Margin="0,0,16,0"
-                         Text="Search id, type or owner" />
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!-- Sort field selection (which column to sort by) -->
                 <ComboBox Grid.Column="1"
@@ -126,7 +126,9 @@
                           CanUserDeleteRows="False"
                           CanUserResizeRows="False"
                           IsReadOnly="True"
-                          Style="{StaticResource EmployeeDataGridStyle}">
+                          Style="{StaticResource EmployeeDataGridStyle}"
+                          ItemsSource="{Binding Devices}"
+                          SelectedItem="{Binding SelectedDevice}">
 
                    
                     <DataGrid.Columns>
@@ -144,7 +146,9 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Content="Open"
-                                            Style="{StaticResource PrimaryButtonStyle}" />
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Command="{Binding DataContext.OpenDeviceCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
