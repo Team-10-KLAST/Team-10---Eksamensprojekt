@@ -12,5 +12,6 @@ namespace Application.Interfaces.Service
         IEnumerable<string> GetAllOSOptions();
         IEnumerable<string> GetAllDeviceTypeOptions();
         IEnumerable<string> GetAllCountryOptions();
+        int GetDeviceDescriptionID(string DeviceType, string OS, string Country);
     }
 }

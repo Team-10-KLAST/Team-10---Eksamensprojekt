@@ -18,10 +18,10 @@ namespace Presentation.Wpf.ViewModels
         private readonly IRequestService _requestService;
         private readonly IDeviceDescriptionService _deviceDescriptionService;
         private readonly IEmployeeService _employeeService;
+        private readonly IDeviceService _deviceService;
+        private readonly ILoanService _loanService;
 
-        //Collection for Email
-        private List<string> AllowedEmails;
-
+        
         //form fields
         private string _email = string.Empty;
         public string Email
@@ -106,12 +106,14 @@ namespace Presentation.Wpf.ViewModels
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
 
-        //Constructor
-        public AddRequestViewModel (IRequestService requestService, IDeviceDescriptionService descriptionService, IEmployeeService employeeService)
+        //Constructor. Creating all relevant instances, populating all collections.
+        public AddRequestViewModel (IRequestService requestService, IDeviceDescriptionService descriptionService, IEmployeeService employeeService, IDeviceService deviceService, ILoanService loanService)
         {
             _requestService = requestService;
             _deviceDescriptionService = descriptionService;
             _employeeService = employeeService;
+            _loanService = loanService;
+            _deviceService = deviceService;
 
             OSOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllOSOptions());
             DeviceOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllDeviceTypeOptions());
@@ -127,17 +129,47 @@ namespace Presentation.Wpf.ViewModels
         }
 
         //Action Methods
+        Request _request;
         private void SubmitRequest ()
         {
-            var request = new Request
+            _request = new Request
             {
                 Justification = RequestComment,
                 RequestDate = DateOnly.FromDateTime(DateTime.Now),
                 RequestStatus = "Pending"
             };
-            _requestService.SubmitRequest(request);
+            _requestService.SubmitRequest(_request);
+            CreateVirtualDevice();
+            CreateLoan();
         }
 
+        //Create VirtualDevice with only DeviceDescription
+        Device _device;
+
+        private void CreateVirtualDevice ()
+        {
+            
+            int deviceDescription = _deviceDescriptionService.GetDeviceDescriptionID(SelectedDeviceType, SelectedOS, SelectedCountry);
+            _device = new Device
+            {
+                DeviceDescriptionID = deviceDescription
+            };
+            _deviceService.AddDevice(_device);
+        }
+
+        //Create a Loan to store BorrowID from email input
+        private void CreateLoan ()
+        {
+            var _loan = new Loan()
+            {
+                RequestID = _request.RequestID,
+                BorrowerID= _employeeService.GetEmployeeByEmail(Email).EmployeeID,
+                DeviceID = _device.DeviceID,
+            };
+            _loanService.AddLoan(_loan);
+        }
+
+        //Comment must not be empty, email must exists in DB.
         private bool CanSubmitRequest()
         {
             if (string.IsNullOrEmpty(Email) ||
@@ -148,6 +180,9 @@ namespace Presentation.Wpf.ViewModels
             return ValidateEmail (Email);
         }
 
+        //Collection for all employee emails, populated when VM constructor is run
+        private List<string> AllowedEmails;
+        //Validate if email exists in DB
         private bool ValidateEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))

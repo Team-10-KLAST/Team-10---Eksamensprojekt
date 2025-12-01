@@ -3,26 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Interfaces.Repository;
 using Application.Interfaces.Service;
+using Application.Models;
 
 namespace Application.Services
 {
     public class DeviceDescriptionService : IDeviceDescriptionService
     {
-        //Data skal hentes fra repository, som ikke er implementeres endnu
+        IRepository<DeviceDescription> _deviceDescriptionRepository;
+
+        //Collection of all DeviceDescription from DB
+        IEnumerable<DeviceDescription> _deviceDescriptions;
+
+        public DeviceDescriptionService (IRepository<DeviceDescription> deviceDescriptionRepository)
+        {
+            _deviceDescriptionRepository = deviceDescriptionRepository;
+            _deviceDescriptions = _deviceDescriptionRepository.GetAll();
+        }
+
+        //Extract the unique values of OS
         public IEnumerable<string> GetAllOSOptions()
         {
-            return new List<string> { "Windows 11", "macOS", "Linux" };
+            return _deviceDescriptions.Select(d => d.OperatingSystem).Distinct();
         }
 
         public IEnumerable<string> GetAllDeviceTypeOptions()
         {
-            return new List<string> { "Laptop", "Desktop", "Mobil" };
+            return _deviceDescriptions.Select(d => d.DeviceType).Distinct();
         }
 
         public IEnumerable<string> GetAllCountryOptions()
         {
-            return new List<string> { "Denmark", "Sweden", "Norway", "Germany" };
+            return _deviceDescriptions.Select(d => d.Location).Distinct();
+        }
+
+        public int GetDeviceDescriptionID(string DeviceType, string OS, string Country)
+        {
+            DeviceDescription matchingDeviceDescription =
+                _deviceDescriptions.FirstOrDefault(d =>
+                d.DeviceType.Equals(DeviceType, System.StringComparison.OrdinalIgnoreCase) && 
+                d.OperatingSystem.Equals(OS, System.StringComparison.OrdinalIgnoreCase) &&
+                d.Location.Equals(Country, System.StringComparison.OrdinalIgnoreCase)
+                );
+            if (matchingDeviceDescription == null)
+            {
+                throw new InvalidOperationException("No matching device description found");
+            }
+            return matchingDeviceDescription.DeviceDescriptionID;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Application.Interfaces
         void DeleteEmployee(int employeeID); //--deletes an employee by unique ID
         IEnumerable<Employee> GetAllEmployees(); //--retrieves all employees
         Employee GetEmployeeByID(int employeeID); //--finds employee by unique ID
+        Employee GetEmployeeByEmail(string email); //--finds employee by unique Email
         IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels();
         IEnumerable<Department> GetAllDepartments();
         IEnumerable<Role> GetAllRoles();
