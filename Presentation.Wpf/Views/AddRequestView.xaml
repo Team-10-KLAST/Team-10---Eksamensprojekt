@@ -105,14 +105,14 @@
                     BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1" 
                     Command="{Binding CancelCommand}"/>
-                <!-- Delete button  -->
+                <!-- Submit button  -->
                 <Button Grid.Column="2"
                     Padding="12,6"
                     Content="Submit request"
                     FontWeight="Bold"
                     BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1"
-                    Command="{Binding DeleteCommand}" Margin="0,0,4,0"/>
+                    Command="{Binding SubmitCommand}" Margin="0,0,4,0"/>
             </Grid>
         </Grid>
     </Grid>
