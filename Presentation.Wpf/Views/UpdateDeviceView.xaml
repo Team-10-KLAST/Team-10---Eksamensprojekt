@@ -7,16 +7,13 @@
       mc:Ignorable="d" 
              Background="{StaticResource PageBackgroundBrush}"
              d:DesignHeight="500" d:DesignWidth="400">
-    <Grid Margin="18,20,17,20" Background="White">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <!-- Header -->
-            <RowDefinition Height="Auto"/>
-            <!-- Form Fields -->
-            <RowDefinition Height="Auto"/>
-            <!-- History log -->
-            <RowDefinition Height="Auto"/>
-            <!-- Buttons -->
+            <RowDefinition Height="Auto"/>   <!-- Header -->
+            <RowDefinition Height= "Auto" />   <!-- Form Fields -->
+            <RowDefinition Height="Auto"/>   <!-- Price -->
+            <RowDefinition Height="Auto"/>   <!-- Status history -->
+            <RowDefinition Height="Auto"/>   <!-- Buttons -->
         </Grid.RowDefinitions>
 
         <!-- Header -->
@@ -28,12 +25,13 @@
         </TextBlock>
 
         <!-- Form Fields -->
-        <Grid Grid.Row="1" Margin="0,0,0,10">
+        
+        <Grid Grid.Row="1" Margin="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
+         
             <!-- Left -->
             <StackPanel Grid.Column="0" Orientation="Vertical">
 
@@ -103,31 +101,28 @@
             </StackPanel>
         </Grid>
 
-        <!-- Status history -->
+
+        <!-- Price -->
         <StackPanel Grid.Row="2" Margin="0,0,0,16">
-            <!-- Textbox -->
-            <TextBlock Text="Price" 
-                Style="{StaticResource BaseTextStyle}" 
-                FontWeight="SemiBold"/>
-            <TextBox Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Text="Price" Style="{StaticResource BodyTextStyle}" Margin="0,0,0,5"/>
+            <TextBox Text="{Binding Price}" Height="22"/>
+        </StackPanel>
 
-
-            <!-- Textbox -->
-            <TextBlock Text="Status history" 
-                       Style="{StaticResource BaseTextStyle}" 
-                       FontWeight="SemiBold"/>
-            <ListBox ItemsSource="{Binding StatusHistory}" IsEnabled="False" Height="77" />
+        <!-- Status history -->
+        <StackPanel Grid.Row="3" Margin="0,0,0,16">
+            <TextBlock Text="Status history" Style="{StaticResource BodyTextStyle}" Margin="0,0,0,5"/>
+            <TextBox Text="{Binding StatusHistoryString}" Height="105" IsReadOnly="True"/>
         </StackPanel>
 
         <!-- Action Buttons -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,50,0,0">
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Delete"
                     Style="{StaticResource RejectButtonStyle}"
-                    Command="{Binding CancelCommand}" />
+                    Command="{Binding RejectCommand}" />
 
             <Button Content="Update"
                     Style="{StaticResource PrimaryButtonStyle}"
-                    Command="{Binding UpdateDeviceCommand}" />
+                    Command="{Binding ApproveCommand}" Click="Button_Click" />
         </StackPanel>
     </Grid>
 </UserControl>
