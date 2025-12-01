@@ -110,6 +110,15 @@ namespace Application.Services
             return employeeDisplayModels;
         }
 
+        public IEnumerable<string> GetAllEmployeeEmails()
+        {            
+            var employees = GetAllEmployees();
+            return employees
+                   .Select(e => e.Email)
+                   .ToList();
+        }
+
+
         /*//Gets employees by department
         public IEnumerable<Employee> GetEmployeesByDepartment(Department department)
         {

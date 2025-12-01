@@ -18,6 +18,8 @@ namespace Application.Interfaces
         IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels();
         IEnumerable<Department> GetAllDepartments();
         IEnumerable<Role> GetAllRoles();
+        IEnumerable<string> GetAllEmployeeEmails();
+
         /*IEnumerable<Employee> GetEmployeesByDepartment(Department department); //--finds employees by department*/
         /*Employee GetEmployeeByEmail(string email); //--finds employee by email*/
 

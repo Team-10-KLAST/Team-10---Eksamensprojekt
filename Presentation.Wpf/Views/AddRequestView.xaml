@@ -36,9 +36,12 @@
                 </Grid.ColumnDefinitions>
                 <!-- Left -->
                 <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Requester (e-mail)"
                 Style="{StaticResource BaseTextStyle}" 
                 FontWeight="SemiBold"/>
+                     <TextBlock Text="{Binding EmailErrorMsg}" Foreground="Red"/>
+                    </StackPanel>
                     <TextBox Height="33"
                 HorizontalAlignment="Stretch"
                 Background="{StaticResource InputFieldBackgroundBrush}"
@@ -105,14 +108,14 @@
                     BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1" 
                     Command="{Binding CancelCommand}"/>
-                <!-- Delete button  -->
+                <!-- Submit button  -->
                 <Button Grid.Column="2"
                     Padding="12,6"
                     Content="Submit request"
                     FontWeight="Bold"
                     BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1"
-                    Command="{Binding DeleteCommand}" Margin="0,0,4,0"/>
+                    Command="{Binding SubmitCommand}" Margin="0,0,4,0"/>
             </Grid>
         </Grid>
     </Grid>
