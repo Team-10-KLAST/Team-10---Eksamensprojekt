@@ -11,11 +11,11 @@ namespace Application.Services;
 
 public class LoanService : ILoanService
 {
+    private readonly IRepository<Loan> _loanRepository;
 
-
-    public LoanService()
+    public LoanService(IRepository<Loan> loanRepository)
     {
-
+        _loanRepository = loanRepository;
     }
 
 
@@ -36,7 +36,8 @@ public class LoanService : ILoanService
 
     public void AddLoan(Loan loan)
     {
-        
+        if (loan.BorrowerID==null) { throw new ArgumentException("BorrowerID cannot be empty"); }
+        if (loan.DeviceID == null) { throw new ArgumentException("DeviceID cannot be empty"); }        
+        _loanRepository.Add(loan);
     }
-    
 }

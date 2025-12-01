@@ -152,7 +152,8 @@ namespace Presentation.Wpf.ViewModels
             int deviceDescription = _deviceDescriptionService.GetDeviceDescriptionID(SelectedDeviceType, SelectedOS, SelectedCountry);
             _device = new Device
             {
-                DeviceDescriptionID = deviceDescription
+                DeviceDescriptionID = deviceDescription,
+                DeviceStatus = "in request"
             };
             _deviceService.AddDevice(_device);
         }
@@ -165,6 +166,7 @@ namespace Presentation.Wpf.ViewModels
                 RequestID = _request.RequestID,
                 BorrowerID= _employeeService.GetEmployeeByEmail(Email).EmployeeID,
                 DeviceID = _device.DeviceID,
+                LoanStatus = "new"
             };
             _loanService.AddLoan(_loan);
         }
