@@ -189,7 +189,7 @@ namespace Data.AdoNet
             try
             {
                 using (var connection = _databaseConnection.CreateConnection())
-                using (var command = new SqlCommand(SpGetEmployeeById, connection))
+                using (var command = new SqlCommand(SpGetEmployeeByID, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
 

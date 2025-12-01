@@ -18,7 +18,7 @@ namespace Presentation.Wpf.Views
     /// <summary>
     /// Interaction logic for NewUpdateDeviceView.xaml
     /// </summary>
-    public partial class NewUpdateDeviceView : Page
+    public partial class NewUpdateDeviceView : UserControl
     {
         public NewUpdateDeviceView()
         {

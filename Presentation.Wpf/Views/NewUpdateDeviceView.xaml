@@ -149,7 +149,7 @@
 
             <Button Content="Update"
                     Style="{StaticResource PrimaryButtonStyle}"
-                    Command="{Binding ApproveCommand}" Click="Button_Click" />
+                    Command="{Binding ApproveCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

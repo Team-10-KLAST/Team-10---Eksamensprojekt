@@ -21,7 +21,7 @@ public class RequestService : IRequestService
 
     public Request? GetRequestByID(int requestID)
     {
-        return _requestRepository.GetById(requestID);
+        return _requestRepository.GetByID(requestID);
     }
 
     public IEnumerable<Request> GetAllRequests()

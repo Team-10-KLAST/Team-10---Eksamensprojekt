@@ -81,7 +81,7 @@ namespace Data.AdoNet
             try
             {
                 using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(SpGetLoanById, connection)
+                using var command = new SqlCommand(SpGetLoanByID, connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
