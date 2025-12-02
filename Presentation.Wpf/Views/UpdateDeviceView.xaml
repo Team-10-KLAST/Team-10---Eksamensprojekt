@@ -1,0 +1,135 @@
+﻿<UserControl x:Class="Presentation.Wpf.Views.UpdateDevice"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Presentation.Wpf.Views"
+      mc:Ignorable="d" 
+             Background="{StaticResource PageBackgroundBrush}"
+             d:DesignHeight="500" d:DesignWidth="400">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>   <!-- Header -->
+            <RowDefinition Height= "Auto" />   <!-- Form Fields -->
+            <RowDefinition Height="Auto"/>   <!-- Price -->
+            <RowDefinition Height="Auto"/>   <!-- Status history -->
+            <RowDefinition Height="Auto"/>   <!-- Buttons -->
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock
+            Style="{StaticResource HeaderTextStyle}"
+            Margin="0,0,0,20"
+            Grid.Row="0">
+            <Run Language="da-dk" Text="Update deviceID"/>
+        </TextBlock>
+
+        <!-- Form Fields -->
+        
+        <Grid Grid.Row="1" Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+         
+            <!-- Left -->
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+
+                <!-- Textbox -->
+                <TextBlock Text="Type" 
+                           Style="{StaticResource BaseTextStyle}" 
+                            FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding Type}" Style="{StaticResource BaseTextStyle}"/>
+
+                <!-- Textbox -->
+                <TextBlock Text="Owner (name)"
+                    Style="{StaticResource BaseTextStyle}" 
+                    FontWeight="SemiBold"/>
+                <TextBox Text="{Binding Owner, Mode=TwoWay}" Height="32" />
+
+                <!-- Textblock -->
+                <TextBlock Text="Status"
+                    Style="{StaticResource BaseTextStyle}" 
+                    FontWeight="SemiBold" Height="21"/>
+                <ComboBox Style="{StaticResource InputFieldComboStyle}"
+                    ItemsSource="{Binding StatusOptions}"
+                    SelectedItem="{Binding Status, Mode=TwoWay}"
+                    Width="183" Height="29" RenderTransformOrigin="0.504,-0.061"/>
+
+                <!-- Textbox -->
+                <TextBlock Text="Registration date" 
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+
+                <!-- Combobox -->
+                <TextBox Text="{Binding RegistrationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="30" />
+            </StackPanel>
+
+            <!-- Right -->
+            <StackPanel Grid.Column="1" Orientation="Vertical">
+
+                <!-- Textbox -->
+                <TextBlock Text="OS"
+                    Style="{StaticResource BaseTextStyle}" 
+                    FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding OS}" Style="{StaticResource BaseTextStyle}"/>
+
+                <!-- Textbox -->
+                <TextBlock Text="Location (country)"
+                    Style="{StaticResource BaseTextStyle}" 
+                    FontWeight="SemiBold"/>
+                <TextBox Text="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="33"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"/>
+
+                <!-- Textbox -->
+                <TextBlock Text="Eventdate (status for history)"
+                    Style="{StaticResource BaseTextStyle}" 
+                    FontWeight="SemiBold" Width="180"/>
+                <TextBox Text="{Binding EventDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="33"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"/>
+
+                <!-- Textbox -->
+                <TextBlock Text="Expiration date"
+                    Style="{StaticResource BaseTextStyle}" 
+                    FontWeight="SemiBold"/>
+                <TextBox Text="{Binding ExpirationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="33"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"/>
+            </StackPanel>
+        </Grid>
+
+
+        <!-- Price -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,16">
+            <TextBlock Text="Price" 
+                       Style="{StaticResource BodyTextStyle}" 
+                       Margin="0,0,0,5"
+                       FontWeight="SemiBold"/>
+            <TextBox Text="{Binding Price}" Height="22"/>
+        </StackPanel>
+
+        <!-- Status history -->
+        <StackPanel Grid.Row="3" Margin="0,0,0,16">
+            <TextBlock Text="Status history" 
+                       Style="{StaticResource BodyTextStyle}" 
+                       Margin="0,0,0,5"
+                       FontWeight="SemiBold"/>
+            <TextBox Text="{Binding StatusHistoryString}" Height="105" IsReadOnly="True" TextChanged="TextBox_TextChanged"/>
+        </StackPanel>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Delete"
+                    Style="{StaticResource RejectButtonStyle}"
+                    Command="{Binding RejectCommand}" />
+
+            <Button Content="Update"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Command="{Binding ApproveCommand}" Click="Button_Click" />
+        </StackPanel>
+    </Grid>
+</UserControl>
+
