@@ -1,33 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
+using Application.Models;
+using Application.Services;
+using Data;
+using Data.AdoNet;
+using Presentation.Wpf.ViewModels;
 
 namespace Presentation.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for DashboardView.xaml
-    /// </summary>
+    // Code-behind for the dashboard view. Creates repositories, services and the view model.
     public partial class DashboardView : UserControl
     {
         public DashboardView()
         {
             InitializeComponent();
-        }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
+            var db = DatabaseConnection.GetInstance();
 
+            // Creates repositories used by the dashboard
+            var requestRepository = new RequestRepository(db);
+            var deviceRepository = new DeviceRepository(db);
+            var loanRepository = new LoanRepository(db);
+            var employeeRepository = new EmployeeRepository(db);
+            var deviceDescriptionRepository = new DeviceDescriptionRepository(db);
+
+            // Creates services used by the view model
+            var requestService = new RequestService(requestRepository);
+            var deviceService = new DeviceService(deviceRepository);
+
+            // Creates the dashboard view model and assigns it as DataContext
+            var viewModel = new DashboardViewModel(
+                requestService,
+                deviceService,
+                loanRepository,
+                employeeRepository,
+                deviceDescriptionRepository);
+
+            DataContext = viewModel;
         }
     }
 }
