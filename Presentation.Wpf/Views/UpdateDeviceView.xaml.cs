@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Presentation.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for NewUpdateDeviceView.xaml
+    /// Interaction logic for UpdateDeviceView.xaml
     /// </summary>
-    public partial class NewUpdateDeviceView : UserControl
+    public partial class UpdateDeviceView : UserControl
     {
-        public NewUpdateDeviceView()
+        public UpdateDeviceView()
         {
             InitializeComponent();
         }
