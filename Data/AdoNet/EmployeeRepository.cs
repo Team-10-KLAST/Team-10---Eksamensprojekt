@@ -9,7 +9,7 @@ using Application.Interfaces;
 
 namespace Data.AdoNet
 {
-    public class EmployeeRepository : IEmployeeRepository<Employee>
+    public class EmployeeRepository : IRepository<Employee>
     {
         // Dependency on DatabaseConnection for creating connections.
         private readonly DatabaseConnection _databaseConnection;
@@ -220,39 +220,39 @@ namespace Data.AdoNet
         }
 
         //Get by Email: Returns a single employee (or null) using a stored procedure
-        public Employee? GetByEmail(string email)
-        {
-            try
-            {
-                using (var connection = _databaseConnection.CreateConnection())
-                using (var command = new SqlCommand(SpGetEmployeeByEmail, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
+        //public Employee? GetByEmail(string email)
+        //{
+        //    try
+        //    {
+        //        using (var connection = _databaseConnection.CreateConnection())
+        //        using (var command = new SqlCommand(SpGetEmployeeByEmail, connection))
+        //        {
+        //            command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@Email", email);
+        //            command.Parameters.AddWithValue("@Email", email);
 
-                    connection.Open();
+        //            connection.Open();
 
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return MapEmployee(reader);
-                        }
-                    }
-                }
+        //            using (var reader = command.ExecuteReader())
+        //            {
+        //                if (reader.Read())
+        //                {
+        //                    return MapEmployee(reader);
+        //                }
+        //            }
+        //        }
 
-                return null;
-            }
-            catch (SqlException ex)
-            {
-                throw new DataException("Database error while reading Employee by email.", ex);
-            }
-            catch (Exception ex)
-            {
-                throw new DataException("Unexpected error while reading Employee by email.", ex);
-            }
-        }
+        //        return null;
+        //    }
+        //    catch (SqlException ex)
+        //    {
+        //        throw new DataException("Database error while reading Employee by email.", ex);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new DataException("Unexpected error while reading Employee by email.", ex);
+        //    }
+        //}
 
         // Helper method to map a SqlDataReader row to an Employee object.
         private static Employee MapEmployee(SqlDataReader reader)
