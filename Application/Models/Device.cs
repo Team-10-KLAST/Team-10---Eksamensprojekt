@@ -33,7 +33,7 @@ namespace Application.Models
                       int deviceDescriptionID)
         {
             DeviceStatus = deviceStatus;
-            Status = DeviceStatus.PLANNED;
+            Status = Models.DeviceStatus.PLANNED;
             Price = price;
             PurchaseDate = purchaseDate;
             ExpectedEndDate = expectedEndDate;
