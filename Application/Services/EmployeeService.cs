@@ -17,11 +17,11 @@ namespace Application.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IRepository<Employee> _employeeRepository;
         private readonly IRepository<Department> _departmentRepository;
         private readonly IRepository<Role> _roleRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IRepository<Department> departmentRepository, IRepository<Role> roleRepository)
+        public EmployeeService(IRepository<Employee> employeeRepository, IRepository<Department> departmentRepository, IRepository<Role> roleRepository)
         {
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
@@ -120,13 +120,17 @@ namespace Application.Services
         }
 
         public Employee GetEmployeeByEmail(string email)
-        {
-            var addr = new MailAddress(email);
-            if (addr.Address.Equals(email, StringComparison.OrdinalIgnoreCase))
+        {            
+            try
             {
-                throw new ArgumentException("Invalid employee Email.");
+                var addr = new MailAddress(email);
             }
-            return _employeeRepository.GetByEmail(email);
+            catch (FormatException)
+            {
+                throw new ArgumentException("Invalid email");
+            }
+            var employees = GetAllEmployees();
+            return employees.FirstOrDefault(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
         /*//Gets employees by department

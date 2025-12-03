@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Models;
+using Application.Models.DisplayModels;
 
 namespace Application.Interfaces.Service
 {
@@ -11,8 +12,9 @@ namespace Application.Interfaces.Service
     {
         Request GetRequestByID(int requestID);
         IEnumerable<Request> GetAllRequests();
-        public void SubmitRequest(Request request);
-        public void CancelRequest(int requestID);
-        public void UpdateRequestStatus(int requestID, string newStatus);
+        void SubmitRequest(Request request);
+        void ApproveRequest(int requestId, int approverID, string comment);
+        void RejectRequest(int requestID, int approverID, string comment);
+        ProcessRequestDisplayModel GetProcessRequestDisplayModel(int requestId);
     }
 }
