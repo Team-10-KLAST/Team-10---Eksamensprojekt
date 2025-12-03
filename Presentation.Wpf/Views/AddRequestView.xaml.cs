@@ -15,19 +15,11 @@ using System.Windows.Shapes;
 
 namespace Presentation.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for AddRequest.xaml
-    /// </summary>
-    public partial class AddRequest : Page
+    public partial class AddRequestView : UserControl
     {
-        public AddRequest()
+        public AddRequestView()
         {
             InitializeComponent();
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
         }
     }
 }

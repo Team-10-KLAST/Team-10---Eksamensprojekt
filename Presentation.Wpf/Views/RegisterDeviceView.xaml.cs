@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Presentation.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for RegisterDeviceView.xaml
-    /// </summary>
     public partial class RegisterDeviceView : UserControl
     {
         public RegisterDeviceView()
