@@ -88,12 +88,29 @@ namespace Presentation.Wpf.ViewModels
             get => _registrationDate;
             set
             {
+                // Keep track of old registration date for expiry date logic
+                var oldRegistrationDate = _registrationDate;
+
                 if (SetProperty(ref _registrationDate, value))
                 {
+                    // Auto-update ExpiryDate based on new RegistrationDate
+                    if (_registrationDate.HasValue)
+                    {
+                        // If ExpiryDate is not set or was previously auto-set to 3 years after old RegistrationDate
+                        if (!ExpiryDate.HasValue ||
+                            (oldRegistrationDate.HasValue &&
+                             ExpiryDate.Value == oldRegistrationDate.Value.AddYears(3)))
+                        {
+                            // Auto-set ExpiryDate to 3 years after new RegistrationDate
+                            ExpiryDate = _registrationDate.Value.AddYears(3);
+                        }
+                    }
+
                     (RegisterCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
+
 
         private DateTime? _expiryDate = DateTime.Today.AddYears(3);
         public DateTime? ExpiryDate
@@ -149,7 +166,6 @@ namespace Presentation.Wpf.ViewModels
 
         private void RegisterDevice()
         {
-            // Sanity check - should not be possible to reach here if dates are null
             if (RegistrationDate is null || ExpiryDate is null)
                 return;
 
@@ -167,7 +183,7 @@ namespace Presentation.Wpf.ViewModels
             {
                 DeviceDescriptionID = deviceDescriptionId,
                 DeviceStatus = status,
-                // UI does not collect price yet – set to 0 for now
+                // UI does not collect price yet – set to 0 for now. Can be updated later.
                 Price = 0m,
                 PurchaseDate = DateOnly.FromDateTime(RegistrationDate.Value),
                 ExpectedEndDate = DateOnly.FromDateTime(ExpiryDate.Value)
