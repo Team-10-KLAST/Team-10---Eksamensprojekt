@@ -12,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Application.Services;
-using Data;
-using Data.AdoNet;
-using Presentation.Wpf.ViewModels;
 
 namespace Presentation.Wpf.Views
 {
-    public partial class EmployeeView : UserControl
+    /// <summary>
+    /// Interaction logic for NavigationView.xaml
+    /// </summary>
+    public partial class NavigationView : UserControl
     {
-        public EmployeeView()
+        public NavigationView()
         {
             InitializeComponent();
         }

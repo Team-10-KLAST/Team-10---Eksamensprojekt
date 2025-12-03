@@ -16,7 +16,6 @@ namespace Application.Models
         public int RequestID { get; set; }
         public DateOnly RequestDate { get; set; }
         public string Justification { get; set; } = "";
-        public string RequestStatus { get; set; } = "";
         public RequestStatus Status { get; set; } = Models.RequestStatus.PENDING;
 
 
@@ -24,11 +23,11 @@ namespace Application.Models
         public Request() { }
 
         // Constructor with parameters (excluding RequestID).
-        public Request(DateOnly requestDate, string justification, string requestStatus)
+        public Request(DateOnly requestDate, string justification, RequestStatus status)
         {
             RequestDate = requestDate;
             Justification = justification;
-            RequestStatus = requestStatus;
+            Status = status;
         }
     }
 }

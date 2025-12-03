@@ -12,16 +12,6 @@ namespace Presentation.Wpf.Views
         public DeviceView()
         {
             InitializeComponent();
-
-            var db = DatabaseConnection.GetInstance();
-
-            var deviceRepo = new DeviceRepository(db);
-
-            var deviceService = new DeviceService(deviceRepo);
-
-            var viewModel = new DeviceViewModel(deviceService);
-
-            DataContext = viewModel;
         }
     }
 }

@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Presentation.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for ProcessRequestView.xaml
-    /// </summary>
     public partial class ProcessRequestView : UserControl
     {
         public ProcessRequestView()

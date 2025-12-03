@@ -6,16 +6,18 @@ namespace Application.Models
 
     public enum DeviceStatus
     {
+        REGISTERED,
+        CANCELLED,
         PLANNED,
         ORDERED,
         RECEIVED,
-        INUSE
+        INUSE,
+        INSTOCK
     }
     public class Device
     {
         public int DeviceID { get; set; }
-        public string DeviceStatus { get; set; } = "";
-        public DeviceStatus Status { get; set; } = Models.DeviceStatus.PLANNED;
+        public DeviceStatus Status { get; set; } = Models.DeviceStatus.REGISTERED;
         public decimal Price { get; set; }
         public DateOnly PurchaseDate { get; set; }
         public DateOnly ExpectedEndDate { get; set; }
@@ -28,12 +30,11 @@ namespace Application.Models
         }
 
         // Constructor with parameters (excluding DeviceID).
-        public Device(string deviceStatus, decimal price,
+        public Device(DeviceStatus status, decimal price,
                       DateOnly purchaseDate, DateOnly expectedEndDate,
                       int deviceDescriptionID)
         {
-            DeviceStatus = deviceStatus;
-            Status = Models.DeviceStatus.PLANNED;
+            Status = status;
             Price = price;
             PurchaseDate = purchaseDate;
             ExpectedEndDate = expectedEndDate;

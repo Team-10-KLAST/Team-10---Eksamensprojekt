@@ -2,8 +2,11 @@
 using System.Data;
 using System.IO;
 using System.Windows;
-using Microsoft.Extensions.Configuration;
+using Application.Services;
 using Data;
+using Data.AdoNet;
+using Microsoft.Extensions.Configuration;
+using Presentation.Wpf.ViewModels;
 
 namespace Presentation.Wpf
 {
@@ -24,9 +27,47 @@ namespace Presentation.Wpf
             var connectionString = config.GetConnectionString("DefaultConnection");
             DatabaseConnection.Initialize(connectionString);
 
-            var mainWindow = new MainWindow();
+            // Hent en instans af DatabaseConnection
+            var dbConnection = DatabaseConnection.GetInstance();
+
+            // 1. Opret repositories med dbConnection
+            var loanRepository = new LoanRepository(dbConnection);
+            var employeeRepository = new EmployeeRepository(dbConnection);
+            var deviceDescriptionRepository = new DeviceDescriptionRepository(dbConnection);
+            var deviceRepository = new DeviceRepository(dbConnection);
+            var requestRepository = new RequestRepository(dbConnection);
+            var decisionRepository = new DecisionRepository(dbConnection);
+            var departmentRepository = new DepartmentRepository(dbConnection);
+            var roleRepository = new RoleRepository(dbConnection);
+
+            // 2. Opret services med repositories
+            var requestService = new RequestService(requestRepository, employeeRepository, deviceRepository, 
+                deviceDescriptionRepository, loanRepository, decisionRepository);
+            var deviceService = new DeviceService(deviceRepository);
+            var employeeService = new EmployeeService(employeeRepository, departmentRepository, roleRepository);
+            var deviceDescriptionService = new DeviceDescriptionService(deviceDescriptionRepository);
+            var loanService = new LoanService(loanRepository);
+
+            // 3. Opret MainWindowViewModel med services og repos
+            var mainWindowVm = new MainWindowViewModel(
+                requestService,
+                deviceDescriptionService,
+                employeeService,
+                deviceService,
+                loanService,
+                loanRepository,
+                employeeRepository,
+                deviceDescriptionRepository
+            );
+
+            var mainWindow = new MainWindow
+            {
+                DataContext = mainWindowVm
+            };
+
             mainWindow.Show();
         }
+
     }
 
 }

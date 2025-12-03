@@ -8,39 +8,5 @@
         Width="900">
 
 
-
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <!-- Left Menu-->
-        <Border Grid.Column="0" Background="#003F7D">
-            <StackPanel Margin="10">
-                <TextBlock Text="Menu"
-                           Foreground="White"
-                           Margin="4,4,4,12"
-                           FontSize="18"
-                           FontWeight="Bold" />
-
-                <Button Content="Dashboard"
-                        Margin="4"
-                        Command="{Binding ShowDashboardCommand}" />
-
-                <Button Content="Employees"
-                        Margin="4"
-                        Command="{Binding ShowEmployeesCommand}" />
-
-                <Button Content="Devices"
-                        Margin="4"
-                        Command="{Binding ShowDevicesCommand}" />
-            </StackPanel>
-        </Border>
-
-        <!-- Content-->
-        <Border Grid.Column="1" Background="{StaticResource PageBackgroundBrush}">
-            <ContentControl Content="{Binding CurrentView}" />
-        </Border>
-    </Grid>
+    <ContentControl Content="{Binding CurrentView}" />
 </Window>

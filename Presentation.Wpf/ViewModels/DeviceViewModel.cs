@@ -107,7 +107,7 @@ namespace Presentation.Wpf.ViewModels
                     Owner = string.Empty,
                     Location = string.Empty,
 
-                    Status = device.DeviceStatus,
+                    Status = device.Status.ToString(),
                     RegisteredDate = device.PurchaseDate,
                     ExpiryDate = device.ExpectedEndDate
                 };
