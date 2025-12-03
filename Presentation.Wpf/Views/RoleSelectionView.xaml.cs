@@ -12,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Application.Services;
-using Data;
-using Data.AdoNet;
-using Presentation.Wpf.ViewModels;
 
 namespace Presentation.Wpf.Views
 {
-    public partial class EmployeeView : UserControl
+    /// <summary>
+    /// Interaction logic for RoleSelectionView.xaml
+    /// </summary>
+    public partial class RoleSelectionView : UserControl
     {
-        public EmployeeView()
+        public RoleSelectionView()
         {
             InitializeComponent();
         }

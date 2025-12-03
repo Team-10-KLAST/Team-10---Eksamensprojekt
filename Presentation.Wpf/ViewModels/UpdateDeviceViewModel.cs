@@ -129,11 +129,11 @@ namespace Presentation.Wpf.ViewModels
         public UpdateDeviceViewModel(DeviceDisplayModel device)
         {
             SelectedDevice = device ?? new DeviceDisplayModel();
-            UpdateDeviceCommand = new RelayCommand(UpdateDevice);
+            /*UpdateDeviceCommand = new RelayCommand(UpdateDevice);*/
             CancelCommand = new RelayCommand(Cancel);
         }
 
-        private void UpdateDevice()
+        /*private void UpdateDevice()
         {
             _deviceService.UpdateDevice(SelectedDevice); // Saves changes
 
@@ -143,7 +143,7 @@ namespace Presentation.Wpf.ViewModels
             OnPropertyChanged(nameof(StatusHistory));
 
             CloseOverlay();
-        }
+        }*/
 
         private void Cancel()
         {

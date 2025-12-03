@@ -19,7 +19,7 @@ namespace Presentation.Wpf.Views
 {
     public partial class AddEmployeeView : UserControl
     {
-        public AddEmployeeView(IEmployeeService employeeService)
+        public AddEmployeeView()
         {
             InitializeComponent();
         }

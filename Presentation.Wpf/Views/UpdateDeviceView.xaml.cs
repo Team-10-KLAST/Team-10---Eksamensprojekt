@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Presentation.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for UpdateDeviceView.xaml
-    /// </summary>
     public partial class UpdateDeviceView : UserControl
     {
         public UpdateDeviceView()

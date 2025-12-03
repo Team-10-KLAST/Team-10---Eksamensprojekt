@@ -124,12 +124,12 @@ namespace Presentation.Wpf.ViewModels
             SelectedDeviceType = DeviceOptions.FirstOrDefault();
             SelectedCountry = CountryOptions.FirstOrDefault();
 
-            SubmitCommand = new RelayCommand(SubmitRequest, CanSubmitRequest);
+            /*SubmitCommand = new RelayCommand(SubmitRequest, CanSubmitRequest);*/
             CancelCommand = new RelayCommand(Cancel);
         }
 
         //Action Methods
-        Request _request;
+        /*Request _request;
         private void SubmitRequest ()
         {
             _request = new Request
@@ -141,10 +141,10 @@ namespace Presentation.Wpf.ViewModels
             _requestService.SubmitRequest(_request);
             CreateVirtualDevice();
             CreateLoan();
-        }
+        }*/
 
         //Create VirtualDevice with only DeviceDescription
-        Device _device;
+        /*Device _device;
 
         private void CreateVirtualDevice ()
         {
@@ -156,10 +156,10 @@ namespace Presentation.Wpf.ViewModels
                 DeviceStatus = "in request"
             };
             _deviceService.AddDevice(_device);
-        }
+        }*/
 
         //Create a Loan to store BorrowID from email input
-        private void CreateLoan ()
+        /*private void CreateLoan ()
         {
             var _loan = new Loan()
             {
@@ -169,7 +169,7 @@ namespace Presentation.Wpf.ViewModels
                 LoanStatus = "new"
             };
             _loanService.AddLoan(_loan);
-        }
+        }*/
 
         //Comment must not be empty, email must exists in DB.
         private bool CanSubmitRequest()
