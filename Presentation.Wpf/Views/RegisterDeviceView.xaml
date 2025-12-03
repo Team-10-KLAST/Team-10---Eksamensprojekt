@@ -54,7 +54,9 @@
                          BorderBrush="{StaticResource InputFieldBorderBrush}"
                          Width="375"
                          Height="30"
-                         Margin="0,5,0,10"/>
+                         Margin="0,5,0,10"
+                         ItemsSource="{Binding DeviceTypeOptions}"
+                         SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}" />
             </StackPanel>
             
             <!-- OS-->
@@ -66,7 +68,9 @@
                          BorderBrush="{StaticResource InputFieldBorderBrush}"
                          Width="375"
                          Height="30"
-                         Margin="0,5,0,10"/>
+                         Margin="0,5,0,10"
+                         ItemsSource="{Binding OSOptions}"
+                         SelectedItem="{Binding SelectedOS, Mode=TwoWay}"/>
 
             </StackPanel>
             
@@ -79,7 +83,10 @@
                          BorderBrush="{StaticResource InputFieldBorderBrush}"
                          Width="375"
                          Height="30"
-                         Margin="0,5,0,10"/>
+                         Margin="0,5,0,10"
+                         ItemsSource="{Binding OwnershipOptions}"
+                         SelectedItem="{Binding SelectedOwnership, Mode=TwoWay}"/>
+
 
             </StackPanel>
             
@@ -92,7 +99,9 @@
                          BorderBrush="{StaticResource InputFieldBorderBrush}"
                          Width="375"
                          Height="30"
-                         Margin="0,5,0,10"/>
+                         Margin="0,5,0,10"
+                         ItemsSource="{Binding CountryOptions}"
+                         SelectedItem="{Binding SelectedLocation, Mode=TwoWay}"/>
 
             </StackPanel>
             
@@ -105,7 +114,8 @@
                          BorderBrush="{StaticResource InputFieldBorderBrush}"
                          Width="375"
                          Height="30"
-                         Margin="0,5,0,10"/>
+                         Margin="0,5,0,10"
+                         Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
             <!-- Dates-->
@@ -121,7 +131,7 @@
                                Style="{StaticResource BaseHeaderTextStyle}"
                                FontSize="12"
                                Margin="0,0,0,5"/>
-                    <DatePicker/>
+                    <DatePicker SelectedDate="{Binding RegistrationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <!-- Expiry date-->
@@ -130,8 +140,7 @@
                                Style="{StaticResource BaseHeaderTextStyle}"
                                FontSize="12"
                                Margin="0,0,0,5"/>
-                    <DatePicker />
-
+                    <DatePicker SelectedDate="{Binding ExpiryDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 
             </Grid>
@@ -151,14 +160,15 @@
             <StackPanel Grid.Column="1" 
                         Orientation="Horizontal"
                         HorizontalAlignment="Right">
-                
+
                 <Button Content="Cancel"
                         Style="{StaticResource RejectButtonStyle}"
                         Width="65"
                         Height="25"
                         BorderBrush="{StaticResource BorderBrush}"
                         FontWeight="Bold"
-                        Margin="0,5,5,5"/>
+                        Margin="0,5,5,5"
+                        Command="{Binding CancelCommand}"/>
 
                 <Button Content="Register"
                         Style="{StaticResource PrimaryButtonStyle}"
@@ -166,7 +176,8 @@
                         Height="25"
                         BorderBrush="{StaticResource BorderBrush}"
                         FontWeight="Bold"
-                        Margin="0,5,5,5"/>
+                        Margin="0,5,5,5"
+                        Command="{Binding RegisterCommand}"/>
             </StackPanel>
         </Grid>
 
