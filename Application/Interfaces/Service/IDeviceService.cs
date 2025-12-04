@@ -10,5 +10,7 @@ namespace Application.Interfaces.Service
         void AddDevice(Device device);
         void UpdateDevice(Device device);
         void DeleteDevice(int deviceID);
+        int CreateVirtualDeviceID(string DeviceType, string OS, string country);
+
     }
 }

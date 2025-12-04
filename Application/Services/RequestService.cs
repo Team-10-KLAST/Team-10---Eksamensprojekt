@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Interfaces;
 using Application.Interfaces.Repository;
 using Application.Interfaces.Service;
 using Application.Models;
@@ -20,10 +21,14 @@ public class RequestService : IRequestService
     private readonly IRepository<Loan> _loanRepository;
     private readonly IRepository<Decision> _decisionRepository;
 
+    private readonly IDeviceService _deviceService;
+    private readonly ILoanService _loanService;
+    private readonly IEmployeeService _employeeService;
+
     // Constructor injecting the required repositories
     public RequestService(IRepository<Request> requestRepository, IRepository<Employee> employeeRepository, 
         IRepository<Device> deviceRepository, IRepository<DeviceDescription> deviceDescriptionRepository, 
-        IRepository<Loan> loanRepository, IRepository<Decision> decisionRepository)
+        IRepository<Loan> loanRepository, IRepository<Decision> decisionRepository, IDeviceService deviceService, ILoanService loanService, IEmployeeService employeeService)
     {
         _requestRepository = requestRepository;
         _employeeRepository = employeeRepository;
@@ -31,6 +36,9 @@ public class RequestService : IRequestService
         _deviceDescriptionRepository = deviceDescriptionRepository;
         _loanRepository = loanRepository;
         _decisionRepository = decisionRepository;
+        _deviceService = deviceService;
+        _loanService = loanService;
+        _employeeService = employeeService;
     }
 
     // Retrieves a request by its ID
@@ -45,8 +53,7 @@ public class RequestService : IRequestService
         return _requestRepository.GetAll();
     }
 
-    public void SubmitRequest(Request request)
-    { }
+
 
     // Approves a request by updating the relevant entities and recording the decision
     public void ApproveRequest(int requestId, int approverId, string? comment = null)
@@ -127,5 +134,30 @@ public class RequestService : IRequestService
             OperatingSystem = description.OperatingSystem,
             Location = description.Location,
         };
+    }
+
+    // pass on the infromation from AddRequest form
+    public void SubmitRequest(string email, string deviceType, string OS, string country, string comment)
+    {
+        Request _request = new Request
+        {
+            Justification=comment,
+            RequestDate = DateOnly.FromDateTime(DateTime.Now),
+            Status = RequestStatus.PENDING,
+        };
+        AddRequest(_request);
+        int _borrowerID = _employeeService.GetEmployeeByEmail(email).EmployeeID;
+        int _deviceID = _deviceService.CreateVirtualDeviceID(deviceType, OS, country);
+
+        _loanService.CreateLoan(_request.RequestID, _borrowerID, _deviceID);
+    }
+
+    public void AddRequest(Request request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Justification))
+        {
+            throw new ArgumentException("Comment field cannot be empty.");
+        }
+        _requestRepository.Add(request);
     }
 }

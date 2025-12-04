@@ -18,8 +18,6 @@ namespace Presentation.Wpf.ViewModels
         private readonly IRequestService _requestService;
         private readonly IDeviceDescriptionService _deviceDescriptionService;
         private readonly IEmployeeService _employeeService;
-        private readonly IDeviceService _deviceService;
-        private readonly ILoanService _loanService;
 
         
         //form fields
@@ -107,13 +105,11 @@ namespace Presentation.Wpf.ViewModels
         public ICommand CancelCommand { get; }
 
         //Constructor. Creating all relevant instances, populating all collections.
-        public AddRequestViewModel (IRequestService requestService, IDeviceDescriptionService descriptionService, IEmployeeService employeeService, IDeviceService deviceService, ILoanService loanService)
+        public AddRequestViewModel (IRequestService requestService, IDeviceDescriptionService descriptionService, IEmployeeService employeeService)
         {
             _requestService = requestService;
             _deviceDescriptionService = descriptionService;
             _employeeService = employeeService;
-            _loanService = loanService;
-            _deviceService = deviceService;
 
             OSOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllOSOptions());
             DeviceOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllDeviceTypeOptions());
@@ -128,48 +124,13 @@ namespace Presentation.Wpf.ViewModels
             CancelCommand = new RelayCommand(Cancel);
         }
 
-        //Action Methods
-        Request _request;
+        //Submit request by passing all info from the form
         private void SubmitRequest ()
         {
-            _request = new Request
-            {
-                Justification = RequestComment,
-                RequestDate = DateOnly.FromDateTime(DateTime.Now),
-                RequestStatus = "Pending"
-            };
-            _requestService.SubmitRequest(_request);
-            CreateVirtualDevice();
-            CreateLoan();
+            _requestService.SubmitRequest(Email, SelectedDeviceType, SelectedOS, SelectedCountry, RequestComment);
         }
 
-        //Create VirtualDevice with only DeviceDescription
-        Device _device;
-
-        private void CreateVirtualDevice ()
-        {
-            
-            int deviceDescription = _deviceDescriptionService.GetDeviceDescriptionID(SelectedDeviceType, SelectedOS, SelectedCountry);
-            _device = new Device
-            {
-                DeviceDescriptionID = deviceDescription,
-                DeviceStatus = "in request"
-            };
-            _deviceService.AddDevice(_device);
-        }
-
-        //Create a Loan to store BorrowID from email input
-        private void CreateLoan ()
-        {
-            var _loan = new Loan()
-            {
-                RequestID = _request.RequestID,
-                BorrowerID= _employeeService.GetEmployeeByEmail(Email).EmployeeID,
-                DeviceID = _device.DeviceID,
-                LoanStatus = "new"
-            };
-            _loanService.AddLoan(_loan);
-        }
+       
 
         //Comment must not be empty, email must exists in DB.
         private bool CanSubmitRequest()

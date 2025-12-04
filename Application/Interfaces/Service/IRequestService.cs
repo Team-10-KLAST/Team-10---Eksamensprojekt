@@ -12,9 +12,10 @@ namespace Application.Interfaces.Service
     {
         Request GetRequestByID(int requestID);
         IEnumerable<Request> GetAllRequests();
-        void SubmitRequest(Request request);
+        void SubmitRequest(string email, string deviceType, string OS, string country, string comment);
         void ApproveRequest(int requestId, int approverID, string comment);
         void RejectRequest(int requestID, int approverID, string comment);
         ProcessRequestDisplayModel GetProcessRequestDisplayModel(int requestId);
+        void AddRequest(Request request);
     }
 }

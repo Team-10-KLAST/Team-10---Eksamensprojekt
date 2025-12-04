@@ -11,11 +11,13 @@ namespace Application.Services
     {
         // Used to load, create, update and delete devices in the database
         private readonly IRepository<Device> _deviceRepository;
+        private readonly IDeviceDescriptionService _deviceDescriptionService;
 
         // Receives the repository instance from dependency injection
-        public DeviceService(IRepository<Device> deviceRepository)
+        public DeviceService(IRepository<Device> deviceRepository, IDeviceDescriptionService deviceDescriptionService)
         {
             _deviceRepository = deviceRepository;
+            _deviceDescriptionService = deviceDescriptionService;
         }
 
         // Gets one device by its DeviceID, or null if it does not exist
@@ -72,6 +74,17 @@ namespace Application.Services
             }
 
             _deviceRepository.Delete(deviceID);
+        }
+
+        public int CreateVirtualDeviceID(string DeviceType, string OS, string country)
+        {
+            Device device = new Device
+            {
+                DeviceDescriptionID = _deviceDescriptionService.GetDeviceDescriptionID(DeviceType, OS, country),
+                Status = DeviceStatus.PLANNED,
+            };
+            AddDevice(device);
+            return device.DeviceID;
         }
     }
 }
