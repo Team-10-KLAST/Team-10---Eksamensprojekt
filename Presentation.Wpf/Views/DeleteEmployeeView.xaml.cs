@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Presentation.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for DeleteEmployeeView.xaml
-    /// </summary>
     public partial class DeleteEmployeeView : UserControl
     {
         public DeleteEmployeeView()

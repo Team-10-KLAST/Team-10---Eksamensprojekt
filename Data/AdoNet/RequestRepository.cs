@@ -51,7 +51,7 @@ namespace Data.AdoNet
                         RequestID = reader.GetInt32(reader.GetOrdinal("RequestID")),
                         RequestDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("RequestDate"))),
                         Justification = reader.GetString(reader.GetOrdinal("Justification")),
-                        RequestStatus = reader.GetString(reader.GetOrdinal("RequestStatus"))
+                        Status = (RequestStatus)reader.GetInt32(reader.GetOrdinal("RequestStatus"))
                     });
                 }
                 return requests;
@@ -87,7 +87,7 @@ namespace Data.AdoNet
                         RequestID = reader.GetInt32(reader.GetOrdinal("RequestID")),
                         RequestDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("RequestDate"))),
                         Justification = reader.GetString(reader.GetOrdinal("Justification")),
-                        RequestStatus = reader.GetString(reader.GetOrdinal("RequestStatus"))
+                        Status = (RequestStatus)reader.GetInt32(reader.GetOrdinal("RequestStatus"))
                     };
                 }
                 return null;
@@ -111,7 +111,7 @@ namespace Data.AdoNet
 
                 command.Parameters.Add("@RequestDate", SqlDbType.Date).Value = request.RequestDate.ToDateTime(new TimeOnly(0, 0));
                 command.Parameters.Add("@Justification", SqlDbType.NVarChar, 200).Value = request.Justification;
-                command.Parameters.Add("@RequestStatus", SqlDbType.NVarChar, 50).Value = request.RequestStatus;
+                command.Parameters.Add("@RequestStatus", SqlDbType.Int).Value = (int)request.Status;
 
                 connection.Open();
 
@@ -145,7 +145,7 @@ namespace Data.AdoNet
                 command.Parameters.Add("@RequestID", SqlDbType.Int).Value = request.RequestID;
                 command.Parameters.Add("@RequestDate", SqlDbType.Date).Value = request.RequestDate.ToDateTime(new TimeOnly(0, 0));
                 command.Parameters.Add("@Justification", SqlDbType.NVarChar, 200).Value = request.Justification;
-                command.Parameters.Add("@RequestStatus", SqlDbType.NVarChar, 50).Value = request.RequestStatus;
+                command.Parameters.Add("@RequestStatus", SqlDbType.Int).Value = (int)request.Status;
 
                 connection.Open();
                 var rowsAffected = command.ExecuteNonQuery();

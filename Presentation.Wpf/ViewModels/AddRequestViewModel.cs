@@ -120,9 +120,10 @@ namespace Presentation.Wpf.ViewModels
             SelectedDeviceType = DeviceOptions.FirstOrDefault();
             SelectedCountry = CountryOptions.FirstOrDefault();
 
-            SubmitCommand = new RelayCommand(SubmitRequest, CanSubmitRequest);
+            /*SubmitCommand = new RelayCommand(SubmitRequest, CanSubmitRequest);*/
             CancelCommand = new RelayCommand(Cancel);
         }
+
 
         //Submit request by passing all info from the form
         private void SubmitRequest ()

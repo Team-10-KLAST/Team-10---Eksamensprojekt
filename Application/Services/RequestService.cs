@@ -62,7 +62,7 @@ public class RequestService : IRequestService
 
         var device = _deviceRepository.GetByID(loan.DeviceID)
                  ?? throw new InvalidOperationException("Device not found");
-        device.DeviceStatus = DeviceStatus.PLANNED;
+        device.Status = DeviceStatus.PLANNED;
         _deviceRepository.Update(device);
 
         var decision = new Decision
@@ -82,7 +82,7 @@ public class RequestService : IRequestService
 
         var device = _deviceRepository.GetByID(loan.DeviceID)
                  ?? throw new InvalidOperationException("Device not found");
-        device.DeviceStatus = DeviceStatus.CANCELLED;
+        device.Status = DeviceStatus.CANCELLED;
         _deviceRepository.Update(device);
 
         var decision = new Decision
@@ -106,7 +106,7 @@ public class RequestService : IRequestService
 
         var request = _requestRepository.GetByID(requestId)
               ?? throw new InvalidOperationException("Request not found");
-        request.RequestStatus = RequestStatus.CLOSED;
+        request.Status = RequestStatus.CLOSED;
         _requestRepository.Update(request);
 
         return loan;
