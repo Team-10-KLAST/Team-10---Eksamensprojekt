@@ -23,7 +23,14 @@ public class LoanService : ILoanService
     // IEnumerable<Loan> GetAllLoans() { }
     public void CreateLoan(int requestID, int borrowerID, int deviceID)
     {
-
+        var loan = new Loan
+        {
+            RequestID = requestID,
+            BorrowerID = borrowerID,
+            DeviceID = deviceID,
+            LoanStatus = "new"
+        };
+        AddLoan(loan);
     }
     public void CloseLoan(int loanID)
     {
