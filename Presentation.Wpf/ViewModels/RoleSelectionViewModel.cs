@@ -60,9 +60,7 @@ namespace Presentation.Wpf.ViewModels
                 _mainWindow.CurrentView = new AddRequestViewModel(
                     _requestService,
                     _deviceDescriptionService,
-                    _employeeService,
-                    _deviceService,
-                    _loanService
+                    _employeeService
                 );
             });
 

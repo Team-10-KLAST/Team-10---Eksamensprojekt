@@ -79,9 +79,7 @@ namespace Presentation.Wpf.ViewModels
                 CurrentView = new AddRequestViewModel(
                     _requestService,
                     _deviceDescriptionService,
-                    _employeeService,
-                    _deviceService,
-                    _loanService
+                    _employeeService
                 );
                 OnPropertyChanged(nameof(CurrentView));
             });

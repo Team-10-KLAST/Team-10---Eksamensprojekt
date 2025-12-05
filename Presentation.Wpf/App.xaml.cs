@@ -40,13 +40,13 @@ namespace Presentation.Wpf
             var departmentRepository = new DepartmentRepository(dbConnection);
             var roleRepository = new RoleRepository(dbConnection);
 
-            // 2. Opret services med repositories
-            var requestService = new RequestService(requestRepository, employeeRepository, deviceRepository, 
-                deviceDescriptionRepository, loanRepository, decisionRepository);
-            var deviceService = new DeviceService(deviceRepository);
-            var employeeService = new EmployeeService(employeeRepository, departmentRepository, roleRepository);
+            // 2. Opret services med repositories            
             var deviceDescriptionService = new DeviceDescriptionService(deviceDescriptionRepository);
+            var deviceService = new DeviceService(deviceRepository, deviceDescriptionService);
+            var employeeService = new EmployeeService(employeeRepository, departmentRepository, roleRepository);
             var loanService = new LoanService(loanRepository);
+            var requestService = new RequestService(requestRepository, employeeRepository, deviceRepository,
+                deviceDescriptionRepository, loanRepository, decisionRepository, deviceService, loanService, employeeService);
 
             // 3. Opret MainWindowViewModel med services og repos
             var mainWindowVm = new MainWindowViewModel(
