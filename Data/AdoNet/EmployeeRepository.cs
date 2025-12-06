@@ -32,27 +32,23 @@ namespace Data.AdoNet
         {
             try
             {
-                // Create and open a connection.
                 using (var connection = _databaseConnection.CreateConnection())
-                // Create a SqlCommand that call the uspAddEmployee stored procedure.
                 using (var command = new SqlCommand(SpAddEmployee, connection))
                 {
-                    // Telling ADO.NET that we are calling a stored procedure
                     command.CommandType = CommandType.StoredProcedure;
 
-                    // Add parameters matching those in uspAddEmployee.
                     command.Parameters.AddWithValue("@FirstName", employee.FirstName);
                     command.Parameters.AddWithValue("@LastName", employee.LastName);
                     command.Parameters.AddWithValue("@Email", employee.Email);
                     command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentID);
                     command.Parameters.AddWithValue("@RoleID", employee.RoleID);
+                    command.Parameters.AddWithValue("@TerminationDate",
+                        employee.TerminationDate?.ToDateTime(TimeOnly.MinValue) ?? (object)DBNull.Value);
 
                     connection.Open();
 
-                    // Using the stored procedure to get the DB to return the new EmployeeID
                     var result = command.ExecuteScalar();
 
-                    // Check if we get a valid result back
                     if (result == null || result == DBNull.Value)
                     {
                         throw new DataException("Could not get generated EmployeeId from stored procedure.");
@@ -63,12 +59,10 @@ namespace Data.AdoNet
             }
             catch (SqlException ex)
             {
-                // Wrap SQL exceptions in a DataException. 
                 throw new DataException("Database error while adding Employee.", ex);
             }
             catch (Exception ex)
             {
-                // Catch any other unexpected error and wrap it.
                 throw new DataException("Unexpected error while adding Employee.", ex);
             }
         }
@@ -79,26 +73,23 @@ namespace Data.AdoNet
             try
             {
                 using (var connection = _databaseConnection.CreateConnection())
-                    // Create a SqlCommand that call the uspUpdateEmployee stored procedure
                 using (var command = new SqlCommand(SpUpdateEmployee, connection))
                 {
-                    // Telling ADO.NET that we are calling a stored procedure.
                     command.CommandType = CommandType.StoredProcedure;
 
-                    // Add parameters matching those in uspUpdateEmployee.
                     command.Parameters.AddWithValue("@EmployeeID", employee.EmployeeID);
                     command.Parameters.AddWithValue("@FirstName", employee.FirstName);
                     command.Parameters.AddWithValue("@LastName", employee.LastName);
                     command.Parameters.AddWithValue("@Email", employee.Email);
                     command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentID);
                     command.Parameters.AddWithValue("@RoleID", employee.RoleID);
+                    command.Parameters.AddWithValue("@TerminationDate",
+                        employee.TerminationDate?.ToDateTime(TimeOnly.MinValue) ?? (object)DBNull.Value);
 
                     connection.Open();
 
-                    // Execute the update.
                     var affected = command.ExecuteNonQuery();
 
-                    // If 0 rows affected, the EmployeeID did not exist.
                     if (affected == 0)
                     {
                         throw new DataException($"No Employee with Id {employee.EmployeeID} to update.");
@@ -121,7 +112,6 @@ namespace Data.AdoNet
             try
             {
                 using (var connection = _databaseConnection.CreateConnection())
-                    // Create a SqlCommand that call the uspDeleteEmployee stored procedure
                 using (var command = new SqlCommand(SpDeleteEmployee, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -151,7 +141,6 @@ namespace Data.AdoNet
         // GET ALL: Returns all employees using a stored procedure.
         public IEnumerable<Employee> GetAll()
         {
-            //  We build a list and return it.
             var employees = new List<Employee>();
 
             try
@@ -219,45 +208,9 @@ namespace Data.AdoNet
             }
         }
 
-        //Get by Email: Returns a single employee (or null) using a stored procedure
-        //public Employee? GetByEmail(string email)
-        //{
-        //    try
-        //    {
-        //        using (var connection = _databaseConnection.CreateConnection())
-        //        using (var command = new SqlCommand(SpGetEmployeeByEmail, connection))
-        //        {
-        //            command.CommandType = CommandType.StoredProcedure;
-
-        //            command.Parameters.AddWithValue("@Email", email);
-
-        //            connection.Open();
-
-        //            using (var reader = command.ExecuteReader())
-        //            {
-        //                if (reader.Read())
-        //                {
-        //                    return MapEmployee(reader);
-        //                }
-        //            }
-        //        }
-
-        //        return null;
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        throw new DataException("Database error while reading Employee by email.", ex);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new DataException("Unexpected error while reading Employee by email.", ex);
-        //    }
-        //}
-
         // Helper method to map a SqlDataReader row to an Employee object.
         private static Employee MapEmployee(SqlDataReader reader)
         {
-            // Map each column to the Employee properties.
             return new Employee
             {
                 EmployeeID = reader.GetInt32(reader.GetOrdinal("EmployeeID")),
@@ -265,7 +218,9 @@ namespace Data.AdoNet
                 LastName = reader.GetString(reader.GetOrdinal("LastName")),
                 Email = reader.GetString(reader.GetOrdinal("Email")),
                 DepartmentID = reader.GetInt32(reader.GetOrdinal("DepartmentID")),
-                RoleID = reader.GetInt32(reader.GetOrdinal("RoleID"))
+                RoleID = reader.GetInt32(reader.GetOrdinal("RoleID")),
+                TerminationDate = reader.IsDBNull(reader.GetOrdinal("TerminationDate"))? null
+                    : DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("TerminationDate")))
             };
         }
     }

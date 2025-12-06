@@ -57,5 +57,10 @@
     <DataTemplate DataType="{x:Type vm:NavigationViewModel}">
         <views:NavigationView />
     </DataTemplate>
+    
+    <!-- TerminateEmployee -->
+    <DataTemplate DataType="{x:Type vm:TerminateEmployeeViewModel}">
+        <views:TerminateEmployeeView />
+    </DataTemplate>
 
 </ResourceDictionary>

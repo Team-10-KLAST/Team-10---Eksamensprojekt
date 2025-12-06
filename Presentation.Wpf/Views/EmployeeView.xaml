@@ -82,15 +82,25 @@
                     <DataGridTextColumn Header="Role" Binding="{Binding RoleName}" Width="*"/>
                     <DataGridTextColumn Header="Department" Binding="{Binding DepartmentName}" Width="*"/>
                     <DataGridTextColumn Header="Devices" Binding="{Binding DeviceCount}" Width="*"/>
-                    <DataGridTextColumn Header="Last updated" Binding="{Binding LastUpdated, StringFormat=\{0:yyyy-MM-dd HH:mm\}}" Width="*"/>
+                    <DataGridTextColumn Header="Termination date"
+                    Binding="{Binding TerminationDate, StringFormat=\{0:yyyy-MM-dd\}}" Width="*"/>
+                    <DataGridTemplateColumn Header="Terminate">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Terminate"
+                                        Command="{Binding DataContext.TerminateEmployeeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource PrimaryButtonStyle}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Delete">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Delete"
-                            Command="{Binding DataContext.DeleteEmployeeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                            CommandParameter="{Binding}" 
+                                        Command="{Binding DataContext.DeleteEmployeeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}" 
                                         Style="{StaticResource PrimaryButtonStyle}" />
-
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

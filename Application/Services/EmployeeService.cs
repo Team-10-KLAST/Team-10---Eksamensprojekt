@@ -20,12 +20,15 @@ namespace Application.Services
         private readonly IRepository<Employee> _employeeRepository;
         private readonly IRepository<Department> _departmentRepository;
         private readonly IRepository<Role> _roleRepository;
+        private readonly IRepository<Loan> _loanRepository;
 
-        public EmployeeService(IRepository<Employee> employeeRepository, IRepository<Department> departmentRepository, IRepository<Role> roleRepository)
+        public EmployeeService(IRepository<Employee> employeeRepository, IRepository<Department> departmentRepository, 
+            IRepository<Role> roleRepository, IRepository<Loan> loanRepository)
         {
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
             _roleRepository = roleRepository;
+            _loanRepository = loanRepository;
         }
 
         //Adds a new employee
@@ -46,18 +49,36 @@ namespace Application.Services
                 throw new ArgumentException("Email field cannot be empty.");
             }
             
-            if (employee.DepartmentID == null)
+            if (employee.DepartmentID <= 0)
             {
                 throw new ArgumentException("Department field cannot be empty.");
             }
             
-            if (employee.RoleID == null)
+            if (employee.RoleID <= 0)
             {
                 throw new ArgumentException("Role field cannot be empty.");
             }
             
             _employeeRepository.Add(employee);
         }
+
+        public void TerminateEmployee(int employeeID, DateOnly terminationDate)
+        {
+            if (terminationDate < DateOnly.FromDateTime(DateTime.Today))
+                throw new ArgumentException("Termination date cannot be earlier than today.");
+
+            var employee = _employeeRepository.GetByID(employeeID);
+
+            if (employee == null)
+            {
+                throw new ArgumentException($"No employee found with ID {employeeID}");
+            }
+
+            employee.TerminationDate = terminationDate;
+
+            _employeeRepository.Update(employee);
+        }
+
 
         //Deletes employee by ID
         public void DeleteEmployee(int employeeID)
@@ -91,6 +112,7 @@ namespace Application.Services
             var allEmployees = _employeeRepository.GetAll();
             var departments = _departmentRepository.GetAll().ToDictionary(department => department.DepartmentID, department => department.Name);
             var roles = _roleRepository.GetAll().ToDictionary(role => role.RoleID, role => role.Name);
+            var allLoans = _loanRepository.GetAll();
 
             var employeeDisplayModels = new List<EmployeeDisplayModel>();
 
@@ -102,13 +124,23 @@ namespace Application.Services
                     FullName = $"{employee.FirstName} {employee.LastName}",
                     Email = employee.Email,
                     DepartmentName = departments.TryGetValue(employee.DepartmentID, out var departmentName) ? departmentName : "Unknown",
-                    RoleName = roles.TryGetValue(employee.RoleID, out var roleName) ? roleName : "Unknown"
+                    RoleName = roles.TryGetValue(employee.RoleID, out var roleName) ? roleName : "Unknown",
+                    TerminationDate = employee.TerminationDate,
+                    DeviceCount = allLoans.Count(l => l.BorrowerID == employee.EmployeeID
+                                           && l.LoanStatus == "Active")
                 };
 
                 employeeDisplayModels.Add(employeeDisplayModel);
             }
 
             return employeeDisplayModels;
+        }
+
+        public IEnumerable<Employee> GetTerminatedEmployees()
+        {
+            return _employeeRepository
+                .GetAll()
+                .Where(e => e.TerminationDate != null);
         }
 
         public IEnumerable<string> GetAllEmployeeEmails()

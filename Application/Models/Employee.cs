@@ -8,16 +8,14 @@ namespace Application.Models
 {
     public class Employee
     {
-        public int EmployeeID { get; set; }          // PK in Employee table
+        public int EmployeeID { get; set; }     
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
         public string Email { get; set; } = "";
-
-        // FK values that point to Department and Role tables.
+        public DateOnly? TerminationDate { get; set; }
         public int DepartmentID { get; set; }
         public int RoleID { get; set; }
         
-
         // Parameterless constructor. Needed for ADO.NET.
         public Employee() { }
 
