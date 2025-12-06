@@ -43,7 +43,7 @@ namespace Presentation.Wpf
             // 2. Opret services med repositories            
             var deviceDescriptionService = new DeviceDescriptionService(deviceDescriptionRepository);
             var deviceService = new DeviceService(deviceRepository, deviceDescriptionService);
-            var employeeService = new EmployeeService(employeeRepository, departmentRepository, roleRepository);
+            var employeeService = new EmployeeService(employeeRepository, departmentRepository, roleRepository, loanRepository);
             var loanService = new LoanService(loanRepository);
             var requestService = new RequestService(requestRepository, employeeRepository, deviceRepository,
                 deviceDescriptionRepository, loanRepository, decisionRepository, deviceService, loanService, employeeService);

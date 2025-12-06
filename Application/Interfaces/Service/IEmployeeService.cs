@@ -20,6 +20,8 @@ namespace Application.Interfaces
         IEnumerable<Department> GetAllDepartments();
         IEnumerable<Role> GetAllRoles();
         IEnumerable<string> GetAllEmployeeEmails();
+        void TerminateEmployee(int employeeID, DateOnly terminationDate);
+        IEnumerable<Employee> GetTerminatedEmployees();
 
         /*IEnumerable<Employee> GetEmployeesByDepartment(Department department); //--finds employees by department*/
         /*Employee GetEmployeeByEmail(string email); //--finds employee by email*/

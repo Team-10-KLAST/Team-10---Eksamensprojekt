@@ -63,6 +63,7 @@ namespace Presentation.Wpf.ViewModels
         // Commands
         public ICommand AddEmployeeCommand { get; }
         public ICommand DeleteEmployeeCommand { get; }
+        public ICommand TerminateEmployeeCommand { get; }
 
         // Constructor
         public EmployeeViewModel(IEmployeeService employeeService)
@@ -71,6 +72,8 @@ namespace Presentation.Wpf.ViewModels
 
             AddEmployeeCommand = new RelayCommand(OpenAddEmployeeOverlay);
             DeleteEmployeeCommand = new RelayCommand<EmployeeDisplayModel>(OpenDeleteEmployeeOverlay);
+            TerminateEmployeeCommand = new RelayCommand<EmployeeDisplayModel>(OpenTerminateEmployeeOverlay,
+                employee => employee != null && employee.TerminationDate == null);
 
             EmployeesView = CollectionViewSource.GetDefaultView(AllEmployees);
             EmployeesView.Filter = EmployeeFilter;
@@ -142,7 +145,15 @@ namespace Presentation.Wpf.ViewModels
         private void OpenDeleteEmployeeOverlay(EmployeeDisplayModel displayModel)
         {
             // OBS!!!!! Assigned device count is set to 0 for now; has to be modified later to fetch actual count
-            ShowOverlayAndReload(new DeleteEmployeeViewModel(displayModel, 0, _employeeService));
+            ShowOverlayAndReload(new DeleteEmployeeViewModel(displayModel, displayModel.DeviceCount, _employeeService));
+        }
+
+        // Opens the Terminate Employee overlay for the selected employee
+        private void OpenTerminateEmployeeOverlay(EmployeeDisplayModel displayModel)
+        {
+            ShowOverlayAndReload(
+                new TerminateEmployeeViewModel(displayModel, _employeeService)
+            );
         }
     }
 }
