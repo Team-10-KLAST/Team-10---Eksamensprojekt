@@ -115,30 +115,8 @@
                    Margin="20,0,0,10"
                    VerticalAlignment="Bottom"
                    HorizontalAlignment="Left" />
-
-        <!-- Semi-transparent baggrund -->
-        <Rectangle Fill="#80000000"
-               Visibility="{Binding IsOverlayOpen, Converter={StaticResource BoolToVisibilityConverter}}"
-               Panel.ZIndex="90"
-               Focusable="True"
-               Cursor="Hand">
-            <Rectangle.InputBindings>
-                <MouseBinding MouseAction="LeftClick" Command="{Binding CloseOverlayCommand}" />
-            </Rectangle.InputBindings>
-        </Rectangle>
-
-        <!-- Overlay panel -->
-        <Border Background="{DynamicResource PanelBackgroundBrush}"
-                HorizontalAlignment="Right"
-        VerticalAlignment="Stretch"
-        Visibility="{Binding IsOverlayOpen, Converter={StaticResource BoolToVisibilityConverter}}"
-        Panel.ZIndex="100"
-        BorderBrush="#DDD"
-        BorderThickness="1"
-        Padding="8"
-        Width="{Binding ActualWidth, ElementName=LayoutRoot, Converter={StaticResource MultiplyDoubleConverter}, ConverterParameter=0.33}"
-        MaxWidth="600">
-            <ContentControl Content="{Binding CurrentOverlay}" />
-        </Border>
+        
+        <!-- Overlay -->
+        <local:OverlayHost DataContext="{Binding}" />
     </Grid>
 </UserControl>

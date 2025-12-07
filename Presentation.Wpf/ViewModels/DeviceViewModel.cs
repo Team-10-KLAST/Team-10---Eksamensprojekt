@@ -9,10 +9,11 @@ using Presentation.Wpf.Commands;
 
 namespace Presentation.Wpf.ViewModels
 {
-    public class DeviceViewModel : INotifyPropertyChanged
+    public class DeviceViewModel : OverlayHostViewModel
     {
         // Service used to retrieve devices from the database
         private readonly IDeviceService _deviceService;
+        private readonly IDeviceDescriptionService _deviceDescriptionService;
 
         // View-only representation of a device row for the Devices table
         public class DeviceRow
@@ -76,9 +77,9 @@ namespace Presentation.Wpf.ViewModels
         // Opens/highlights the selected device row
         public ICommand OpenDeviceCommand { get; }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public ICommand RegisterDeviceCommand { get; }
 
-        public DeviceViewModel(IDeviceService deviceService)
+        public DeviceViewModel(IDeviceService deviceService, IDeviceDescriptionService deviceDescriptionService)
         {
             _deviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
 
@@ -87,8 +88,10 @@ namespace Presentation.Wpf.ViewModels
 
             RefreshCommand = new RelayCommand(LoadDevices);
             OpenDeviceCommand = new RelayCommand<DeviceRow>(OpenDevice);
+            RegisterDeviceCommand = new RelayCommand(OpenRegisterDeviceOverlay);
 
             LoadDevices();
+            _deviceDescriptionService = deviceDescriptionService;
         }
 
         private void LoadDevices()
@@ -150,10 +153,10 @@ namespace Presentation.Wpf.ViewModels
             SelectedDevice = row;
         }
 
-        // Raises PropertyChanged for data binding
-        protected void OnPropertyChanged(string propertyName)
+        private void OpenRegisterDeviceOverlay()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var overlayVm = new RegisterDeviceViewModel(_deviceDescriptionService, _deviceService);
+            ShowOverlay(overlayVm);
         }
     }
 }
