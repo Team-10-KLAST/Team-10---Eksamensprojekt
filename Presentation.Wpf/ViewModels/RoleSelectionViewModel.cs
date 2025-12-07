@@ -72,7 +72,8 @@ namespace Presentation.Wpf.ViewModels
                     _employeeService,
                     _loanRepository,
                     _employeeRepository,
-                    _deviceDescriptionRepository
+                    _deviceDescriptionRepository,
+                    _deviceDescriptionService
                 );
             });
         }

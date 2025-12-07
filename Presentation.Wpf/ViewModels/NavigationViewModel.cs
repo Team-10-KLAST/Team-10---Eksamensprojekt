@@ -19,6 +19,7 @@ namespace Presentation.Wpf.ViewModels
         private readonly IRequestService _requestService;
         private readonly IDeviceService _deviceService;
         private readonly IEmployeeService _employeeService;
+        private readonly IDeviceDescriptionService _deviceDescriptionService;
 
         // Repositories used to load additional data needed for display strings
         private readonly IRepository<Loan> _loanRepository;
@@ -45,7 +46,7 @@ namespace Presentation.Wpf.ViewModels
         private readonly DeviceViewModel _devices;
 
         public NavigationViewModel(IRequestService requestService, IDeviceService deviceService, IEmployeeService employeeService,
-            IRepository<Loan> loanRepository, IRepository<Employee> employeeRepository, IRepository<DeviceDescription> deviceDescriptionRepository)
+            IRepository<Loan> loanRepository, IRepository<Employee> employeeRepository, IRepository<DeviceDescription> deviceDescriptionRepository, IDeviceDescriptionService deviceDescriptionService)
         {
             _requestService = requestService;
             _deviceService = deviceService;
@@ -56,13 +57,14 @@ namespace Presentation.Wpf.ViewModels
 
             _dashboard = new DashboardViewModel(requestService, deviceService, loanRepository, employeeRepository, deviceDescriptionRepository);
             _employees = new EmployeeViewModel(employeeService);
-            _devices = new DeviceViewModel(deviceService);
+            _devices = new DeviceViewModel(deviceService, deviceDescriptionService);
 
             ShowDashboardCommand = new RelayCommand(() => CurrentView = _dashboard);
             ShowEmployeesCommand = new RelayCommand(() => CurrentView = _employees);
             ShowDevicesCommand = new RelayCommand(() => CurrentView = _devices);
 
             CurrentView = _dashboard;
+            _deviceDescriptionService = deviceDescriptionService;
         }
     }
 }
