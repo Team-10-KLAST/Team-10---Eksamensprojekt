@@ -19,7 +19,7 @@ namespace Application.Models
         // Parameterless constructor. Needed for ADO.NET.
         public Employee() { }
 
-        // Constructor with parameters (excluding EmployeeID).
+        // Convenience constructor for creating a new employee before it has an EmployeeID.
         public Employee(string firstName, string lastName, string email,
                         int departmentID, int roleID)
         {
