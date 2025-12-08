@@ -137,12 +137,13 @@ public class RequestService : IRequestService
     }
 
     // pass on the infromation from AddRequest form
-    public void SubmitRequest(string email, string deviceType, string OS, string country, string comment)
+    public void SubmitRequest(string email, string deviceType, string OS, string country, string comment, DateOnly neededByDate)
     {
         Request _request = new Request
         {
             Justification=comment,
             RequestDate = DateOnly.FromDateTime(DateTime.Now),
+            NeededByDate = neededByDate,
             Status = RequestStatus.PENDING,
         };
         AddRequest(_request);
