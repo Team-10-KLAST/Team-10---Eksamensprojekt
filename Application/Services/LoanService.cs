@@ -12,10 +12,12 @@ namespace Application.Services;
 public class LoanService : ILoanService
 {
     private readonly IRepository<Loan> _loanRepository;
+    private readonly IDeviceService _deviceService;
 
-    public LoanService(IRepository<Loan> loanRepository)
+    public LoanService(IRepository<Loan> loanRepository, IDeviceService deviceService)
     {
         _loanRepository = loanRepository;
+        _deviceService = deviceService;
     }
 
 
@@ -43,8 +45,19 @@ public class LoanService : ILoanService
 
     public void AddLoan(Loan loan)
     {
-        if (loan.BorrowerID==null) { throw new ArgumentException("BorrowerID cannot be empty"); }
-        if (loan.DeviceID == null) { throw new ArgumentException("DeviceID cannot be empty"); }        
+        if (loan.BorrowerID == null) { throw new ArgumentException("BorrowerID cannot be empty"); }
+        if (loan.DeviceID == null) { throw new ArgumentException("DeviceID cannot be empty"); }
         _loanRepository.Add(loan);
+
+        // Sæt IsWiped = false hvis loan status er "new" eller "In Use"
+        if (loan.LoanStatus.Equals("new", StringComparison.OrdinalIgnoreCase) || loan.LoanStatus.Equals("In Use", StringComparison.OrdinalIgnoreCase))
+        {
+            var device = _deviceService.GetDeviceByID(loan.DeviceID);
+            if (device != null)
+            {
+                device.IsWiped = false;
+                _deviceService.UpdateDevice(device);
+            }
+        }
     }
 }
