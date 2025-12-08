@@ -18,7 +18,7 @@ namespace Application.Models
     {
         public int DeviceID { get; set; }
         public DeviceStatus Status { get; set; } = DeviceStatus.REGISTERED;
-        public bool Wiped { get; set; } = false;
+        public bool IsWiped { get; set; } = true;
         public DateOnly PurchaseDate { get; set; }
         public DateOnly ExpectedEndDate { get; set; }
         public int DeviceDescriptionID { get; set; }
@@ -28,13 +28,13 @@ namespace Application.Models
 
         // Constructor with parameters (excluding DeviceID).
         public Device(DeviceStatus status,
-                      bool wiped,
+                      bool isWiped,
                       DateOnly purchaseDate,
                       DateOnly expectedEndDate,
                       int deviceDescriptionID)
         {
             Status = status;
-            Wiped = wiped;
+            IsWiped = isWiped;
             PurchaseDate = purchaseDate;
             ExpectedEndDate = expectedEndDate;
             DeviceDescriptionID = deviceDescriptionID;

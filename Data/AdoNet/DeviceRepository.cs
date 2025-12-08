@@ -48,7 +48,7 @@ namespace Data.AdoNet
                         DeviceID = reader.GetInt32(reader.GetOrdinal("DeviceID")),
                         DeviceDescriptionID = reader.GetInt32(reader.GetOrdinal("DeviceDescriptionID")),
                         Status = (DeviceStatus)reader.GetInt32(reader.GetOrdinal("DeviceStatus")),
-                        Wiped = reader.GetBoolean(reader.GetOrdinal("Wiped")),
+                        IsWiped = reader.GetBoolean(reader.GetOrdinal("IsWiped")),
                         PurchaseDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("PurchaseDate"))),
                         ExpectedEndDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("ExpectedEndDate")))
                     });
@@ -91,7 +91,7 @@ namespace Data.AdoNet
                         DeviceID = reader.GetInt32(reader.GetOrdinal("DeviceID")),
                         DeviceDescriptionID = reader.GetInt32(reader.GetOrdinal("DeviceDescriptionID")),
                         Status = (DeviceStatus)reader.GetInt32(reader.GetOrdinal("DeviceStatus")),
-                        Wiped = reader.GetBoolean(reader.GetOrdinal("Wiped")),
+                        IsWiped = reader.GetBoolean(reader.GetOrdinal("IsWiped")),
                         PurchaseDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("PurchaseDate"))),
                         ExpectedEndDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("ExpectedEndDate")))
                     };
@@ -123,7 +123,7 @@ namespace Data.AdoNet
 
                 command.Parameters.Add("@DeviceDescriptionID", SqlDbType.Int).Value = device.DeviceDescriptionID;
                 command.Parameters.Add("@DeviceStatus", SqlDbType.Int).Value = (int)device.Status;
-                command.Parameters.Add("@Wiped", SqlDbType.Bit).Value = device.Wiped;
+                command.Parameters.Add("@IsWiped", SqlDbType.Bit).Value = device.IsWiped;
                 command.Parameters.Add("@PurchaseDate", SqlDbType.Date).Value =
                     device.PurchaseDate.ToDateTime(new TimeOnly(0, 0));
                 command.Parameters.Add("@ExpectedEndDate", SqlDbType.Date).Value =
@@ -165,7 +165,7 @@ namespace Data.AdoNet
                 command.Parameters.Add("@DeviceID", SqlDbType.Int).Value = device.DeviceID;
                 command.Parameters.Add("@DeviceDescriptionID", SqlDbType.Int).Value = device.DeviceDescriptionID;
                 command.Parameters.Add("@DeviceStatus", SqlDbType.Int).Value = (int)device.Status;
-                command.Parameters.Add("@Wiped", SqlDbType.Bit).Value = device.Wiped;
+                command.Parameters.Add("@IsWiped", SqlDbType.Bit).Value = device.IsWiped;
                 command.Parameters.Add("@PurchaseDate", SqlDbType.Date).Value =
                     device.PurchaseDate.ToDateTime(new TimeOnly(0, 0));
                 command.Parameters.Add("@ExpectedEndDate", SqlDbType.Date).Value =
