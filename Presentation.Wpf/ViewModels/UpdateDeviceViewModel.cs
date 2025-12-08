@@ -110,14 +110,14 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
-        public decimal Price
+        public bool Wiped
         {
-            get => SelectedDevice.Price;
+            get => SelectedDevice.Wiped;
             set
             {
-                if (SelectedDevice.Price != value)
+                if (SelectedDevice.Wiped != value)
                 {
-                    SelectedDevice.Price = value;
+                    SelectedDevice.Wiped = value;
                     OnPropertyChanged();
                 }
             }

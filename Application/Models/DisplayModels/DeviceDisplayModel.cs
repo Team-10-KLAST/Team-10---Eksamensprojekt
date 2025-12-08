@@ -14,7 +14,7 @@ namespace Application.Models.DisplayModels
         public DateTime EventDate { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime ExpirationDate { get; set; }
-        public decimal Price { get; set; }
+        public bool Wiped { get; set; }
         public List<string> StatusHistory { get; set; } = new();
     }
 }
