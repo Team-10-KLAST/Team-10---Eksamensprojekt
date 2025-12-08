@@ -50,6 +50,7 @@ namespace Data.AdoNet
                     {
                         RequestID = reader.GetInt32(reader.GetOrdinal("RequestID")),
                         RequestDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("RequestDate"))),
+                        NeededByDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("NeededByDate"))),
                         Justification = reader.GetString(reader.GetOrdinal("Justification")),
                         Status = (RequestStatus)reader.GetInt32(reader.GetOrdinal("RequestStatus"))
                     });
@@ -86,6 +87,7 @@ namespace Data.AdoNet
                     {
                         RequestID = reader.GetInt32(reader.GetOrdinal("RequestID")),
                         RequestDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("RequestDate"))),
+                        NeededByDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("NeededByDate"))),
                         Justification = reader.GetString(reader.GetOrdinal("Justification")),
                         Status = (RequestStatus)reader.GetInt32(reader.GetOrdinal("RequestStatus"))
                     };
@@ -110,6 +112,7 @@ namespace Data.AdoNet
                 };
 
                 command.Parameters.Add("@RequestDate", SqlDbType.Date).Value = request.RequestDate.ToDateTime(new TimeOnly(0, 0));
+                command.Parameters.Add("@NeededByDate", SqlDbType.Date).Value = request.NeededByDate.ToDateTime(new TimeOnly(0, 0));
                 command.Parameters.Add("@Justification", SqlDbType.NVarChar, 200).Value = request.Justification;
                 command.Parameters.Add("@RequestStatus", SqlDbType.Int).Value = (int)request.Status;
 
@@ -144,6 +147,7 @@ namespace Data.AdoNet
                 };
                 command.Parameters.Add("@RequestID", SqlDbType.Int).Value = request.RequestID;
                 command.Parameters.Add("@RequestDate", SqlDbType.Date).Value = request.RequestDate.ToDateTime(new TimeOnly(0, 0));
+                command.Parameters.Add("@NeededByDate", SqlDbType.Date).Value = request.NeededByDate.ToDateTime(new TimeOnly(0, 0));
                 command.Parameters.Add("@Justification", SqlDbType.NVarChar, 200).Value = request.Justification;
                 command.Parameters.Add("@RequestStatus", SqlDbType.Int).Value = (int)request.Status;
 

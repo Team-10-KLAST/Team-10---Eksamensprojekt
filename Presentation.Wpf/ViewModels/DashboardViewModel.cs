@@ -115,12 +115,16 @@ namespace Presentation.Wpf.ViewModels
         private void LoadPendingRequests()
         {
             var allRequests = _requestService.GetAllRequests();
+            var pendingRequests = allRequests
+                .Where(r => r.Status == RequestStatus.PENDING)
+                .OrderBy(r => r.NeededByDate)
+                .ToList();
             var allLoans = _loanRepository.GetAll().ToList();
             var allEmployees = _employeeRepository.GetAll().ToList();
             var allDeviceDescriptions = _deviceDescriptionRepository.GetAll().ToList();
             var allDevices = _deviceService.GetAllDevices().ToList();
 
-            foreach (var request in allRequests)
+            foreach (var request in pendingRequests)
             {
                 // Only show requests with status PENDING
                 if (request.Status != RequestStatus.PENDING)
@@ -156,7 +160,7 @@ namespace Presentation.Wpf.ViewModels
 
                 var location = description?.Location ?? "Unknown";
 
-                var dateText = request.RequestDate.ToString("dd.MM.yyyy");
+                var dateText = request.NeededByDate.ToString("dd.MM.yyyy");
 
                 var subText = $"{employeeName} · {location} · {dateText}";
 

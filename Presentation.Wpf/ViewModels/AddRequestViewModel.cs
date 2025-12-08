@@ -35,6 +35,20 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        private DateTime _neededByDate = DateTime.Today;
+        public DateTime NeededByDate
+        {
+            get => _neededByDate;
+            set
+            {
+                if (SetProperty(ref _neededByDate, value))
+                {
+                    // Optional: if you ever want the date to affect CanExecute
+                    (SubmitCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
         private string _emailErrorMsg = string.Empty;
         public string EmailErrorMsg
         {
@@ -128,7 +142,7 @@ namespace Presentation.Wpf.ViewModels
         //Submit request by passing all info from the form
         private void SubmitRequest ()
         {
-            _requestService.SubmitRequest(Email, SelectedDeviceType, SelectedOS, SelectedCountry, RequestComment);
+            _requestService.SubmitRequest(Email, SelectedDeviceType, SelectedOS, SelectedCountry, RequestComment, DateOnly.FromDateTime(NeededByDate.Date));
         }
 
        
@@ -177,6 +191,7 @@ namespace Presentation.Wpf.ViewModels
             Email = string.Empty;
             EmailErrorMsg = string.Empty;
             RequestComment = string.Empty;
+            NeededByDate = DateTime.Today;
 
             SelectedOS = OSOptions.FirstOrDefault();
             SelectedDeviceType = DeviceOptions.FirstOrDefault();

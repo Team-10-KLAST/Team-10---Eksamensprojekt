@@ -15,6 +15,7 @@ namespace Application.Models
     {
         public int RequestID { get; set; }
         public DateOnly RequestDate { get; set; }
+        public DateOnly NeededByDate { get; set; }
         public string Justification { get; set; } = "";
         public RequestStatus Status { get; set; } = Models.RequestStatus.PENDING;
 
@@ -22,10 +23,11 @@ namespace Application.Models
         // Parameterless constructor. Needed for ADO.NET.
         public Request() { }
 
-        // Constructor with parameters (excluding RequestID).
-        public Request(DateOnly requestDate, string justification, RequestStatus status)
+        // Constructor with parameters (excluding RequestID). --> Behøver vi denne, når vi har parameterless constructor? <--
+        public Request(DateOnly requestDate, DateOnly neededByDate, string justification, RequestStatus status)
         {
             RequestDate = requestDate;
+            NeededByDate = neededByDate;
             Justification = justification;
             Status = status;
         }
