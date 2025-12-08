@@ -14,16 +14,14 @@ namespace Presentation.Wpf.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        // Services and repositories
+        // Services 
         private readonly IRequestService _requestService;
         private readonly IDeviceDescriptionService _deviceDescriptionService;
         private readonly IEmployeeService _employeeService;
         private readonly IDeviceService _deviceService;
         private readonly ILoanService _loanService;
+        private readonly IDashboardService _dashboardService;
 
-        private readonly IRepository<Loan> _loanRepository;
-        private readonly IRepository<Employee> _employeeRepository;
-        private readonly IRepository<DeviceDescription> _deviceDescriptionRepository;
 
 
         private object _currentView;
@@ -46,19 +44,15 @@ namespace Presentation.Wpf.ViewModels
         IEmployeeService employeeService,
         IDeviceService deviceService,
         ILoanService loanService,
-        IRepository<Loan> loanRepository,
-        IRepository<Employee> employeeRepository,
-        IRepository<DeviceDescription> deviceDescriptionRepository)
+        IDashboardService dashboardService)
         {
             _requestService = requestService;
             _deviceDescriptionService = deviceDescriptionService;
             _employeeService = employeeService;
             _deviceService = deviceService;
             _loanService = loanService;
+            _dashboardService = dashboardService;
 
-            _loanRepository = loanRepository;
-            _employeeRepository = employeeRepository;
-            _deviceDescriptionRepository = deviceDescriptionRepository;
 
             // Start på rollevalg
             CurrentView = new RoleSelectionViewModel(
@@ -68,9 +62,7 @@ namespace Presentation.Wpf.ViewModels
             _employeeService,
             _deviceService,
             _loanService,
-            _loanRepository,
-            _employeeRepository,
-            _deviceDescriptionRepository
+            _dashboardService
         );
 
 
@@ -90,10 +82,8 @@ namespace Presentation.Wpf.ViewModels
                     _requestService,
                     _deviceService,
                     _employeeService,
-                    _loanRepository,
-                    _employeeRepository,
-                    _deviceDescriptionRepository,
-                    _deviceDescriptionService
+                    _deviceDescriptionService,
+                    _dashboardService
                 );
                 OnPropertyChanged(nameof(CurrentView));
             });

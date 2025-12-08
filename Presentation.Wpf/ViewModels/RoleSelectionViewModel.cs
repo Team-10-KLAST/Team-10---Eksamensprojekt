@@ -15,16 +15,13 @@ namespace Presentation.Wpf.ViewModels
 {
     public class RoleSelectionViewModel : ViewModelBase
     {
-        // Services and Repositories
+        // Services 
         private readonly IRequestService _requestService;
         private readonly IDeviceDescriptionService _deviceDescriptionService;
         private readonly IEmployeeService _employeeService;
         private readonly IDeviceService _deviceService;
         private readonly ILoanService _loanService;
-
-        private readonly IRepository<Loan> _loanRepository;
-        private readonly IRepository<Employee> _employeeRepository;
-        private readonly IRepository<DeviceDescription> _deviceDescriptionRepository;
+        private readonly IDashboardService _dashboardService;
 
 
         public ICommand SelectEmployeeCommand { get; }
@@ -38,10 +35,7 @@ namespace Presentation.Wpf.ViewModels
         IDeviceDescriptionService descriptionService,
         IEmployeeService employeeService,
         IDeviceService deviceService,
-        ILoanService loanService,
-        IRepository<Loan> loanRepository,
-        IRepository<Employee> employeeRepository,
-        IRepository<DeviceDescription> deviceDescriptionRepository)
+        ILoanService loanService, IDashboardService dashboardService)
         {
             _mainWindow = mainWindow;
 
@@ -50,10 +44,7 @@ namespace Presentation.Wpf.ViewModels
             _employeeService = employeeService;
             _deviceService = deviceService;
             _loanService = loanService;
-
-            _loanRepository = loanRepository;
-            _employeeRepository = employeeRepository;
-            _deviceDescriptionRepository = deviceDescriptionRepository;
+            _dashboardService = dashboardService;
 
             SelectEmployeeCommand = new RelayCommand(() =>
             {
@@ -70,10 +61,8 @@ namespace Presentation.Wpf.ViewModels
                     _requestService,
                     _deviceService,
                     _employeeService,
-                    _loanRepository,
-                    _employeeRepository,
-                    _deviceDescriptionRepository,
-                    _deviceDescriptionService
+                    _deviceDescriptionService,
+                    _dashboardService
                 );
             });
         }

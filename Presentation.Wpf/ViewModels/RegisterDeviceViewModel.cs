@@ -183,8 +183,6 @@ namespace Presentation.Wpf.ViewModels
             {
                 DeviceDescriptionID = deviceDescriptionId,
                 /*DeviceStatus = status,*/ // Status enum mapping will be handled in service layer
-                // UI does not collect price yet – set to 0 for now. Can be updated later.
-                Price = 0m,
                 PurchaseDate = DateOnly.FromDateTime(RegistrationDate.Value),
                 ExpectedEndDate = DateOnly.FromDateTime(ExpiryDate.Value)
             };
