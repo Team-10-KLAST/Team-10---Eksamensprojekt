@@ -50,7 +50,7 @@ namespace Presentation.Wpf.ViewModels
             _deviceDescriptionService = deviceDescriptionService;
             _dashboardService = dashboardService;
 
-            _dashboard = new DashboardViewModel(dashboardService,requestService, deviceService);
+            _dashboard = new DashboardViewModel(dashboardService,requestService, deviceService, employeeService, deviceDescriptionService);
             _employees = new EmployeeViewModel(employeeService);
             _devices = new DeviceViewModel(deviceService, deviceDescriptionService);
 

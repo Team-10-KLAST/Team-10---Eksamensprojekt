@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:Presentation.Wpf.Views"
              mc:Ignorable="d"
              d:DesignHeight="600"
              d:DesignWidth="1000"
@@ -37,7 +38,8 @@
     </UserControl.Resources>
 
     <!-- Dashboardet skaleres, når vinduet ændrer størrelse -->
-    <Viewbox Stretch="Uniform">
+    <Grid x:Name="Root">
+        <Viewbox Stretch="Uniform">
         <Grid Width="1000" Height="600" Margin="24">
 
             <!-- Rækker: 0 = titel, 1 = "Quick actions", 2 = quick cards, 3 = status-kolonner -->
@@ -499,4 +501,8 @@
             </Grid>
         </Grid>
     </Viewbox>
+
+        <local:OverlayHost DataContext="{Binding}" />
+    </Grid>
+
 </UserControl>

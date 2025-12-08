@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Application.Interfaces;          
-using Application.Interfaces.Service;  
+using Application.Interfaces;
+using Application.Interfaces.Service;
 using Application.Models;
 using Application.Models.DisplayModels;
-using Application.Services;
 using Presentation.Wpf.Commands;
-using Presentation.Wpf.ViewModels;
 
 namespace Presentation.Wpf.ViewModels
 {
@@ -17,6 +16,8 @@ namespace Presentation.Wpf.ViewModels
         private readonly IDashboardService _dashboardService;
         private readonly IRequestService _requestService;
         private readonly IDeviceService _deviceService;
+        private readonly IEmployeeService _employeeService;
+        private readonly IDeviceDescriptionService _deviceDescriptionService;
 
         public ObservableCollection<RequestDashboardDisplayModel> PendingRequests { get; } = new();
         public ObservableCollection<DeviceDashboardDisplayModel> PlannedDevices { get; } = new();
@@ -44,11 +45,15 @@ namespace Presentation.Wpf.ViewModels
         public DashboardViewModel(
             IDashboardService dashboardService,
             IRequestService requestService,
-            IDeviceService deviceService)
+            IDeviceService deviceService,
+            IEmployeeService employeeService,
+            IDeviceDescriptionService deviceDescriptionService)
         {
             _dashboardService = dashboardService;
             _requestService = requestService;
             _deviceService = deviceService;
+            _employeeService = employeeService;
+            _deviceDescriptionService = deviceDescriptionService;
 
             OpenRegisterDeviceCommand = new RelayCommand(OpenRegisterDeviceOverlay);
             OpenRegisterEmployeeCommand = new RelayCommand(OpenRegisterEmployeeOverlay);
@@ -108,34 +113,61 @@ namespace Presentation.Wpf.ViewModels
             ShowOverlay(overlayViewModel);
         }
 
+       
+
         private void OpenRegisterDeviceOverlay()
         {
-            var overlay = new RegisterDeviceViewModel(deviceService, deviceDescriptionService );
+            var overlay = new RegisterDeviceViewModel(
+                _deviceDescriptionService,
+                _deviceService);
+
             ShowOverlayAndReload(overlay);
         }
 
         private void OpenRegisterEmployeeOverlay()
         {
-            // Eksempel – byt til jeres rigtige viewmodelnavn og constructor
-            var overlay = new AddEmployeeViewModel( employeeService);
+            var overlay = new AddEmployeeViewModel(_employeeService);
             ShowOverlayAndReload(overlay);
         }
 
+        
 
         private void OpenProcessRequestOverlay(RequestDashboardDisplayModel requestDisplayModel)
         {
             if (requestDisplayModel is null)
                 return;
-            // var overlay = new ProcessRequestViewModel(requestDisplayModel.RequestID, _requestService, _deviceService);
-            // ShowOverlayAndReload(overlay);
+
+            var overlay = new ProcessRequestViewModel(
+                _requestService,
+                _employeeService,
+                requestDisplayModel.RequestID);
+
+            ShowOverlayAndReload(overlay);
         }
+
+        
 
         private void OpenUpdateDeviceOverlay(DeviceDashboardDisplayModel deviceDisplayModel)
         {
             if (deviceDisplayModel is null)
                 return;
-            // var overlay = new UpdateDeviceViewModel(deviceDisplayModel.DeviceID, _deviceService);
-            // ShowOverlayAndReload(overlay);
+
+            
+            var deviceDisplay = new DeviceDisplayModel
+            {
+                DeviceID = deviceDisplayModel.DeviceID,
+                Status = deviceDisplayModel.Status.ToString(),
+                RegistrationDate = deviceDisplayModel.PurchaseDate.ToDateTime(TimeOnly.MinValue),
+                ExpirationDate = deviceDisplayModel.ExpectedEndDate.ToDateTime(TimeOnly.MinValue),
+                OwnerFullName = string.Empty,
+                Location = string.Empty,
+                EventDate = DateTime.Today,
+                Wiped = false,
+                StatusHistory = new List<string>()
+            };
+
+            var overlay = new UpdateDeviceViewModel(deviceDisplay);
+            ShowOverlayAndReload(overlay);
         }
     }
 }
