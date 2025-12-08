@@ -43,7 +43,6 @@ namespace Presentation.Wpf.ViewModels
             {
                 if (SetProperty(ref _neededByDate, value))
                 {
-                    // Optional: if you ever want the date to affect CanExecute
                     (SubmitCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
@@ -139,7 +138,6 @@ namespace Presentation.Wpf.ViewModels
         }
 
 
-        //Submit request by passing all info from the form
         private void SubmitRequest ()
         {
             _requestService.SubmitRequest(Email, SelectedDeviceType, SelectedOS, SelectedCountry, RequestComment, DateOnly.FromDateTime(NeededByDate.Date));
