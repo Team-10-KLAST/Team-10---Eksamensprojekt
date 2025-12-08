@@ -217,7 +217,6 @@ namespace Presentation.Wpf.ViewModels
                 {
                     DeviceID = device.DeviceID,
                     Status = device.Status,
-                    Price = device.Price,
                     PurchaseDate = device.PurchaseDate,
                     ExpectedEndDate = device.ExpectedEndDate,
                     HeaderText = headerText,
