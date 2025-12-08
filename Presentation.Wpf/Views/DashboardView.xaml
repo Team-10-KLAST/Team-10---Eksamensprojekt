@@ -209,7 +209,7 @@
                                        FontSize="16"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource PrimaryTextBrush}"
-                                       Text="Requests (pending)" />
+                                       Text="Pending requests" />
 
                             <Button Grid.Column="2"
                                     Margin="0,0,8,0"
@@ -218,9 +218,7 @@
                                     Background="{StaticResource PanelBackgroundBrush}"
                                     Foreground="{StaticResource PrimaryTextBrush}" />
 
-                            <Button Grid.Column="3"
-                                    Content="Approve all"
-                                    Style="{StaticResource PrimaryButtonStyle}" />
+                            
                         </Grid>
 
                         <ScrollViewer Grid.Row="1"
@@ -301,9 +299,7 @@
                                     Background="{StaticResource PanelBackgroundBrush}"
                                     Foreground="{StaticResource PrimaryTextBrush}" />
 
-                            <Button Grid.Column="3"
-                                    Content="Approve all"
-                                    Style="{StaticResource PrimaryButtonStyle}" />
+                            
                         </Grid>
 
                         <ScrollViewer Grid.Row="1"
@@ -384,9 +380,7 @@
                                     Foreground="{StaticResource PrimaryTextBrush}" />
 
 
-                            <Button Grid.Column="3"
-                                    Content="Approve all"
-                                    Style="{StaticResource PrimaryButtonStyle}" />
+                       
                         </Grid>
 
                         <ScrollViewer Grid.Row="1"
@@ -456,7 +450,7 @@
                                        FontSize="16"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource PrimaryTextBrush}"
-                                       Text="Ready to approve / assign" />
+                                       Text="Ready to assign" />
 
                             <Button Grid.Column="2"
                                     Margin="0,0,8,0"
@@ -466,9 +460,7 @@
                                     Foreground="{StaticResource PrimaryTextBrush}" />
 
 
-                            <Button Grid.Column="3"
-                                    Content="Approve all"
-                                    Style="{StaticResource PrimaryButtonStyle}" />
+                            
                         </Grid>
 
                         <ScrollViewer Grid.Row="1"

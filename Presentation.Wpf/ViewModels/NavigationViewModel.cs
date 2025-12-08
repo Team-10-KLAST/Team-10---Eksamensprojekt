@@ -20,11 +20,8 @@ namespace Presentation.Wpf.ViewModels
         private readonly IDeviceService _deviceService;
         private readonly IEmployeeService _employeeService;
         private readonly IDeviceDescriptionService _deviceDescriptionService;
+        private readonly IDashboardService _dashboardService;
 
-        // Repositories used to load additional data needed for display strings
-        private readonly IRepository<Loan> _loanRepository;
-        private readonly IRepository<Employee> _employeeRepository;
-        private readonly IRepository<DeviceDescription> _deviceDescriptionRepository;
 
         private object _currentView;
         public object CurrentView
@@ -45,17 +42,15 @@ namespace Presentation.Wpf.ViewModels
         private readonly EmployeeViewModel _employees;
         private readonly DeviceViewModel _devices;
 
-        public NavigationViewModel(IRequestService requestService, IDeviceService deviceService, IEmployeeService employeeService,
-            IRepository<Loan> loanRepository, IRepository<Employee> employeeRepository, IRepository<DeviceDescription> deviceDescriptionRepository, IDeviceDescriptionService deviceDescriptionService)
-        {
+        public NavigationViewModel(IRequestService requestService, IDeviceService deviceService, IEmployeeService employeeService, IDeviceDescriptionService deviceDescriptionService, IDashboardService dashboardService)
+        {   
             _requestService = requestService;
             _deviceService = deviceService;
             _employeeService = employeeService;
-            _loanRepository = loanRepository;
-            _employeeRepository = employeeRepository;
-            _deviceDescriptionRepository = deviceDescriptionRepository;
+            _deviceDescriptionService = deviceDescriptionService;
+            _dashboardService = dashboardService;
 
-            _dashboard = new DashboardViewModel(requestService, deviceService, loanRepository, employeeRepository, deviceDescriptionRepository);
+            _dashboard = new DashboardViewModel(dashboardService,requestService, deviceService);
             _employees = new EmployeeViewModel(employeeService);
             _devices = new DeviceViewModel(deviceService, deviceDescriptionService);
 
@@ -64,7 +59,7 @@ namespace Presentation.Wpf.ViewModels
             ShowDevicesCommand = new RelayCommand(() => CurrentView = _devices);
 
             CurrentView = _dashboard;
-            _deviceDescriptionService = deviceDescriptionService;
+            
         }
     }
 }

@@ -47,6 +47,7 @@ namespace Presentation.Wpf
             var loanService = new LoanService(loanRepository);
             var requestService = new RequestService(requestRepository, employeeRepository, deviceRepository,
                 deviceDescriptionRepository, loanRepository, decisionRepository, deviceService, loanService, employeeService);
+            var dashboardService = new DashboardService(requestService, deviceService, loanRepository, employeeRepository, deviceDescriptionRepository);
 
             // 3. Opret MainWindowViewModel med services og repos
             var mainWindowVm = new MainWindowViewModel(
@@ -55,9 +56,7 @@ namespace Presentation.Wpf
                 employeeService,
                 deviceService,
                 loanService,
-                loanRepository,
-                employeeRepository,
-                deviceDescriptionRepository
+                dashboardService
             );
 
             var mainWindow = new MainWindow
