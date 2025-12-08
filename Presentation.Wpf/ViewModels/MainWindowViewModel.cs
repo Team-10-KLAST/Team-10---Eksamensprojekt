@@ -22,8 +22,6 @@ namespace Presentation.Wpf.ViewModels
         private readonly ILoanService _loanService;
         private readonly IDashboardService _dashboardService;
 
-
-
         private object _currentView;
         public object CurrentView
         {

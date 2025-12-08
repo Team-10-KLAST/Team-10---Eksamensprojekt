@@ -29,7 +29,6 @@ namespace Data.AdoNet
         public IEnumerable<Loan> GetAll()
         {
             var loans = new List<Loan>();
-
             try
             {
                 using var connection = _databaseConnection.CreateConnection();
@@ -43,27 +42,8 @@ namespace Data.AdoNet
 
                 while (reader.Read())
                 {
-                    // Reads the optional EndDate safely
-                    var endDateOrdinal = reader.GetOrdinal("EndDate");
-                    DateOnly? endDate = null;
-                    if (!reader.IsDBNull(endDateOrdinal))
-                    {
-                        endDate = DateOnly.FromDateTime(reader.GetDateTime(endDateOrdinal));
-                    }
-
-                    loans.Add(new Loan
-                    {
-                        LoanID = reader.GetInt32(reader.GetOrdinal("LoanID")),
-                        LoanStatus = reader.GetString(reader.GetOrdinal("Status")),
-                        StartDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("StartDate"))),
-                        EndDate = endDate,
-                        RequestID = reader.GetInt32(reader.GetOrdinal("RequestID")),
-                        BorrowerID = reader.GetInt32(reader.GetOrdinal("BorrowerID")),
-                        ApproverID = reader.GetInt32(reader.GetOrdinal("ApproverID")),
-                        DeviceID = reader.GetInt32(reader.GetOrdinal("DeviceID"))
-                    });
+                    loans.Add(MapLoan(reader));
                 }
-
                 return loans;
             }
             catch (SqlException exception)
@@ -86,7 +66,6 @@ namespace Data.AdoNet
                     CommandType = CommandType.StoredProcedure
                 };
 
-                // Sends the LoanID to the stored procedure
                 command.Parameters.Add("@LoanID", SqlDbType.Int).Value = loanID;
 
                 connection.Open();
@@ -94,29 +73,8 @@ namespace Data.AdoNet
 
                 if (reader.Read())
                 {
-                    // Reads the optional EndDate safely
-                    var endDateOrdinal = reader.GetOrdinal("EndDate");
-                    DateOnly? endDate = null;
-                    if (!reader.IsDBNull(endDateOrdinal))
-                    {
-                        endDate = DateOnly.FromDateTime(reader.GetDateTime(endDateOrdinal));
-                    }
-
-                    // Builds and returns a Loan object from the current record
-                    return new Loan
-                    {
-                        LoanID = reader.GetInt32(reader.GetOrdinal("LoanID")),
-                        LoanStatus = reader.GetString(reader.GetOrdinal("Status")),
-                        StartDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("StartDate"))),
-                        EndDate = endDate,
-                        RequestID = reader.GetInt32(reader.GetOrdinal("RequestID")),
-                        BorrowerID = reader.GetInt32(reader.GetOrdinal("BorrowerID")),
-                        ApproverID = reader.GetInt32(reader.GetOrdinal("ApproverID")),
-                        DeviceID = reader.GetInt32(reader.GetOrdinal("DeviceID"))
-                    };
+                    return MapLoan(reader);
                 }
-
-                // Returns null when no Loan with the given LoanID is found
                 return null;
             }
             catch (SqlException exception)
@@ -139,24 +97,7 @@ namespace Data.AdoNet
                     CommandType = CommandType.StoredProcedure
                 };
 
-                command.Parameters.Add("@Status", SqlDbType.NVarChar, 50).Value = loan.LoanStatus;
-                command.Parameters.Add("@RequestID", SqlDbType.Int).Value = loan.RequestID;
-                command.Parameters.Add("@BorrowerID", SqlDbType.Int).Value = loan.BorrowerID;
-                command.Parameters.Add("@ApproverID", SqlDbType.Int).Value = loan.ApproverID;
-                command.Parameters.Add("@DeviceID", SqlDbType.Int).Value = loan.DeviceID;
-                command.Parameters.Add("@StartDate", SqlDbType.Date).Value =
-                    loan.StartDate.ToDateTime(new TimeOnly(0, 0));
-
-                // Sends EndDate as a Date value or DBNull when not set
-                var endDateParam = command.Parameters.Add("@EndDate", SqlDbType.Date);
-                if (loan.EndDate.HasValue)
-                {
-                    endDateParam.Value = loan.EndDate.Value.ToDateTime(new TimeOnly(0, 0));
-                }
-                else
-                {
-                    endDateParam.Value = DBNull.Value;
-                }
+                AddLoanParameters(command, loan);
 
                 connection.Open();
 
@@ -191,24 +132,7 @@ namespace Data.AdoNet
                 };
 
                 command.Parameters.Add("@LoanID", SqlDbType.Int).Value = loan.LoanID;
-                command.Parameters.Add("@Status", SqlDbType.NVarChar, 50).Value = loan.LoanStatus;
-                command.Parameters.Add("@RequestID", SqlDbType.Int).Value = loan.RequestID;
-                command.Parameters.Add("@BorrowerID", SqlDbType.Int).Value = loan.BorrowerID;
-                command.Parameters.Add("@ApproverID", SqlDbType.Int).Value = loan.ApproverID;
-                command.Parameters.Add("@DeviceID", SqlDbType.Int).Value = loan.DeviceID;
-                command.Parameters.Add("@StartDate", SqlDbType.Date).Value =
-                    loan.StartDate.ToDateTime(new TimeOnly(0, 0));
-
-                // Sends EndDate as a Date value or DBNull when not set
-                var endDateParam = command.Parameters.Add("@EndDate", SqlDbType.Date);
-                if (loan.EndDate.HasValue)
-                {
-                    endDateParam.Value = loan.EndDate.Value.ToDateTime(new TimeOnly(0, 0));
-                }
-                else
-                {
-                    endDateParam.Value = DBNull.Value;
-                }
+                AddLoanParameters(command, loan);
 
                 connection.Open();
                 var rowsAffected = command.ExecuteNonQuery();
@@ -248,6 +172,55 @@ namespace Data.AdoNet
             {
                 throw new DataException($"An error occurred while deleting the loan with ID {loanID} from the database.", exception);
             }
+        }
+
+        // Maps a SqlDataReader row to a Loan object
+        private static Loan MapLoan(SqlDataReader reader)
+        {
+            var endDateOrdinal = reader.GetOrdinal("EndDate");
+            var approverOrdinal = reader.GetOrdinal("ApproverID");
+            var startDateOrdinal = reader.GetOrdinal("StartDate");
+
+            return new Loan
+            {
+                LoanID = reader.GetInt32(reader.GetOrdinal("LoanID")),
+                Status = (LoanStatus)reader.GetInt32(reader.GetOrdinal("LoanStatus")),
+                StartDate = reader.IsDBNull(startDateOrdinal)
+                    ? null
+                    : DateOnly.FromDateTime(reader.GetDateTime(startDateOrdinal)),
+                EndDate = reader.IsDBNull(endDateOrdinal)
+                    ? null
+                    : DateOnly.FromDateTime(reader.GetDateTime(endDateOrdinal)),
+                RequestID = reader.GetInt32(reader.GetOrdinal("RequestID")),
+                BorrowerID = reader.GetInt32(reader.GetOrdinal("BorrowerID")),
+                ApproverID = reader.IsDBNull(approverOrdinal)
+                    ? 0
+                    : reader.GetInt32(approverOrdinal),
+                DeviceID = reader.GetInt32(reader.GetOrdinal("DeviceID"))
+            };
+        }
+
+        // Adds parameters for a Loan object to a SqlCommand
+        private static void AddLoanParameters(SqlCommand command, Loan loan)
+        {
+            command.Parameters.Add("@Status", SqlDbType.Int).Value = (int)loan.Status;
+            command.Parameters.Add("@RequestID", SqlDbType.Int).Value = loan.RequestID;
+            command.Parameters.Add("@BorrowerID", SqlDbType.Int).Value = loan.BorrowerID;
+
+            var approverParam = command.Parameters.Add("@ApproverID", SqlDbType.Int);
+            approverParam.Value = loan.ApproverID == 0 ? DBNull.Value : loan.ApproverID;
+
+            command.Parameters.Add("@DeviceID", SqlDbType.Int).Value = loan.DeviceID;
+
+            var startDateParam = command.Parameters.Add("@StartDate", SqlDbType.Date);
+            startDateParam.Value = loan.StartDate.HasValue
+                ? loan.StartDate.Value.ToDateTime(new TimeOnly(0, 0))
+                : DBNull.Value;
+
+            var endDateParam = command.Parameters.Add("@EndDate", SqlDbType.Date);
+            endDateParam.Value = loan.EndDate.HasValue
+                ? loan.EndDate.Value.ToDateTime(new TimeOnly(0, 0))
+                : DBNull.Value;
         }
     }
 }

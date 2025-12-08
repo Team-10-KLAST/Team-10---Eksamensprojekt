@@ -39,7 +39,7 @@ namespace Data.AdoNet
                 decisions.Add(new Decision
                 {
                     DecisionID = reader.GetInt32(reader.GetOrdinal("DecisionID")),
-                    DecisionStatus = Enum.Parse<DecisionStatus>(reader.GetString(reader.GetOrdinal("DecisionStatus"))),
+                    Status = (DecisionStatus)reader.GetInt32(reader.GetOrdinal("DecisionStatus")),
                     DecisionDate = decisionDate,
                     Comments = reader.GetString(reader.GetOrdinal("Comments")),
                     LoanID = reader.GetInt32(reader.GetOrdinal("LoanID"))
@@ -55,7 +55,7 @@ namespace Data.AdoNet
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
-            command.Parameters.AddWithValue("@DecisionStatus", entity.DecisionStatus.ToString());
+            command.Parameters.AddWithValue("@DecisionStatus", (int)entity.Status);
             _ = command.Parameters.AddWithValue("@DecisionDate", entity.DecisionDate);
             command.Parameters.AddWithValue("@Comments", entity.Comments ?? "");
             command.Parameters.AddWithValue("@LoanID", entity.LoanID);
@@ -97,7 +97,7 @@ namespace Data.AdoNet
                 return new Decision
                 {
                     DecisionID = reader.GetInt32(reader.GetOrdinal("DecisionID")),
-                    DecisionStatus = Enum.Parse<DecisionStatus>(reader.GetString(reader.GetOrdinal("DecisionStatus"))),
+                    Status = (DecisionStatus)reader.GetInt32(reader.GetOrdinal("DecisionStatus")),
                     DecisionDate = decisionDate,
                     Comments = reader.GetString(reader.GetOrdinal("Comments")),
                     LoanID = reader.GetInt32(reader.GetOrdinal("LoanID"))
@@ -114,7 +114,7 @@ namespace Data.AdoNet
                 CommandType = System.Data.CommandType.StoredProcedure
             };
             command.Parameters.AddWithValue("@DecisionID", entity.DecisionID);
-            command.Parameters.AddWithValue("@DecisionStatus", entity.DecisionStatus.ToString());
+            command.Parameters.AddWithValue("@DecisionStatus", (int)entity.Status);
             command.Parameters.AddWithValue("@DecisionDate", entity.DecisionDate);
             command.Parameters.AddWithValue("@Comments", entity.Comments ?? "");
             command.Parameters.AddWithValue("@LoanID", entity.LoanID);
