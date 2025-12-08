@@ -10,7 +10,7 @@ namespace Application.Interfaces.Service
 {
     public interface IRequestService
     {
-        Request GetRequestByID(int requestID);
+        Request? GetRequestByID(int requestID);
         IEnumerable<Request> GetAllRequests();
         void SubmitRequest(string email, string deviceType, string OS, string country, string comment, DateOnly neededByDate);
         void ApproveRequest(int requestId, int approverID, string comment);

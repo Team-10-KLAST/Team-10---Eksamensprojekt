@@ -30,34 +30,40 @@ public class LoanService : ILoanService
             RequestID = requestID,
             BorrowerID = borrowerID,
             DeviceID = deviceID,
-            LoanStatus = "new"
+            Status = LoanStatus.INACTIVE,
+            StartDate = null,
+            EndDate = null
         };
         AddLoan(loan);
     }
+
     public void CloseLoan(int loanID)
     {
 
     }
-    public void UpdateLoanStatus(int loanID, string newStatus)
+    public void UpdateLoanStatus(int loanID, LoanStatus newStatus)
     {
+        var loan = _loanRepository.GetByID(loanID)
+            ?? throw new InvalidOperationException("Loan not found.");
 
+        loan.Status = newStatus;
+        _loanRepository.Update(loan);
     }
 
     public void AddLoan(Loan loan)
     {
-        if (loan.BorrowerID == null) { throw new ArgumentException("BorrowerID cannot be empty"); }
-        if (loan.DeviceID == null) { throw new ArgumentException("DeviceID cannot be empty"); }
+        if (loan.BorrowerID <= 0) { throw new ArgumentException("BorrowerID cannot be empty"); }
+        if (loan.DeviceID <= 0) { throw new ArgumentException("DeviceID cannot be empty"); }
         _loanRepository.Add(loan);
 
-        // Sæt IsWiped = false hvis loan status er "new" eller "In Use"
-        if (loan.LoanStatus.Equals("new", StringComparison.OrdinalIgnoreCase) || loan.LoanStatus.Equals("In Use", StringComparison.OrdinalIgnoreCase))
+        if (loan.Status == LoanStatus.INACTIVE || loan.Status == LoanStatus.ACTIVE)
         {
-            var device = _deviceService.GetDeviceByID(loan.DeviceID);
-            if (device != null)
-            {
-                device.IsWiped = false;
-                _deviceService.UpdateDevice(device);
-            }
+            var device = _deviceService.GetDeviceByID(loan.DeviceID)
+                ?? throw new InvalidOperationException("Device not found.");
+
+            device.IsWiped = false;
+            _deviceService.UpdateDevice(device);
         }
+
     }
 }

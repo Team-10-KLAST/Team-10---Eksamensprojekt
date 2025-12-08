@@ -68,7 +68,7 @@ public class RequestService : IRequestService
         var decision = new Decision
         {
             LoanID = loan.LoanID,
-            DecisionStatus = DecisionStatus.APPROVED,
+            Status = DecisionStatus.APPROVED,
             DecisionDate = DateOnly.FromDateTime(DateTime.Now),
             Comments = string.IsNullOrWhiteSpace(comment) ? string.Empty : comment
         };
@@ -88,7 +88,7 @@ public class RequestService : IRequestService
         var decision = new Decision
         {
             LoanID = loan.LoanID,
-            DecisionStatus = DecisionStatus.REJECTED,
+            Status = DecisionStatus.REJECTED,
             DecisionDate = DateOnly.FromDateTime(DateTime.Now),
             Comments = string.IsNullOrWhiteSpace(comment) ? string.Empty : comment
         };
