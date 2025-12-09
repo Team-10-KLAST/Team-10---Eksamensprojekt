@@ -28,7 +28,9 @@
                        Style="{StaticResource BodyTextStyle}" 
                        Margin="0,0,0,5"/>
             <TextBox 
-                     Style="{StaticResource ReadonlyInputFieldStyle}" TextChanged="TextBox_TextChanged_4" Text="" />
+                     Style="{StaticResource ReadonlyInputFieldStyle}" 
+                     TextChanged="TextBox_TextChanged_4" 
+                     Text="{Binding TentativeAssigneeEmail, UpdateSourceTrigger=PropertyChanged}" />
 
 
             <!-- Type -->
