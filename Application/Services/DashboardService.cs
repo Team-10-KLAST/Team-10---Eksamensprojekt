@@ -47,15 +47,12 @@ namespace Application.Services
 
             foreach (var request in pendingRequests)
             {
-                // Find loan connected to this request
                 var loan = allLoans.FirstOrDefault(l => l.RequestID == request.RequestID);
                 if (loan is null)
                     continue;
 
-                // Find employee (borrower)
                 var employee = allEmployees.FirstOrDefault(e => e.EmployeeID == loan.BorrowerID);
 
-                // Find device and description
                 var device = allDevices.FirstOrDefault(d => d.DeviceID == loan.DeviceID);
                 DeviceDescription? description = null;
                 if (device is not null)
@@ -64,12 +61,10 @@ namespace Application.Services
                         .FirstOrDefault(dd => dd.DeviceDescriptionID == device.DeviceDescriptionID);
                 }
 
-                // Build device-related part of the header
                 var deviceType = description?.DeviceType ?? "Device";
                 var operatingSystem = description?.OperatingSystem ?? "Unknown";
                 var headerText = $"REQ-{request.RequestID} · {deviceType} · {operatingSystem}";
 
-                // Build employee + location + date for the subtext
                 var employeeName = employee is null
                     ? "Unknown"
                     : $"{employee.FirstName} {employee.LastName}";
@@ -81,9 +76,6 @@ namespace Application.Services
                 result.Add(new RequestDashboardDisplayModel
                 {
                     RequestID = request.RequestID,
-                    RequestDate = request.RequestDate,
-                    Justification = request.Justification,
-                    Status = request.Status,
                     HeaderText = headerText,
                     SubText = subText
                 });
@@ -91,6 +83,7 @@ namespace Application.Services
 
             return result;
         }
+
 
         public IReadOnlyList<DeviceDashboardDisplayModel> GetDevicesByStatus(DeviceStatus status)
         {
@@ -103,22 +96,18 @@ namespace Application.Services
 
             foreach (var device in allDevices.Where(d => d.Status == status))
             {
-                // Find loan for this device (used to get borrower/employee)
                 var loan = allLoans.FirstOrDefault(l => l.DeviceID == device.DeviceID);
                 var employee = loan is null
                     ? null
                     : allEmployees.FirstOrDefault(e => e.EmployeeID == loan.BorrowerID);
 
-                // Find description for type, OS and location
                 var description = allDeviceDescriptions
                     .FirstOrDefault(dd => dd.DeviceDescriptionID == device.DeviceDescriptionID);
 
-                // Build header: DEV-ID · Type · OS
                 var deviceType = description?.DeviceType ?? "Device";
                 var operatingSystem = description?.OperatingSystem ?? "Unknown";
                 var headerText = $"DEV-{device.DeviceID} · {deviceType} · {operatingSystem}";
 
-                // Build subtext: Employee · Location · Date
                 var employeeName = employee is null
                     ? "Unknown"
                     : $"{employee.FirstName} {employee.LastName}";
@@ -130,9 +119,6 @@ namespace Application.Services
                 result.Add(new DeviceDashboardDisplayModel
                 {
                     DeviceID = device.DeviceID,
-                    Status = device.Status,
-                    PurchaseDate = device.PurchaseDate,
-                    ExpectedEndDate = device.ExpectedEndDate,
                     HeaderText = headerText,
                     SubText = subText
                 });
@@ -140,5 +126,6 @@ namespace Application.Services
 
             return result;
         }
+
     }
 }

@@ -146,7 +146,7 @@
                        FontWeight="SemiBold"
                        Margin="0,0,0,5"/>
 
-            <TextBox Text="{Binding StatusHistoryString}"
+            <TextBox Text="{Binding StatusHistoryString, Mode=OneWay}"
                        Height="64"
                        Width="354"
                        IsReadOnly="True"
