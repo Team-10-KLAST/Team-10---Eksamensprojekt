@@ -145,29 +145,21 @@ namespace Presentation.Wpf.ViewModels
             ShowOverlayAndReload(overlay);
         }
 
-        
+
 
         private void OpenUpdateDeviceOverlay(DeviceDashboardDisplayModel deviceDisplayModel)
         {
             if (deviceDisplayModel is null)
                 return;
 
-            
             var deviceDisplay = new DeviceDisplayModel
             {
-                DeviceID = deviceDisplayModel.DeviceID,
-                Status = deviceDisplayModel.Status.ToString(),
-                RegistrationDate = deviceDisplayModel.PurchaseDate.ToDateTime(TimeOnly.MinValue),
-                ExpirationDate = deviceDisplayModel.ExpectedEndDate.ToDateTime(TimeOnly.MinValue),
-                OwnerFullName = string.Empty,
-                Location = string.Empty,
-                EventDate = DateTime.Today,
-                Wiped = false,
-                StatusHistory = new List<string>()
+                DeviceID = deviceDisplayModel.DeviceID
             };
 
             var overlay = new UpdateDeviceViewModel(deviceDisplay);
             ShowOverlayAndReload(overlay);
         }
+
     }
 }

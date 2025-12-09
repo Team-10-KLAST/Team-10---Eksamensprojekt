@@ -11,8 +11,6 @@ namespace Application.Models.DisplayModels
     {
         public int RequestID { get; set; }
         public DateOnly RequestDate { get; set; }
-        public string Justification { get; set; } = string.Empty;
-        public RequestStatus Status { get; set; }
         // Text to show in the first line of the card
         public string HeaderText { get; set; } = string.Empty;
         // Text to show in the second line of the card
