@@ -13,24 +13,25 @@ namespace AssetManagerTest;
 [TestClass]
 public class DepartmentRepositoryTest
 {
-    private DepartmentRepository _repository;
+    // Repository instance to be tested
+    private DepartmentRepository _repository = null!;
 
+    // Arrange: Initialize the repository before each test
     [TestInitialize]
     public void Setup()
     {
-        var db = DatabaseConnection.GetInstance();
-        _repository = new DepartmentRepository(db);
+        var database = DatabaseConnection.GetInstance();
+        _repository = new DepartmentRepository(database);
     }
 
+    // Test to verify that GetAll method returns the expected departments
     [TestMethod]
     public void GetAll_ShouldReturnDepartments()
     {
-        // Arrange
-        var db = DatabaseConnection.GetInstance();
-        var repo = new DepartmentRepository(db);
+        // Arrange (Handled in Setup)
 
         // Act
-        var result = repo.GetAll().ToList();
+        var result = _repository.GetAll().ToList();
 
         // Assert
         Assert.AreEqual(4, result.Count, "Expected exactly 4 departments in the test database.");
