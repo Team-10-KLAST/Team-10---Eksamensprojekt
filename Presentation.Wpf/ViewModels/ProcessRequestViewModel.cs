@@ -56,7 +56,7 @@ namespace Presentation.Wpf.ViewModels
             set
             {
                 SetProperty(ref _approver, value);
-                // Valides format
+
                 if (!ValidateEmailFormat(_approver))
                 {
                     return;
@@ -157,10 +157,10 @@ namespace Presentation.Wpf.ViewModels
             if (approver == null)
             {
                 EmailErrorMsg = "Approver does not exists.";
-                return; // Stopper metoden her
+                return; 
             }
 
-            EmailErrorMsg = string.Empty; // Rydder fejl hvis alt er ok
+            EmailErrorMsg = string.Empty; 
             _requestService.ApproveRequest(_requestId, approver.EmployeeID, Comment);
             CloseOverlay();
         }
