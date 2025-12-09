@@ -11,7 +11,7 @@ namespace AssetManagerTest;
 
 //Arrange
 
-public class DummyEmployeeRepository : IRepository<Employee>
+/*public class DummyEmployeeRepository : IRepository<Employee>
 {
     private readonly List<Employee> _employees= new List<Employee>();
 
@@ -51,4 +51,4 @@ public class EmployeeServiceTest
     public void TestMethod1()
     {
     }
-}
+}*/
