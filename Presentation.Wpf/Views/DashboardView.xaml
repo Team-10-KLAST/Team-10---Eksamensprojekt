@@ -307,7 +307,7 @@
                         <ScrollViewer Grid.Row="1"
                                       Margin="0,12,0,0"
                                       VerticalScrollBarVisibility="Auto">
-                            <ItemsControl ItemsSource="{Binding PlannedDevices}">
+                            <ItemsControl ItemsSource="{Binding PlannedDevices, Mode=OneWay}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border Style="{StaticResource StatusItemCardBorderStyle}">
@@ -502,7 +502,7 @@
         </Grid>
     </Viewbox>
 
-        <local:OverlayHost DataContext="{Binding}" />
+       <!-- <local:OverlayHost DataContext="{Binding}" /> -->
     </Grid>
 
 </UserControl>
