@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="Resources/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles.xaml" />
                 <ResourceDictionary Source="Resources/ViewsTemplates.xaml" />
+                <ResourceDictionary Source="/Resources/DashboardStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <helpers:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />

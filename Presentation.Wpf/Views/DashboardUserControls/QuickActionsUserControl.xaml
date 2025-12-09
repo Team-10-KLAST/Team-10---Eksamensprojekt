@@ -1,0 +1,134 @@
+﻿<UserControl x:Class="Presentation.Wpf.Views.DashboardUserControls.QuickActionsUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="200"
+             d:DesignWidth="1000">
+    
+    <!-- Root grid for the Quick Actions section -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Section header -->
+        <TextBlock Grid.Row="0"
+                   Margin="0,0,0,8"
+                   Text="Quick actions"
+                   FontFamily="{StaticResource PrimaryFont}"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource PrimaryTextBrush}" />
+
+        <!-- Grid containing the two quick action cards -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- QUICK ACTION: Register device (left card) -->
+            <Border Grid.Column="0"
+                    Style="{StaticResource QuickActionCardBorderStyle}"
+                    Margin="0,0,16,24">
+                <!-- Layout for the "Register device" card -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Icon for device registration -->
+                    <Border Grid.Column="0"
+                            Style="{StaticResource StatusIconCircleStyle}"
+                            Background="{StaticResource PrimaryActionBrush}">
+                        <TextBlock Text="🖥"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+
+                    <!-- Text content describing the action -->
+                    <StackPanel Grid.Column="1"
+                                Margin="16,0,16,0"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Register device"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource PrimaryTextBrush}" />
+                        <TextBlock Text="Create a new asset and (optionally) assign an owner"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="13"
+                                   Foreground="{StaticResource SecondaryTextBrush}" />
+                    </StackPanel>
+
+                    <!-- Arrow button that triggers the OpenRegisterDeviceCommand on the DashboardViewModel -->
+                    <Button Grid.Column="2"
+                            Content="→"
+                            FontSize="20"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource SecondaryTextBrush}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Command="{Binding OpenRegisterDeviceCommand}" />
+                </Grid>
+            </Border>
+
+            <!-- QUICK ACTION: Register employee (right card) -->
+            <Border Grid.Column="1"
+                    Style="{StaticResource QuickActionCardBorderStyle}"
+                    Margin="16,0,0,24">
+                <!-- Layout for the "Register employee" card -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Icon for employee registration -->
+                    <Border Grid.Column="0"
+                            Style="{StaticResource StatusIconCircleStyle}"
+                            Background="{StaticResource PrimaryActionBrush}">
+                        <TextBlock Text="👤"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+
+                    <!-- Text content describing the action -->
+                    <StackPanel Grid.Column="1"
+                                Margin="16,0,16,0"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Register employee"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource PrimaryTextBrush}" />
+                        <TextBlock Text="Add a new employee profile for assignments"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="13"
+                                   Foreground="{StaticResource SecondaryTextBrush}" />
+                    </StackPanel>
+
+                    <!-- Arrow button that triggers the OpenRegisterEmployeeCommand on the DashboardViewModel -->
+                    <Button Grid.Column="2"
+                            Content="→"
+                            FontSize="20"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource SecondaryTextBrush}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Command="{Binding OpenRegisterEmployeeCommand}" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
