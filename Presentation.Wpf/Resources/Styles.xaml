@@ -46,9 +46,10 @@
     <Style TargetType="TextBox" x:Key="InputFieldStyle">
         <Setter Property="Background" Value="{DynamicResource InputFieldBackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InputFieldBorderBrush}" />
-        <Setter Property="Padding" Value="5" />
+        <Setter Property="Padding" Value="4" /> <!-- Mindre padding -->
         <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
-        <Setter Property="Height" Value="36" />
+        <Setter Property="FontSize" Value="14" /> <!-- Matcher tekststørrelse -->
+        <Setter Property="Height" Value="28" /> <!-- Mindre højde -->
     </Style>
 
     <!-- Readonly Input Field Style -->

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Presentation.Wpf.Views"
+             xmlns:local="clr-namespace:Presentation.Wpf.Views" xmlns:viewmodels="clr-namespace:Presentation.Wpf.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ProcessRequestViewModel}"
              mc:Ignorable="d" 
              Background="{StaticResource PageBackgroundBrush}"
              d:DesignHeight="600" d:DesignWidth="400">
@@ -27,8 +27,8 @@
             <TextBlock Text="Tentative assignee (email)" 
                        Style="{StaticResource BodyTextStyle}" 
                        Margin="0,0,0,5"/>
-            <TextBox Text="{Binding TentativeAssigneeEmail}" 
-                     Style="{StaticResource ReadonlyInputFieldStyle}" />
+            <TextBox 
+                     Style="{StaticResource ReadonlyInputFieldStyle}" TextChanged="TextBox_TextChanged_4" Text="" />
 
 
             <!-- Type -->
@@ -60,7 +60,7 @@
                      Style="{StaticResource InputFieldStyle}" />
 
             <!-- Error message -->
-            <TextBlock Text="{Binding EmailErrorMessage}" 
+            <TextBlock Text="{Binding EmailErrorMsg}" 
                        Foreground="Red" 
                        FontSize="12" 
                        Margin="0,2,0,0"/>
@@ -69,7 +69,7 @@
             <TextBlock Text="Comment" 
                        Style="{StaticResource BodyTextStyle}" 
                        Margin="0,10,0,5"/>
-            <TextBox Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox 
                      Style="{StaticResource InputFieldStyle}" 
                      AcceptsReturn="True" 
                      Height="80" />

@@ -56,7 +56,18 @@ namespace Presentation.Wpf.ViewModels
             set
             {
                 SetProperty(ref _approver, value);
-                ValidateEmailFormat(_approver);
+                // Valides format
+                if (!ValidateEmailFormat(_approver))
+                {
+                    return;
+                }
+
+                // Checks for email
+                if (!string.IsNullOrWhiteSpace(_approver))
+                {
+                    var employee = _employeeService.GetEmployeeByEmail(_approver);
+                    EmailErrorMsg = employee == null ? "Approver not found." : string.Empty;
+                }
 
                 (ApproveCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 (RejectCommand as RelayCommand)?.RaiseCanExecuteChanged();
@@ -142,9 +153,14 @@ namespace Presentation.Wpf.ViewModels
 
         private void Approve()
         {
-            var approver = _employeeService.GetEmployeeByEmail(Approver)
-                           ?? throw new InvalidOperationException("Approver not found");
+            var approver = _employeeService.GetEmployeeByEmail(Approver);
+            if (approver == null)
+            {
+                EmailErrorMsg = "Approver does not exists.";
+                return; // Stopper metoden her
+            }
 
+            EmailErrorMsg = string.Empty; // Rydder fejl hvis alt er ok
             _requestService.ApproveRequest(_requestId, approver.EmployeeID, Comment);
             CloseOverlay();
         }
