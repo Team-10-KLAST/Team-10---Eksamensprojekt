@@ -1,0 +1,365 @@
+﻿<UserControl x:Class="Presentation.Wpf.Views.DashboardUserControls.TasksUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="400"
+             d:DesignWidth="1000">
+
+    <!-- Root grid for status columns (Pending, Planned, Ordered, Received -->
+    <Grid Margin="0,8,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Pending Requests -->
+        <Border Grid.Row="0" Grid.Column="0"
+                Style="{StaticResource StatusColumnCardBorderStyle}"
+                Margin="0,0,16,16">
+            
+            <!-- Inner layout for the Pending box -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                
+                <!-- Header area for Pending box -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Icon for Pending requests -->
+                    <Border Grid.Column="0"
+                            Style="{StaticResource StatusIconCircleStyle}"
+                            Background="{StaticResource PrimaryActionBrush}">
+                        <TextBlock Text="🖥"
+                                   FontSize="18"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+
+                    <!-- Title text for Pending requests -->
+                    <TextBlock Grid.Column="1"
+                               Margin="12,0,0,0"
+                               VerticalAlignment="Center"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource PrimaryTextBrush}"
+                               Text="Pending requests" />
+
+                    <!-- Button that displays the number of pending requests -->
+                    <Button Grid.Column="2"
+                            Margin="0,0,8,0"
+                            Content="{Binding PendingRequestsCount, StringFormat={}{0} items}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Background="{StaticResource PanelBackgroundBrush}"
+                            Foreground="{StaticResource PrimaryTextBrush}" />
+                </Grid>
+
+                <!-- Scrollable area that shows the list of pending requests -->
+                <ScrollViewer Grid.Row="1"
+                              Margin="0,12,0,0"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding PendingRequests}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource StatusItemCardBorderStyle}">
+                                    <Button Command="{Binding DataContext.OpenProcessRequestCommand,
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding HeaderText}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="13"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource PrimaryTextBrush}" />
+                                            <TextBlock Text="{Binding SubText}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource SecondaryTextBrush}" />
+                                        </StackPanel>
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Planned Devices-->
+        <Border Grid.Row="0" Grid.Column="1"
+                Style="{StaticResource StatusColumnCardBorderStyle}"
+                Margin="16,0,0,16">
+
+            <!-- Inner layout for the Planned box -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Header area for Planned devices -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Icon for Planned devices -->
+                    <Border Grid.Column="0"
+                            Style="{StaticResource StatusIconCircleStyle}"
+                            Background="{StaticResource PrimaryActionBrush}">
+                        <TextBlock Text="📱"
+                                   FontSize="18"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+
+                    <!-- Title for Planned devices -->
+                    <TextBlock Grid.Column="1"
+                               Margin="12,0,0,0"
+                               VerticalAlignment="Center"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource PrimaryTextBrush}"
+                               Text="Planned" />
+
+                    <!-- Button showing the count of planned devices -->
+                    <Button Grid.Column="2"
+                            Margin="0,0,8,0"
+                            Content="{Binding PlannedDevicesCount, StringFormat={}{0} items}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Background="{StaticResource PanelBackgroundBrush}"
+                            Foreground="{StaticResource PrimaryTextBrush}" />
+                </Grid>
+
+                <!-- Scrollable area that shows the list of planned devices -->
+                <ScrollViewer Grid.Row="1"
+                              Margin="0,12,0,0"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding PlannedDevices, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource StatusItemCardBorderStyle}">
+                                    <Button Command="{Binding DataContext.OpenUpdateDeviceCommand,
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding HeaderText}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="13"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource PrimaryTextBrush}" />
+                                            <TextBlock Text="{Binding SubText}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource SecondaryTextBrush}" />
+                                        </StackPanel>
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Ordered Devices -->
+        <Border Grid.Row="1" Grid.Column="0"
+                Style="{StaticResource StatusColumnCardBorderStyle}"
+                Margin="0,16,16,0">
+
+            <!-- Inner layout for the Ordered box -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Header area for Ordered devices -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Icon for Ordered devices -->
+                    <Border Grid.Column="0"
+                            Style="{StaticResource StatusIconCircleStyle}"
+                            Background="{StaticResource PrimaryActionBrush}">
+                        <TextBlock Text="📦"
+                                   FontSize="18"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+
+                    <!-- Title text for Ordered devices -->
+                    <TextBlock Grid.Column="1"
+                               Margin="12,0,0,0"
+                               VerticalAlignment="Center"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource PrimaryTextBrush}"
+                               Text="Ordered" />
+
+                    <!-- Button with count of ordered devices -->
+                    <Button Grid.Column="2"
+                            Margin="0,0,8,0"
+                            Content="{Binding OrderedDevicesCount, StringFormat={}{0} items}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Background="{StaticResource PanelBackgroundBrush}"
+                            Foreground="{StaticResource PrimaryTextBrush}" />
+                </Grid>
+
+                <!-- Scrollable list of ordered devices -->
+                <ScrollViewer Grid.Row="1"
+                              Margin="0,12,0,0"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding OrderedDevices}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource StatusItemCardBorderStyle}">
+                                    <Button Command="{Binding DataContext.OpenUpdateDeviceCommand,
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding HeaderText}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="13"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource PrimaryTextBrush}" />
+                                            <TextBlock Text="{Binding SubText}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource SecondaryTextBrush}" />
+                                        </StackPanel>
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Ready to assign / Received Devices -->
+        <Border Grid.Row="1" Grid.Column="1"
+                Style="{StaticResource StatusColumnCardBorderStyle}"
+                Margin="16,16,0,0">
+
+            <!-- Inner layout for Ready to assign box -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Header area for Ready to assign devices -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Icon for Ready to assign devices -->
+                    <Border Grid.Column="0"
+                            Style="{StaticResource StatusIconCircleStyle}"
+                            Background="{StaticResource PrimaryActionBrush}">
+                        <TextBlock Text="✔"
+                                   FontSize="18"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+
+                    <!-- Title text for Ready to assign devices -->
+                    <TextBlock Grid.Column="1"
+                               Margin="12,0,0,0"
+                               VerticalAlignment="Center"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource PrimaryTextBrush}"
+                               Text="Ready to assign" />
+
+                    <!-- Button with count of received devices -->
+                    <Button Grid.Column="2"
+                            Margin="0,0,8,0"
+                            Content="{Binding ReceivedDevicesCount, StringFormat={}{0} items}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Background="{StaticResource PanelBackgroundBrush}"
+                            Foreground="{StaticResource PrimaryTextBrush}" />
+                </Grid>
+
+                <!-- Scrollable list of devices that are ready to be assigned -->
+                <ScrollViewer Grid.Row="1"
+                              Margin="0,12,0,0"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding ReceivedDevices}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource StatusItemCardBorderStyle}">
+                                    <Button Command="{Binding DataContext.OpenUpdateDeviceCommand,
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding HeaderText}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="13"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource PrimaryTextBrush}" />
+                                            <TextBlock Text="{Binding SubText}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource SecondaryTextBrush}" />
+                                        </StackPanel>
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
