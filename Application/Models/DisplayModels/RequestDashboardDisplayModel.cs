@@ -10,7 +10,6 @@ namespace Application.Models.DisplayModels
     public class RequestDashboardDisplayModel
     {
         public int RequestID { get; set; }
-        public DateOnly RequestDate { get; set; }
         // Text to show in the first line of the card
         public string HeaderText { get; set; } = string.Empty;
         // Text to show in the second line of the card
