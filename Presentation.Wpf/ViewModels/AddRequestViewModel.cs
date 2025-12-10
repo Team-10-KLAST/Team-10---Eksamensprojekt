@@ -13,13 +13,16 @@ using Presentation.Wpf.Commands;
 
 namespace Presentation.Wpf.ViewModels
 {
-    internal class AddRequestViewModel : OverlayPanelViewModelBase
+    internal class AddRequestViewModel : ViewModelBase
     {
         private readonly IRequestService _requestService;
         private readonly IDeviceDescriptionService _deviceDescriptionService;
         private readonly IEmployeeService _employeeService;
+        private readonly Action _navigateBack;
 
-        
+        //Collection for all employee emails, populated when VM constructor is run
+        private List<string> AllowedEmails;
+
         //form fields
         private string _email = string.Empty;
         public string Email
@@ -43,10 +46,18 @@ namespace Presentation.Wpf.ViewModels
             {
                 if (SetProperty(ref _neededByDate, value))
                 {
+                    DateErrorMsg = string.Empty;
                     (SubmitCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
+        private string _dateErrorMsg = string.Empty;
+        public string DateErrorMsg
+        {
+            get => _dateErrorMsg;
+            private set => SetProperty(ref _dateErrorMsg, value);
+        }
+
 
         private string _emailErrorMsg = string.Empty;
         public string EmailErrorMsg
@@ -110,7 +121,7 @@ namespace Presentation.Wpf.ViewModels
 
         //Collections for Comboboxes
         public ObservableCollection<string> OSOptions { get; }
-        public ObservableCollection<string> DeviceOptions { get; }
+        public ObservableCollection<string> DeviceTypeOptions { get; }
         public ObservableCollection<string> CountryOptions { get; }
 
         //Commands
@@ -118,29 +129,31 @@ namespace Presentation.Wpf.ViewModels
         public ICommand CancelCommand { get; }
 
         //Constructor. Creating all relevant instances, populating all collections.
-        public AddRequestViewModel (IRequestService requestService, IDeviceDescriptionService descriptionService, IEmployeeService employeeService)
+        public AddRequestViewModel (IRequestService requestService, IDeviceDescriptionService descriptionService, IEmployeeService employeeService, Action navigateBack)
         {
             _requestService = requestService;
             _deviceDescriptionService = descriptionService;
             _employeeService = employeeService;
 
             OSOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllOSOptions());
-            DeviceOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllDeviceTypeOptions());
+            DeviceTypeOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllDeviceTypeOptions());
             CountryOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllCountryOptions());
             AllowedEmails = new List<string>(_employeeService.GetAllEmployeeEmails());
 
             SelectedOS = OSOptions.FirstOrDefault();
-            SelectedDeviceType = DeviceOptions.FirstOrDefault();
+            SelectedDeviceType = DeviceTypeOptions.FirstOrDefault();
             SelectedCountry = CountryOptions.FirstOrDefault();
 
-            /*SubmitCommand = new RelayCommand(SubmitRequest, CanSubmitRequest);*/
+            SubmitCommand = new RelayCommand(SubmitRequest, CanSubmitRequest);
             CancelCommand = new RelayCommand(Cancel);
+            _navigateBack = navigateBack;
         }
 
 
         private void SubmitRequest ()
         {
             _requestService.SubmitRequest(Email, SelectedDeviceType, SelectedOS, SelectedCountry, RequestComment, DateOnly.FromDateTime(NeededByDate.Date));
+            Cancel();
         }
 
        
@@ -153,35 +166,47 @@ namespace Presentation.Wpf.ViewModels
             {
                 return false;
             }
+            if (NeededByDate.Date < DateTime.Today.Date)
+            {
+                DateErrorMsg = "Date must not be in the past.";
+                return false;
+            }
             return ValidateEmail (Email);
         }
 
-        //Collection for all employee emails, populated when VM constructor is run
-        private List<string> AllowedEmails;
+        
         //Validate if email exists in DB
         private bool ValidateEmail(string email)
         {
+            EmailErrorMsg = string.Empty;
             if (string.IsNullOrWhiteSpace(email))
             {
-                EmailErrorMsg = string.Empty;
                 return false;
             }
 
             try
             {
-                return AllowedEmails.Contains(email);
+                var mailAddress = new MailAddress(email);                
             }
             catch (FormatException)
             {
-                EmailErrorMsg = "Invalid email";
+                EmailErrorMsg = "Invalid email format.";
                 return false;
             }
+
+            if ( !AllowedEmails.Contains(email) )
+            {
+                EmailErrorMsg = "Email doesn't exist in Database.";
+                return false;
+            }
+            return true;
         }
+        
 
         private void Cancel()
         {
             ClearFields();
-            CloseOverlay();
+            _navigateBack();
         }
 
         private void ClearFields()
@@ -192,7 +217,7 @@ namespace Presentation.Wpf.ViewModels
             NeededByDate = DateTime.Today;
 
             SelectedOS = OSOptions.FirstOrDefault();
-            SelectedDeviceType = DeviceOptions.FirstOrDefault();
+            SelectedDeviceType = DeviceTypeOptions.FirstOrDefault();
             SelectedCountry = CountryOptions.FirstOrDefault();
 
             (SubmitCommand as RelayCommand)?.RaiseCanExecuteChanged();
