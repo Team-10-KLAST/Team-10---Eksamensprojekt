@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Presentation.Wpf.Views"
              mc:Ignorable="d" 
-             Background="{StaticResource PageBackgroundBrush}" Height="646" Width="738">
+             Background="{StaticResource PageBackgroundBrush}" Height="746" Width="738">
 
     <Grid Margin="100,100,100,80" Background="{StaticResource PanelBackgroundBrush}">
         <!-- Root layout -->
@@ -35,18 +35,19 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <!-- Left -->
-                <StackPanel Grid.Column="0" Margin="0,0,8,0">
-                    <StackPanel Orientation="Horizontal">
+                <StackPanel Grid.Column="0" Margin="0,0,8,0">                    
                     <TextBlock Text="Requester (e-mail)"
                 Style="{StaticResource BaseTextStyle}" 
                 FontWeight="SemiBold"/>
-                     <TextBlock Text="{Binding EmailErrorMsg}" Foreground="Red"/>
-                    </StackPanel>
+                     
                     <TextBox Height="33"
                 HorizontalAlignment="Stretch"
                 Background="{StaticResource InputFieldBackgroundBrush}"
                 BorderBrush="{StaticResource InputFieldBorderBrush}"
                 Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+                    <!-- Email validering -->
+                    <TextBlock Text="{Binding EmailErrorMsg}" Foreground="Red" Style="{StaticResource BaseTextStyle}"/>
+
                     <!-- ComboBox -->
                     <TextBlock Text="OS"
                     Style="{StaticResource BaseTextStyle}" 
@@ -66,6 +67,9 @@
                     ItemsSource="{Binding DeviceTypeOptions}"
                     SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}"
                     Width="240" Height="33"/>
+                    <!-- Tom spacer for at matche valideringsfejlen i venstre side -->
+                    <TextBlock Text="" Style="{StaticResource BaseTextStyle}"/>
+
                     <!-- ComboBox -->
                     <TextBlock Text="Location (country)"
                     Style="{StaticResource BaseTextStyle}" 
@@ -80,10 +84,12 @@
                      Style="{StaticResource BaseTextStyle}"
                      FontWeight="SemiBold"
                      Margin="0,12,0,4"/>
+                    
 
 <DatePicker SelectedDate="{Binding NeededByDate, Mode=TwoWay}"
      Height="33"
      HorizontalAlignment="Stretch"/>
+                    <TextBlock Text="{Binding DateErrorMsg}" Foreground="Red" Style="{StaticResource BaseTextStyle}"/>
                 </StackPanel>
             </Grid>
 
@@ -126,6 +132,7 @@
                     BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1"
                     Command="{Binding SubmitCommand}" Margin="0,0,4,0"/>
+                
             </Grid>
         </Grid>
     </Grid>
