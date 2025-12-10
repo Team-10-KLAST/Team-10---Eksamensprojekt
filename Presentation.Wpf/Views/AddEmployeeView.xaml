@@ -66,7 +66,8 @@
                        FontWeight="SemiBold"/>
             <ComboBox Grid.Row="6" Grid.Column="0" Style="{StaticResource InputFieldComboStyle}"
                       ItemsSource="{Binding Departments}"
-                      SelectedItem="{Binding SelectedDepartment}" 
+                      SelectedItem="{Binding SelectedDepartment}"
+                      DisplayMemberPath="Name"
                       Margin="0,0,0,16"/>
 
             <TextBlock Grid.Row="5" Grid.Column="1" Text="Role" Margin="0,0,0,16"
@@ -75,6 +76,7 @@
             <ComboBox Grid.Row="6" Grid.Column="1" Style="{StaticResource InputFieldComboStyle}"
                       ItemsSource="{Binding Roles}"
                       SelectedItem="{Binding SelectedRole}" 
+                      DisplayMemberPath="Name"
                       Margin="0,0,0,16"/>
         <!-- Buttons Cancel & Save -->
         <StackPanel Grid.Row="7" Grid.ColumnSpan="2" 

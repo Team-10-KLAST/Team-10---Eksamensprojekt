@@ -33,6 +33,7 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        private readonly Action _navigateBack;
         public ICommand SelectEmployeeCommand { get; }
         public ICommand SelectAssetManagerCommand { get; }
 
@@ -69,7 +70,8 @@ namespace Presentation.Wpf.ViewModels
                 CurrentView = new AddRequestViewModel(
                     _requestService,
                     _deviceDescriptionService,
-                    _employeeService
+                    _employeeService,
+                    _navigateBack
                 );
                 OnPropertyChanged(nameof(CurrentView));
             });

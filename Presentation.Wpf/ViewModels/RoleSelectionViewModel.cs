@@ -23,6 +23,8 @@ namespace Presentation.Wpf.ViewModels
         private readonly ILoanService _loanService;
         private readonly IDashboardService _dashboardService;
 
+        
+
 
         public ICommand SelectEmployeeCommand { get; }
         public ICommand SelectAssetManagerCommand { get; }
@@ -46,12 +48,26 @@ namespace Presentation.Wpf.ViewModels
             _loanService = loanService;
             _dashboardService = dashboardService;
 
+            Action NavigateBackToRoleSelection = () =>
+            {                
+                _mainWindow.CurrentView = new RoleSelectionViewModel(
+                    _mainWindow,
+                    _requestService,
+                    _deviceDescriptionService,
+                    _employeeService,
+                    _deviceService,
+                    _loanService,
+                    _dashboardService
+                );
+            };
+
             SelectEmployeeCommand = new RelayCommand(() =>
             {
                 _mainWindow.CurrentView = new AddRequestViewModel(
                     _requestService,
                     _deviceDescriptionService,
-                    _employeeService
+                    _employeeService,
+                    NavigateBackToRoleSelection
                 );
             });
 
