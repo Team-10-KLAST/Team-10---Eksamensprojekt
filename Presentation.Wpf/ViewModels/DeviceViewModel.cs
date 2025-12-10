@@ -30,9 +30,9 @@ namespace Presentation.Wpf.ViewModels
 
             public string Status { get; set; } = string.Empty;
 
-            public DateOnly RegisteredDate { get; set; }
+            public DateOnly? RegisteredDate { get; set; }
 
-            public DateOnly ExpiryDate { get; set; }
+            public DateOnly? ExpiryDate { get; set; }
         }
 
         public ObservableCollection<DeviceRow> Devices { get; } = new();

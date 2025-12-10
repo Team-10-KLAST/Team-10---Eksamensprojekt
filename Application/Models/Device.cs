@@ -19,8 +19,8 @@ namespace Application.Models
         public int DeviceID { get; set; }
         public DeviceStatus Status { get; set; } = DeviceStatus.REGISTERED;
         public bool IsWiped { get; set; } = true;
-        public DateOnly PurchaseDate { get; set; }
-        public DateOnly ExpectedEndDate { get; set; }
+        public DateOnly? PurchaseDate { get; set; }
+        public DateOnly? ExpectedEndDate { get; set; }
         public int DeviceDescriptionID { get; set; }
         public Device()
         {

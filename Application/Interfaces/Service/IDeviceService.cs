@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Application.Models;
+using Application.Models.DisplayModels;
 
 namespace Application.Interfaces.Service
 {
@@ -11,6 +12,8 @@ namespace Application.Interfaces.Service
         void UpdateDevice(Device device);
         void DeleteDevice(int deviceID);
         int CreateVirtualDeviceID(string DeviceType, string OS, string country);
+        DeviceDisplayModel? GetDeviceDisplayByID(int deviceID);
+
 
     }
 }

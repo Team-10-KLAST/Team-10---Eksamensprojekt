@@ -152,10 +152,13 @@ namespace Presentation.Wpf.ViewModels
             if (deviceDisplayModel is null)
                 return;
 
-            var deviceDisplay = new DeviceDisplayModel
+            var deviceDisplay = _deviceService.GetDeviceDisplayByID(deviceDisplayModel.DeviceID);
+
+            if (deviceDisplay == null)
             {
-                DeviceID = deviceDisplayModel.DeviceID
-            };
+                ErrorMessage = "Kunne ikke hente device fra databasen.";
+                return;
+            }
 
             var overlay = new UpdateDeviceViewModel(deviceDisplay);
             ShowOverlayAndReload(overlay);
