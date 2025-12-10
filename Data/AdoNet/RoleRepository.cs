@@ -53,6 +53,7 @@ namespace Data.AdoNet
             }
         }
 
+
         // Not yet implemented methods. Can be implemented later as needed.
         void IRepository<Role>.Add(Role entity) => throw new NotImplementedException();
         void IRepository<Role>.Delete(int id) => throw new NotImplementedException();
