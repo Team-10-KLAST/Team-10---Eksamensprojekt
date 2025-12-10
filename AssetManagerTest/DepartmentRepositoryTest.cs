@@ -7,7 +7,7 @@ using Data.AdoNet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace AssetManagerTest;
+namespace AssetManagement_Test;
 
 
 [TestClass]
