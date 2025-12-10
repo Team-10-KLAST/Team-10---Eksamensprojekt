@@ -14,7 +14,7 @@ namespace Application.Models
         public int DecisionID { get; set; }
         public DecisionStatus Status { get; set; } = DecisionStatus.PENDING;
         public DateOnly DecisionDate { get; set; }
-        public string Comments { get; set; } = "";
+        public string Comment { get; set; } = "";
         public int LoanID { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace Data.AdoNet
         {
             var decisions = new List<Decision>();
             using var connection = _databaseConnection.CreateConnection();
-            using var command = new SqlCommand("usp_GetAllDecisions", connection)
+            using var command = new SqlCommand("uspGetAllDecisions", connection)
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
@@ -41,7 +41,7 @@ namespace Data.AdoNet
                     DecisionID = reader.GetInt32(reader.GetOrdinal("DecisionID")),
                     Status = (DecisionStatus)reader.GetInt32(reader.GetOrdinal("DecisionStatus")),
                     DecisionDate = decisionDate,
-                    Comments = reader.GetString(reader.GetOrdinal("Comments")),
+                    Comment = reader.GetString(reader.GetOrdinal("Comment")),
                     LoanID = reader.GetInt32(reader.GetOrdinal("LoanID"))
                 });
             }
@@ -51,13 +51,13 @@ namespace Data.AdoNet
         public void Add(Decision entity)
         {
             using var connection = _databaseConnection.CreateConnection();
-            using var command = new SqlCommand("usp_AddDecision", connection)
+            using var command = new SqlCommand("uspAddDecision", connection)
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
             command.Parameters.AddWithValue("@DecisionStatus", (int)entity.Status);
             _ = command.Parameters.AddWithValue("@DecisionDate", entity.DecisionDate);
-            command.Parameters.AddWithValue("@Comments", entity.Comments ?? "");
+            command.Parameters.AddWithValue("@Comment", entity.Comment ?? "");
             command.Parameters.AddWithValue("@LoanID", entity.LoanID);
 
             connection.Open();
@@ -67,7 +67,7 @@ namespace Data.AdoNet
         public void Delete(int id)
         {
             using var connection = _databaseConnection.CreateConnection();
-            using var command = new SqlCommand("usp_DeleteDecision", connection)
+            using var command = new SqlCommand("uspDeleteDecision", connection)
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
@@ -80,7 +80,7 @@ namespace Data.AdoNet
         public Decision? GetByID(int id)
         {
             using var connection = _databaseConnection.CreateConnection();
-            using var command = new SqlCommand("usp_GetDecisionById", connection)
+            using var command = new SqlCommand("uspGetDecisionById", connection)
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
@@ -99,7 +99,7 @@ namespace Data.AdoNet
                     DecisionID = reader.GetInt32(reader.GetOrdinal("DecisionID")),
                     Status = (DecisionStatus)reader.GetInt32(reader.GetOrdinal("DecisionStatus")),
                     DecisionDate = decisionDate,
-                    Comments = reader.GetString(reader.GetOrdinal("Comments")),
+                    Comment = reader.GetString(reader.GetOrdinal("Comment")),
                     LoanID = reader.GetInt32(reader.GetOrdinal("LoanID"))
                 };
             }
@@ -109,14 +109,14 @@ namespace Data.AdoNet
         public void Update(Decision entity)
         {
             using var connection = _databaseConnection.CreateConnection();
-            using var command = new SqlCommand("usp_UpdateDecision", connection)
+            using var command = new SqlCommand("usppdateDecision", connection)
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
             command.Parameters.AddWithValue("@DecisionID", entity.DecisionID);
             command.Parameters.AddWithValue("@DecisionStatus", (int)entity.Status);
             command.Parameters.AddWithValue("@DecisionDate", entity.DecisionDate);
-            command.Parameters.AddWithValue("@Comments", entity.Comments ?? "");
+            command.Parameters.AddWithValue("@Comment", entity.Comment ?? "");
             command.Parameters.AddWithValue("@LoanID", entity.LoanID);
 
             connection.Open();

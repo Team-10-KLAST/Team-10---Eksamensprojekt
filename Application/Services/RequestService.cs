@@ -70,7 +70,7 @@ public class RequestService : IRequestService
             LoanID = loan.LoanID,
             Status = DecisionStatus.APPROVED,
             DecisionDate = DateOnly.FromDateTime(DateTime.Now),
-            Comments = string.IsNullOrWhiteSpace(comment) ? string.Empty : comment
+            Comment = string.IsNullOrWhiteSpace(comment) ? string.Empty : comment
         };
         _decisionRepository.Add(decision);
     }
@@ -90,7 +90,7 @@ public class RequestService : IRequestService
             LoanID = loan.LoanID,
             Status = DecisionStatus.REJECTED,
             DecisionDate = DateOnly.FromDateTime(DateTime.Now),
-            Comments = string.IsNullOrWhiteSpace(comment) ? string.Empty : comment
+            Comment = string.IsNullOrWhiteSpace(comment) ? string.Empty : comment
         };
         _decisionRepository.Add(decision);
     }

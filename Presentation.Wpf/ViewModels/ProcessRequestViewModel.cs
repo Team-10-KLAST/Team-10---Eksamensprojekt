@@ -48,7 +48,7 @@ namespace Presentation.Wpf.ViewModels
         }
 
 
-        // Input from asset manager
+        //Validation of approver
         private string _approver = string.Empty;
         public string Approver
         {
@@ -62,11 +62,21 @@ namespace Presentation.Wpf.ViewModels
                     return;
                 }
 
-                // Checks for email
                 if (!string.IsNullOrWhiteSpace(_approver))
                 {
                     var employee = _employeeService.GetEmployeeByEmail(_approver);
-                    EmailErrorMsg = employee == null ? "Approver not found." : string.Empty;
+                    if (employee == null)
+                    {
+                        EmailErrorMsg = "Approver not found.";
+                    }
+                    else if (employee.RoleID != 1)
+                    {
+                        EmailErrorMsg = "Approver not found.";
+                    }
+                    else
+                    {
+                        EmailErrorMsg = string.Empty;
+                    }
                 }
 
                 (ApproveCommand as RelayCommand)?.RaiseCanExecuteChanged();
@@ -144,25 +154,24 @@ namespace Presentation.Wpf.ViewModels
         // Approve and Reject methods
         private void Reject()
         {
-            var approver = _employeeService.GetEmployeeByEmail(Approver)
-                           ?? throw new InvalidOperationException("Approver not found");
-
-            _requestService.RejectRequest(_requestId, approver.EmployeeID, Comment);
-            CloseOverlay();
+            var approver = _employeeService.GetEmployeeByEmail(Approver);
+            if (approver != null)
+            {
+                EmailErrorMsg = string.Empty;
+                _requestService.RejectRequest(_requestId, approver.EmployeeID, Comment);
+                CloseOverlay();
+            }
         }
 
         private void Approve()
         {
             var approver = _employeeService.GetEmployeeByEmail(Approver);
-            if (approver == null)
+            if (approver != null)
             {
-                EmailErrorMsg = "Approver does not exists.";
-                return; 
+                EmailErrorMsg = string.Empty;
+                _requestService.ApproveRequest(_requestId, approver.EmployeeID, Comment);
+                CloseOverlay();
             }
-
-            EmailErrorMsg = string.Empty; 
-            _requestService.ApproveRequest(_requestId, approver.EmployeeID, Comment);
-            CloseOverlay();
         }
 
         // CanExecute methods for commands
