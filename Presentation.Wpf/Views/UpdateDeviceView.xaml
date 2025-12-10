@@ -41,38 +41,36 @@
                 <!-- Textbox -->
                 <TextBlock Text="Type" 
                            Style="{StaticResource BaseTextStyle}" 
-                FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding SelectedType.Type}" Style="{StaticResource BaseTextStyle}"/>
+                           FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding Type}" Style="{StaticResource BaseTextStyle}"/>
 
                 <!-- Textbox -->
                 <TextBlock Text="Owner (name)"
                     Style="{StaticResource BaseTextStyle}" 
                     FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding SelectedEmployee.FullName}" Style="{StaticResource BaseTextStyle}"/>
+                <TextBlock Text="{Binding Owner}" Style="{StaticResource BaseTextStyle}"/>
 
-                <!-- Textbox -->
                 <TextBlock Text="Status"
-                    Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"
-                    Margin="0,12,0,4"/>
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,12,0,4"/>
 
-                <!-- Combobox -->
                 <ComboBox Style="{StaticResource InputFieldComboStyle}"
-                    ItemsSource="{Binding StatusOptions}"
-                    SelectedItem="{Binding Selectedstatus, Mode=TwoWay}"
-                    Width="177" Height="33"/>
+                          ItemsSource="{Binding StatusOptions}"
+                          SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"
+                          Width="177"
+                          Height="33"/>
 
-                <!-- Textbox -->
+                <!-- Registration date -->
                 <TextBlock Text="Registration date" 
                            Style="{StaticResource BaseTextStyle}" 
                            FontWeight="SemiBold"
                            Margin="0,0,0,4"/>
 
-                <!-- Combobox -->
-                <ComboBox Style="{StaticResource InputFieldComboStyle}"
-                    ItemsSource="{Binding RegistrationDate}"   
-                    SelectedItem="{Binding SelectedDate, Mode=TwoWay}"
-                    Width="177" Height="33"/>
+                <DatePicker SelectedDate="{Binding RegistrationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Stretch"
+                            Height="33"/>
+
 
                 <!-- Wiped flag -->
                 <TextBlock Text="Wiped"
@@ -93,7 +91,7 @@
                     Style="{StaticResource BaseTextStyle}" 
                     FontWeight="SemiBold"/>
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text= "{Binding SelectedOS.OS}" Style="{StaticResource BaseTextStyle}"/>
+                    <TextBlock Text= "{Binding OS}" Style="{StaticResource BaseTextStyle}"/>
                 </StackPanel>
 
                 <!-- Textbox -->
@@ -109,28 +107,28 @@
                 </StackPanel>
 
                 <!-- Textbox -->
-                <TextBlock Text="Eventdate (status for history)"
-                    Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"/>
+                <TextBlock Text=""
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"/>
+                
                 <StackPanel Orientation="Vertical">
                     <TextBox Height="33"
-                        HorizontalAlignment="Stretch"
-                        Background="{StaticResource InputFieldBackgroundBrush}"
-                        BorderBrush="{StaticResource InputFieldBorderBrush}"
-                        Text="{Binding EventDate, UpdateSourceTrigger=PropertyChanged}"/>
+                             HorizontalAlignment="Stretch"
+                             Background="{StaticResource InputFieldBackgroundBrush}"
+                             BorderBrush="{StaticResource InputFieldBorderBrush}"
+                             Text=""/>
                 </StackPanel>
 
-                <!-- Textbox -->
+                <!-- Expiration date -->
                 <TextBlock Text="Expiration date"
-                    Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"/>
-                <StackPanel Orientation="Vertical">
-                    <TextBox Height="33"
-                        HorizontalAlignment="Stretch"
-                        Background="{StaticResource InputFieldBackgroundBrush}"
-                        BorderBrush="{StaticResource InputFieldBorderBrush}"
-                        Text="{Binding ExpirationDate, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+
+                <DatePicker SelectedDate="{Binding ExpirationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Stretch"
+                            Height="33"/>
+
             </StackPanel>
         </Grid>
 
@@ -157,11 +155,11 @@
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,50,0,0">
             <Button Content="Cancel"
                     Style="{StaticResource RejectButtonStyle}"
-                    Command="{Binding RejectCommand}" Click="Button_Click" />
+                    Command="{Binding CancelCommand}" Click="Button_Click" />
 
             <Button Content="Update"
                     Style="{StaticResource PrimaryButtonStyle}"
-                    Command="{Binding ApproveCommand}"/>
+                    Command="{Binding UpdateDeviceCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

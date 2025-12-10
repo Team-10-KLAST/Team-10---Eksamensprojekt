@@ -52,5 +52,11 @@ namespace Application.Services
             }
             return matchingDeviceDescription.DeviceDescriptionID;
         }
+
+        public DeviceDescription? GetByID(int id)
+        {
+            return _deviceDescriptions
+                .FirstOrDefault(d => d.DeviceDescriptionID == id);
+        }
     }
 }

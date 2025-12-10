@@ -113,7 +113,9 @@ namespace Application.Services
                     : $"{employee.FirstName} {employee.LastName}";
 
                 var location = description?.Location ?? "Unknown";
-                var dateText = device.PurchaseDate.ToString("dd.MM.yyyy");
+                var dateText = device.PurchaseDate.HasValue
+                           ? device.PurchaseDate.Value.ToString("dd.MM.yyyy")
+                           : "No date";
                 var subText = $"{employeeName} · {location} · {dateText}";
 
                 result.Add(new DeviceDashboardDisplayModel

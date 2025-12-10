@@ -43,14 +43,29 @@ namespace Data.AdoNet
 
                 while (reader.Read())
                 {
+                    var purchaseDateOrdinal = reader.GetOrdinal("PurchaseDate");
+                    var expectedEndDateOrdinal = reader.GetOrdinal("ExpectedEndDate");
+
+                    DateOnly? purchaseDate = null;
+                    if (!reader.IsDBNull(purchaseDateOrdinal))
+                    {
+                        purchaseDate = DateOnly.FromDateTime(reader.GetDateTime(purchaseDateOrdinal));
+                    }
+
+                    DateOnly? expectedEndDate = null;
+                    if (!reader.IsDBNull(expectedEndDateOrdinal))
+                    {
+                        expectedEndDate = DateOnly.FromDateTime(reader.GetDateTime(expectedEndDateOrdinal));
+                    }
+
                     devices.Add(new Device
                     {
                         DeviceID = reader.GetInt32(reader.GetOrdinal("DeviceID")),
                         DeviceDescriptionID = reader.GetInt32(reader.GetOrdinal("DeviceDescriptionID")),
                         Status = (DeviceStatus)reader.GetInt32(reader.GetOrdinal("DeviceStatus")),
                         IsWiped = reader.GetBoolean(reader.GetOrdinal("IsWiped")),
-                        PurchaseDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("PurchaseDate"))),
-                        ExpectedEndDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("ExpectedEndDate")))
+                        PurchaseDate = purchaseDate,
+                        ExpectedEndDate = expectedEndDate
                     });
                 }
 
@@ -85,15 +100,29 @@ namespace Data.AdoNet
 
                 if (reader.Read())
                 {
-                    // Builds and returns a Device object from the current record
+                    var purchaseDateOrdinal = reader.GetOrdinal("PurchaseDate");
+                    var expectedEndDateOrdinal = reader.GetOrdinal("ExpectedEndDate");
+
+                    DateOnly? purchaseDate = null;
+                    if (!reader.IsDBNull(purchaseDateOrdinal))
+                    {
+                        purchaseDate = DateOnly.FromDateTime(reader.GetDateTime(purchaseDateOrdinal));
+                    }
+
+                    DateOnly? expectedEndDate = null;
+                    if (!reader.IsDBNull(expectedEndDateOrdinal))
+                    {
+                        expectedEndDate = DateOnly.FromDateTime(reader.GetDateTime(expectedEndDateOrdinal));
+                    }
+
                     return new Device
                     {
                         DeviceID = reader.GetInt32(reader.GetOrdinal("DeviceID")),
                         DeviceDescriptionID = reader.GetInt32(reader.GetOrdinal("DeviceDescriptionID")),
                         Status = (DeviceStatus)reader.GetInt32(reader.GetOrdinal("DeviceStatus")),
                         IsWiped = reader.GetBoolean(reader.GetOrdinal("IsWiped")),
-                        PurchaseDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("PurchaseDate"))),
-                        ExpectedEndDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("ExpectedEndDate")))
+                        PurchaseDate = purchaseDate,
+                        ExpectedEndDate = expectedEndDate
                     };
                 }
 
@@ -124,10 +153,14 @@ namespace Data.AdoNet
                 command.Parameters.Add("@DeviceDescriptionID", SqlDbType.Int).Value = device.DeviceDescriptionID;
                 command.Parameters.Add("@DeviceStatus", SqlDbType.Int).Value = (int)device.Status;
                 command.Parameters.Add("@IsWiped", SqlDbType.Bit).Value = device.IsWiped;
-                command.Parameters.Add("@PurchaseDate", SqlDbType.Date).Value =
-                    device.PurchaseDate.ToDateTime(new TimeOnly(0, 0));
+                command.Parameters.Add("@PurchaseDate", SqlDbType.Date).Value = 
+                    device.PurchaseDate.HasValue
+                        ? device.PurchaseDate.Value.ToDateTime(new TimeOnly(0, 0))
+                        : (object)DBNull.Value;
                 command.Parameters.Add("@ExpectedEndDate", SqlDbType.Date).Value =
-                    device.ExpectedEndDate.ToDateTime(new TimeOnly(0, 0));
+                    device.ExpectedEndDate.HasValue
+                        ? device.ExpectedEndDate.Value.ToDateTime(new TimeOnly(0, 0))
+                        : (object)DBNull.Value;
 
                 connection.Open();
 
@@ -166,10 +199,17 @@ namespace Data.AdoNet
                 command.Parameters.Add("@DeviceDescriptionID", SqlDbType.Int).Value = device.DeviceDescriptionID;
                 command.Parameters.Add("@DeviceStatus", SqlDbType.Int).Value = (int)device.Status;
                 command.Parameters.Add("@IsWiped", SqlDbType.Bit).Value = device.IsWiped;
+
                 command.Parameters.Add("@PurchaseDate", SqlDbType.Date).Value =
-                    device.PurchaseDate.ToDateTime(new TimeOnly(0, 0));
+                    device.PurchaseDate.HasValue
+                        ? device.PurchaseDate.Value.ToDateTime(new TimeOnly(0, 0))
+                        : (object)DBNull.Value;
+
                 command.Parameters.Add("@ExpectedEndDate", SqlDbType.Date).Value =
-                    device.ExpectedEndDate.ToDateTime(new TimeOnly(0, 0));
+                    device.ExpectedEndDate.HasValue
+                        ? device.ExpectedEndDate.Value.ToDateTime(new TimeOnly(0, 0))
+                        : (object)DBNull.Value;
+
 
                 connection.Open();
 
