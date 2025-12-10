@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AssetManagerTest;
+namespace AssetManagement_Test;
 
 [TestClass]
 public class TestSetup
