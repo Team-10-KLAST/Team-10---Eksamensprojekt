@@ -47,9 +47,7 @@
                          Height="33"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"
-                         IsReadOnly="True"
-                         Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Style="{StaticResource ReadonlyInputFieldStyle}"
                          Margin="0,0,0,12"/>
 
                 <!-- Owner -->
@@ -61,9 +59,7 @@
                          Height="33"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"
-                         IsReadOnly="True"
-                         Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Style="{StaticResource ReadonlyInputFieldStyle}"
                          Margin="0,0,0,12"/>
 
                 <!-- Status -->
@@ -109,9 +105,7 @@
                          Height="33"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"
-                         IsReadOnly="True"
-                         Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Style="{StaticResource ReadonlyInputFieldStyle}"
                          Margin="0,0,0,12"/>
 
                 <!-- Location -->
@@ -122,8 +116,7 @@
                 <TextBox Height="33"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"
-                         Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Style="{StaticResource ReadonlyInputFieldStyle}"
                          Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
                          Margin="0,0,0,12"/>
 
@@ -135,8 +128,7 @@
                 <TextBox Height="33"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"
-                         Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Style="{StaticResource ReadonlyInputFieldStyle}"
                          Text="{Binding NeededByDate, Mode=OneWay, StringFormat={}{0:dd.MM.yyyy}}"
                          IsReadOnly="True"
                          Margin="0,0,0,12"/>

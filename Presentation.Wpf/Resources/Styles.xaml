@@ -50,14 +50,16 @@
         <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
         <Setter Property="FontSize" Value="14" /> <!-- Matcher tekststørrelse -->
         <Setter Property="Height" Value="28" /> <!-- Mindre højde -->
+        <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
 
     <!-- Readonly Input Field Style -->
     <Style x:Key="ReadonlyInputFieldStyle" TargetType="TextBox" BasedOn="{StaticResource InputFieldStyle}">
-        <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ReadonlyInputBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="Focusable" Value="False" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InputFieldBorderBrush}" />
     </Style>
 
     <!-- Reject/Delete Button Style -->
