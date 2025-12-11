@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Application.Interfaces;
 using Application.Interfaces.Repository;
@@ -52,8 +53,6 @@ public class RequestService : IRequestService
     {
         return _requestRepository.GetAll();
     }
-
-
 
     // Approves a request by updating the relevant entities and recording the decision
     public void ApproveRequest(int requestId, int approverId, string? comment = null)
@@ -127,21 +126,29 @@ public class RequestService : IRequestService
         var description = _deviceDescriptionRepository.GetByID(device.DeviceDescriptionID)
                           ?? throw new InvalidOperationException("Device description not found");
 
+        var request = _requestRepository.GetByID(requestId)
+                      ?? throw new InvalidOperationException("Request not found");
+
+        var neededByDate = _requestRepository.GetByID(requestId)?.NeededByDate
+                           ?? throw new InvalidOperationException("NeededByDate not found");
+
         return new ProcessRequestDisplayModel
         {
             TentativeAssigneeEmail = borrower.Email,
             DeviceType = description.DeviceType,
             OperatingSystem = description.OperatingSystem,
             Location = description.Location,
-        };
+            RequestComment = request.Justification,
+            NeededByDate = request.NeededByDate.ToDateTime(TimeOnly.MinValue),
+};
     }
 
     // pass on the infromation from AddRequest form
-    public void SubmitRequest(string email, string deviceType, string OS, string country, string comment, DateOnly neededByDate)
+    public void SubmitRequest(string email, string deviceType, string OS, string country, string requestComment, DateOnly neededByDate)
     {
         Request _request = new Request
         {
-            Justification=comment,
+            Justification = requestComment,
             RequestDate = DateOnly.FromDateTime(DateTime.Now),
             NeededByDate = neededByDate,
             Status = RequestStatus.PENDING,
