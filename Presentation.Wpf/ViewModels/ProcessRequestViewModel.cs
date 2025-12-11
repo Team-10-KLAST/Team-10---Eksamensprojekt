@@ -47,6 +47,12 @@ namespace Presentation.Wpf.ViewModels
             set => SetProperty(ref _location, value);
         }
 
+        private DateTime _neededBy;
+        public DateTime NeededBy
+        {
+            get => _neededBy;
+            set => SetProperty(ref _neededBy, value);
+        }
 
         //Validation of approver
         private string _approver = string.Empty;
