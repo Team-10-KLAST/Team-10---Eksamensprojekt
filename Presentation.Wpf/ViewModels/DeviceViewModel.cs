@@ -190,7 +190,7 @@ namespace Presentation.Wpf.ViewModels
 
             SelectedDevice = row;
             var deviceDisplayModel = _deviceService.GetDeviceDisplayByID(row.DeviceId);
-            var overlayUpdateDeviceVM = new UpdateDeviceViewModel(deviceDisplayModel);
+            var overlayUpdateDeviceVM = new UpdateDeviceViewModel(deviceDisplayModel, _deviceService);
             ShowOverlay(overlayUpdateDeviceVM);
         }
 
