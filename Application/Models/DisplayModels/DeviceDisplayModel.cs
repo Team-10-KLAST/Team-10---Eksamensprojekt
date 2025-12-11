@@ -14,6 +14,8 @@ namespace Application.Models.DisplayModels
         public DateTime? RegistrationDate { get; set; }
         public DateTime? ExpirationDate { get; set; }
 
+        public DateTime? NeededByDate { get; set; }
+
         public bool Wiped { get; set; }
         public string OwnerFullName { get; set; } = string.Empty;
         public List<string> StatusHistory { get; set; } = new();
