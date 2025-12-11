@@ -71,7 +71,7 @@
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
                     <!-- Sort field selection (which column to sort by) -->
-                    <ComboBox Grid.Column="1"
+                    <!--<ComboBox Grid.Column="1"
                           Style="{StaticResource InputFieldComboStyle}"
                           Width="150"
                           VerticalAlignment="Center"
@@ -80,10 +80,10 @@
                         <ComboBoxItem Content="Sort: Date/type" />
                         <ComboBoxItem Content="Sort: Device id" />
                         <ComboBoxItem Content="Sort: Owner" />
-                    </ComboBox>
+                    </ComboBox>-->
 
                     <!-- Sort direction selection (ascending/descending) -->
-                    <ComboBox Grid.Column="2"
+                    <!--<ComboBox Grid.Column="2"
                           Style="{StaticResource InputFieldComboStyle}"
                           Width="70"
                           VerticalAlignment="Center"
@@ -91,7 +91,7 @@
                           SelectedIndex="0">
                         <ComboBoxItem Content="↓" />
                         <ComboBoxItem Content="↑" />
-                    </ComboBox>
+                    </ComboBox>-->
 
                     <!-- Filter by device type -->
                     <ComboBox Grid.Column="3"
@@ -99,10 +99,11 @@
                           Width="140"
                           VerticalAlignment="Center"
                           Margin="0,0,8,0"
-                          SelectedIndex="0">
+                          SelectedIndex="0"
+                        SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}">
+                        <ComboBoxItem Content="All" />
                         <ComboBoxItem Content="Laptop" />
-                        <ComboBoxItem Content="Phone" />
-                        <ComboBoxItem Content="Other" />
+                        <ComboBoxItem Content="Mobile" />
                     </ComboBox>
 
                     <!-- Filter by device status -->
@@ -160,7 +161,7 @@
                 </Border>
             </Grid>
         </Viewbox>
-        
-        <local:OverlayHost DataContext="{Binding}" />
+
+        <!--<local:OverlayHost DataContext="{Binding}" />-->
     </Grid>
 </UserControl>

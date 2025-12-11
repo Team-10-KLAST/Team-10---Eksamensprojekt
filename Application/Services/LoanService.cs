@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Interfaces;
 using Application.Interfaces.Repository;
 using Application.Interfaces.Service;
 using Application.Models;
@@ -65,5 +66,20 @@ public class LoanService : ILoanService
             _deviceService.UpdateDevice(device);
         }
 
+    }
+
+    public IEnumerable<Loan> GetAllLoans()
+    {
+        return _loanRepository.GetAll();
+    }
+
+    public Loan GetMostRecentLoanByDeviceID(int deviceID)
+    {
+        var loan = GetAllLoans()
+            .Where(d => d.DeviceID == deviceID)
+            .OrderByDescending(d => d.LoanID)
+            .FirstOrDefault();
+
+        return loan;
     }
 }
