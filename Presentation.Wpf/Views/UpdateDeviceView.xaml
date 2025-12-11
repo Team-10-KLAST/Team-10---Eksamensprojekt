@@ -1,13 +1,13 @@
 ﻿<UserControl x:Class="Presentation.Wpf.Views.UpdateDeviceView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:Presentation.Wpf.Views"
-    mc:Ignorable="d" 
-             
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Presentation.Wpf.Views"
+             mc:Ignorable="d" 
              Background="{StaticResource PageBackgroundBrush}"
              d:DesignHeight="500" d:DesignWidth="400">
+
     <Grid Margin="20" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -25,7 +25,7 @@
             Style="{StaticResource HeaderTextStyle}"
             Margin="0,0,0,20"
             Grid.Row="0">
-            <Run Language="da-dk" Text="Update deviceID"/>
+            <Run Language="da-dk" Text="Update device" />
         </TextBlock>
 
         <!-- Form Fields -->
@@ -35,127 +35,145 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- Left -->
-            <StackPanel Grid.Column="0" Orientation="Vertical">
+            <!-- Left column -->
+            <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,0,16,0">
 
-                <!-- Textbox -->
+                <!-- Type -->
                 <TextBlock Text="Type" 
                            Style="{StaticResource BaseTextStyle}" 
-                           FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding Type}" Style="{StaticResource BaseTextStyle}"/>
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Text="{Binding Type, Mode=OneWay}"
+                         Height="33"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         IsReadOnly="True"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Margin="0,0,0,12"/>
 
-                <!-- Textbox -->
+                <!-- Owner -->
                 <TextBlock Text="Owner (name)"
-                    Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding Owner}" Style="{StaticResource BaseTextStyle}"/>
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Text="{Binding Owner}"
+                         Height="33"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         IsReadOnly="True"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Margin="0,0,0,12"/>
 
+                <!-- Status -->
                 <TextBlock Text="Status"
                            Style="{StaticResource BaseTextStyle}" 
                            FontWeight="SemiBold"
-                           Margin="0,12,0,4"/>
-
+                           Margin="0,0,0,4"/>
                 <ComboBox Style="{StaticResource InputFieldComboStyle}"
                           ItemsSource="{Binding StatusOptions}"
                           SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"
-                          Width="177"
-                          Height="33"/>
+                          HorizontalAlignment="Stretch"
+                          Height="33"
+                          Margin="0,0,0,12"/>
 
                 <!-- Registration date -->
                 <TextBlock Text="Registration date" 
                            Style="{StaticResource BaseTextStyle}" 
                            FontWeight="SemiBold"
                            Margin="0,0,0,4"/>
-
                 <DatePicker SelectedDate="{Binding RegistrationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             HorizontalAlignment="Stretch"
-                            Height="33"/>
-
+                            Height="33"
+                            Margin="0,0,0,12"/>
 
                 <!-- Wiped flag -->
                 <TextBlock Text="Wiped"
                            Style="{StaticResource BaseTextStyle}" 
                            FontWeight="SemiBold"
-                           Margin="0,12,0,4"/>
-
+                           Margin="0,0,0,4"/>
                 <CheckBox Content="Device has been wiped"
                           IsChecked="{Binding Wiped, Mode=TwoWay}"/>
-
             </StackPanel>
 
-            <!-- Right -->
-            <StackPanel Grid.Column="1" Orientation="Vertical">
+            <!-- Right column -->
+            <StackPanel Grid.Column="1" Orientation="Vertical" Margin="16,0,0,0">
 
-                <!-- Textbox -->
+                <!-- OS -->
                 <TextBlock Text="OS"
-                    Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"/>
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text= "{Binding OS}" Style="{StaticResource BaseTextStyle}"/>
-                </StackPanel>
-
-                <!-- Textbox -->
-                <TextBlock Text="Location (country)"
-                    Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"/>
-                <StackPanel Orientation="Vertical">
-                    <TextBox Height="33"
-                        HorizontalAlignment="Stretch"
-                        Background="{StaticResource InputFieldBackgroundBrush}"
-                        BorderBrush="{StaticResource InputFieldBorderBrush}"
-                        Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-
-                <!-- Textbox -->
-                <TextBlock Text=""
                            Style="{StaticResource BaseTextStyle}" 
-                           FontWeight="SemiBold"/>
-                
-                <StackPanel Orientation="Vertical">
-                    <TextBox Height="33"
-                             HorizontalAlignment="Stretch"
-                             Background="{StaticResource InputFieldBackgroundBrush}"
-                             BorderBrush="{StaticResource InputFieldBorderBrush}"
-                             Text=""/>
-                </StackPanel>
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Text="{Binding OS, Mode=OneWay}"
+                         Height="33"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         IsReadOnly="True"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Margin="0,0,0,12"/>
+
+                <!-- Location -->
+                <TextBlock Text="Location (country)"
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Height="33"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,0,12"/>
+
+                <!-- Needed by -->
+                <TextBlock Text="Needed by"
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Height="33"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Text="{Binding NeededByDate, Mode=OneWay, StringFormat={}{0:dd.MM.yyyy}}"
+                         IsReadOnly="True"
+                         Margin="0,0,0,12"/>
 
                 <!-- Expiration date -->
                 <TextBlock Text="Expiration date"
                            Style="{StaticResource BaseTextStyle}" 
                            FontWeight="SemiBold"
                            Margin="0,0,0,4"/>
-
                 <DatePicker SelectedDate="{Binding ExpirationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             HorizontalAlignment="Stretch"
                             Height="33"/>
-
             </StackPanel>
         </Grid>
 
         <!-- Status history -->
-        <StackPanel Grid.Row="2" Margin="0,0,0,16">
-            <!-- Textbox -->
-            
-
-
-            <!-- Textbox -->
+        <StackPanel Grid.Row="2" Margin="0,16,0,0">
             <TextBlock Text="Status history" 
                        Style="{StaticResource BodyTextStyle}" 
                        FontWeight="SemiBold"
                        Margin="0,0,0,5"/>
 
             <TextBox Text="{Binding StatusHistoryString, Mode=OneWay}"
-                       Height="64"
-                       Width="354"
-                       IsReadOnly="True"
-                       TextWrapping="Wrap"/>
+                     Height="80"
+                     HorizontalAlignment="Stretch"
+                     TextWrapping="Wrap"
+                     IsReadOnly="True"
+                     Background="{StaticResource InputFieldBackgroundBrush}"
+                     BorderBrush="{StaticResource InputFieldBorderBrush}"/>
         </StackPanel>
 
         <!-- Action Buttons -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,50,0,0">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
             <Button Content="Cancel"
                     Style="{StaticResource RejectButtonStyle}"
-                    Command="{Binding CancelCommand}" Click="Button_Click" />
+                    Command="{Binding CancelCommand}"
+                    Margin="0,0,8,0"/>
 
             <Button Content="Update"
                     Style="{StaticResource PrimaryButtonStyle}"
@@ -163,5 +181,3 @@
         </StackPanel>
     </Grid>
 </UserControl>
-
-

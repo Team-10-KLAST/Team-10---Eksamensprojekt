@@ -156,13 +156,16 @@ namespace Presentation.Wpf.ViewModels
 
             if (deviceDisplay == null)
             {
-                ErrorMessage = "Kunne ikke hente device fra databasen.";
+                ErrorMessage = "Could not load device from database.";
                 return;
             }
 
-            var overlay = new UpdateDeviceViewModel(deviceDisplay);
+            // Pass the service into the viewmodel so it can persist changes
+            var overlay = new UpdateDeviceViewModel(deviceDisplay, _deviceService);
+
             ShowOverlayAndReload(overlay);
         }
+
 
     }
 }

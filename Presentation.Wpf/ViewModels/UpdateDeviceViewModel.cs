@@ -1,14 +1,18 @@
-﻿using Application.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Input;
+using Application.Interfaces.Service;
+using Application.Models;
 using Application.Models.DisplayModels;
 using Presentation.Wpf.Commands;
-using System;
-using System.Collections.Generic;
-using System.Windows.Input;
 
 namespace Presentation.Wpf.ViewModels
 {
     public class UpdateDeviceViewModel : OverlayPanelViewModelBase
     {
+        private readonly IDeviceService _deviceService;
+
         private DeviceDisplayModel _selectedDevice;
         public DeviceDisplayModel SelectedDevice
         {
@@ -57,6 +61,10 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        public DateTime? NeededByDate
+        {
+            get => SelectedDevice?.NeededByDate;
+        }
         public string Location
         {
             get => SelectedDevice?.Location ?? string.Empty;
@@ -158,19 +166,45 @@ namespace Presentation.Wpf.ViewModels
         public ICommand UpdateDeviceCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public UpdateDeviceViewModel(DeviceDisplayModel device)
+        public UpdateDeviceViewModel(DeviceDisplayModel device, IDeviceService deviceService)
         {
-            SelectedDevice = device ?? new DeviceDisplayModel();
+            SelectedDevice = device;
+            _deviceService = deviceService;
+
             UpdateDeviceCommand = new RelayCommand(UpdateDevice);
             CancelCommand = new RelayCommand(Cancel);
         }
 
-        // Temporary: just close the overlay for now
         private void UpdateDevice()
         {
-            // Later you can call a service here to persist changes to the database.
-            CloseOverlay();
+            // UI validation: show a friendly message first
+            if (SelectedStatus == DeviceStatus.INSTOCK && !Wiped)
+            {
+                MessageBox.Show(
+                    "The device must be wiped before it can be set to 'In stock'. " +
+                    "Please mark the device as wiped first.",
+                    "Cannot update device",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            try
+            {
+                _deviceService.UpdateDevice(SelectedDevice);
+                CloseOverlay();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error during update",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
+
 
         private void Cancel()
         {
