@@ -7,7 +7,7 @@ using Data;
 using Data.AdoNet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AssetManagement_Test;
+namespace AssetManagerTest;
 
 [TestClass]
 public class DecisionRepositoryTest
