@@ -22,6 +22,8 @@ namespace Application.Services
         private readonly IRepository<Role> _roleRepository;
         private readonly IRepository<Loan> _loanRepository;
 
+        private readonly List<Employee> _employees = new();
+
         public EmployeeService(IRepository<Employee> employeeRepository, IRepository<Department> departmentRepository, 
             IRepository<Role> roleRepository, IRepository<Loan> loanRepository)
         {

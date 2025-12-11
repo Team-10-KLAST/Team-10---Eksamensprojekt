@@ -26,9 +26,8 @@
             </Grid.ColumnDefinitions>
         <!-- Header -->
         <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
-                       Text="Create Employee"
                        FontSize="20"
-                       Style="{StaticResource BaseHeaderTextStyle}" Margin="0,0,0,16" />
+                       Style="{StaticResource BaseHeaderTextStyle}" Margin="0,0,0,16" ><Run Language="da-dk" Text="Add"/><Run Text=" Employee"/></TextBlock>
         <!-- FirstName & LastName -->
         <TextBlock Grid.Row="1" Grid.Column="0" Text="First Name*" Margin="0,0,0,16" 
                    Style="{StaticResource BaseTextStyle}" 
@@ -85,11 +84,11 @@
                         Margin="0,0,8,0" Padding="12,6" FontWeight="Bold"
                         BorderBrush="{StaticResource BorderBrush}"
                         BorderThickness="1" />
-                <Button Content="Save Employee"
+                <Button Content="Add Employee"
                         Command="{Binding SaveCommand}"
                         Margin="0,0,8,0" Padding="12,6" FontWeight="Bold"
                         BorderBrush="{StaticResource BorderBrush}"
-                        BorderThickness="1" />
+                        BorderThickness="1" Click="Button_Click" />
             </StackPanel>
         </Grid>
     

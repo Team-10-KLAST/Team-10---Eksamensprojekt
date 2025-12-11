@@ -106,11 +106,11 @@
                     <StackPanel Grid.Column="1"
                                 Margin="16,0,16,0"
                                 VerticalAlignment="Center">
-                        <TextBlock Text="Register employee"
+                        <TextBlock
                                    FontFamily="{StaticResource PrimaryFont}"
                                    FontSize="18"
                                    FontWeight="SemiBold"
-                                   Foreground="{StaticResource PrimaryTextBrush}" />
+                                   Foreground="{StaticResource PrimaryTextBrush}" ><Run Language="da-dk" Text="Add"/><Run Text=" employee"/></TextBlock>
                         <TextBlock Text="Add a new employee profile for assignments"
                                    FontFamily="{StaticResource PrimaryFont}"
                                    FontSize="13"

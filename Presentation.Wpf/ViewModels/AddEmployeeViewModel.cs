@@ -24,14 +24,26 @@ namespace Presentation.Wpf.ViewModels
         public string FirstName
         {
             get => _firstName;
-            set => SetProperty(ref _firstName, value);
+            set
+            {
+                if (SetProperty(ref _firstName, value))
+                {
+                    (SaveCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                }
+            }
         }
 
         private string _lastName = string.Empty;
         public string LastName
         {
             get => _lastName;
-            set => SetProperty(ref _lastName, value);
+            set
+            {
+                if (SetProperty(ref _lastName, value))
+                {
+                    (SaveCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                }
+            }
         }
 
         private string _email = string.Empty;
@@ -41,8 +53,9 @@ namespace Presentation.Wpf.ViewModels
             set
             {
                 if (SetProperty(ref _email, value))
-                {                    
+                {
                     ValidateEmailFormat(value);
+                    (SaveCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -110,10 +123,16 @@ namespace Presentation.Wpf.ViewModels
                 
             };                       
             
-            _employeeService.AddEmployee(newEmployee);
-
-            ClearFields();
-            CloseOverlay();
+            try
+            {
+                _employeeService.AddEmployee(newEmployee);
+                ClearFields();
+                CloseOverlay();
+            }
+            catch (Exception ex)
+            {
+                EmailErrorMsg = "Error trying to add employee: " + ex.Message;
+            }
         }
 
         private void ClearFields()
