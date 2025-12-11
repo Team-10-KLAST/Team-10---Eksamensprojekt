@@ -47,11 +47,11 @@ namespace Presentation.Wpf.ViewModels
             set => SetProperty(ref _location, value);
         }
 
-        private DateTime _neededBy;
-        public DateTime NeededBy
+        private DateTime _neededByDate;
+        public DateTime NeededByDate
         {
-            get => _neededBy;
-            set => SetProperty(ref _neededBy, value);
+            get => _neededByDate;
+            set => SetProperty(ref _neededByDate, value);
         }
 
         //Validation of approver
