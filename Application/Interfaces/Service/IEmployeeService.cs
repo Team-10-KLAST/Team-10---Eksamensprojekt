@@ -22,7 +22,6 @@ namespace Application.Interfaces
         IEnumerable<string> GetAllEmployeeEmails();
         void TerminateEmployee(int employeeID, DateOnly terminationDate);
         IEnumerable<Employee> GetTerminatedEmployees();
-
         /*IEnumerable<Employee> GetEmployeesByDepartment(Department department); //--finds employees by department*/
         /*Employee GetEmployeeByEmail(string email); //--finds employee by email*/
 
@@ -31,4 +30,5 @@ namespace Application.Interfaces
         Employee GetEmployeeByEmail(string email); //--finds employee by email
         IEnumerable<Employee> GetEmployeesByRole(Role role); //--finds employees by role*/
     }
+
 }
