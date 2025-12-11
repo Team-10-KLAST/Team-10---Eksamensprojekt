@@ -12,9 +12,6 @@
         <DataTemplate DataType="{x:Type vm:AddEmployeeViewModel}">
             <local:AddEmployeeView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:DeleteEmployeeViewModel}">
-            <local:DeleteEmployeeView />
-        </DataTemplate>
     </UserControl.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource PageBackgroundBrush}">
@@ -94,11 +91,11 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Delete">
+                    <DataGridTemplateColumn Header="Assign">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Delete"
-                                        Command="{Binding DataContext.DeleteEmployeeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                <Button Content="Assign"
+                                        Command="{Binding AssignDeviceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}" 
                                         Style="{StaticResource PrimaryButtonStyle}" />
                             </DataTemplate>

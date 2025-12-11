@@ -71,7 +71,6 @@ namespace Presentation.Wpf.ViewModels
             _employeeService = employeeService;
 
             AddEmployeeCommand = new RelayCommand(OpenAddEmployeeOverlay);
-            DeleteEmployeeCommand = new RelayCommand<EmployeeDisplayModel>(OpenDeleteEmployeeOverlay);
             TerminateEmployeeCommand = new RelayCommand<EmployeeDisplayModel>(OpenTerminateEmployeeOverlay,
                 employee => employee != null && employee.TerminationDate == null);
 
@@ -139,13 +138,6 @@ namespace Presentation.Wpf.ViewModels
         private void OpenAddEmployeeOverlay()
         {
             ShowOverlayAndReload(new AddEmployeeViewModel(_employeeService));
-        }
-
-        // Opens the Delete Employee overlay for the selected employee
-        private void OpenDeleteEmployeeOverlay(EmployeeDisplayModel displayModel)
-        {
-            // OBS!!!!! Assigned device count is set to 0 for now; has to be modified later to fetch actual count
-            ShowOverlayAndReload(new DeleteEmployeeViewModel(displayModel, displayModel.DeviceCount, _employeeService));
         }
 
         // Opens the Terminate Employee overlay for the selected employee

@@ -33,11 +33,6 @@
         <views:AddEmployeeView />
     </DataTemplate>
 
-    <!-- DeleteEmployee -->
-    <DataTemplate DataType="{x:Type vm:DeleteEmployeeViewModel}">
-        <views:DeleteEmployeeView />
-    </DataTemplate>
-    
     <!-- RegisterDevice -->
     <DataTemplate DataType="{x:Type vm:RegisterDeviceViewModel}">
         <views:RegisterDeviceView />
