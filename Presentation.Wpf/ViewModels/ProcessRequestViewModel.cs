@@ -47,6 +47,27 @@ namespace Presentation.Wpf.ViewModels
             set => SetProperty(ref _location, value);
         }
 
+        private DateTime _neededByDate;
+        public DateTime NeededByDate
+        {
+            get => _neededByDate;
+            set
+            {
+                SetProperty(ref _neededByDate, value);
+                OnPropertyChanged(nameof(NeededByDateString));
+            }
+        }
+        public string NeededByDateString => NeededByDate != default
+        ? NeededByDate.ToString("dd-MM-yyyy")
+        : string.Empty;
+
+
+        private string _requestComment = string.Empty;
+        public string RequestComment
+        {
+            get => _requestComment;
+            set => SetProperty(ref _requestComment, value);
+        }
 
         //Validation of approver
         private string _approver = string.Empty;
@@ -95,7 +116,7 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
-        // Error messages
+         // Error messages
         private string _emailErrorMsg = string.Empty;
         public string EmailErrorMsg
         {
@@ -124,6 +145,8 @@ namespace Presentation.Wpf.ViewModels
                 DeviceType = displayModel.DeviceType;
                 OperatingSystem = displayModel.OperatingSystem;
                 Location = displayModel.Location;
+                RequestComment = displayModel.RequestComment;
+                NeededByDate = displayModel.NeededByDate;
             }
         }
 
