@@ -75,21 +75,21 @@ namespace Presentation.Wpf.ViewModels
         }
 
         //For Combobox filter
-        //private string _selectedDeviceType;
-        //public string SelectedDeviceType
-        //{
-        //    get => _selectedDeviceType;
-        //    set
-        //    {
-        //        if (_selectedDeviceType != value)
-        //        {
-        //            _selectedDeviceType = value;
-        //            OnPropertyChanged(nameof(SelectedDeviceType));
-        //            var view = CollectionViewSource.GetDefaultView(Devices);
-        //            view?.Refresh();
-        //        }
-        //    }
-        //}
+        private string _selectedDeviceType = "All";
+        public string SelectedDeviceType
+        {
+            get => _selectedDeviceType;
+            set
+            {
+                if (_selectedDeviceType != value)
+                {
+                    _selectedDeviceType = value;
+                    OnPropertyChanged(nameof(SelectedDeviceType));
+                    var view = CollectionViewSource.GetDefaultView(Devices);
+                    view.Refresh();
+                }
+            }
+        }
 
         // Reloads data from the service
         public ICommand RefreshCommand { get; }
@@ -105,7 +105,6 @@ namespace Presentation.Wpf.ViewModels
             _deviceDescriptionService = deviceDescriptionService;
             _loanService = loanService;
             _employeeService = employeeService;
-            //SelectedDeviceType = "All";
 
             var view = CollectionViewSource.GetDefaultView(Devices);
             view.Filter = DeviceFilter;
@@ -153,12 +152,12 @@ namespace Presentation.Wpf.ViewModels
         {
             if (obj is not DeviceRow row)
                 return false;
+            var comparison = StringComparison.OrdinalIgnoreCase;
 
             bool textMatches = true;
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
                 var search = SearchText.Trim();
-                var comparison = StringComparison.OrdinalIgnoreCase;
 
                 bool matchesId = row.DeviceId.ToString()
                     .Contains(search, comparison);
@@ -176,9 +175,15 @@ namespace Presentation.Wpf.ViewModels
                     .Contains(search, comparison);
 
                 textMatches = matchesId || matchesType || matchesOs || matchesLocation || matchesOwner;
-            }          
+            }
 
-            return textMatches ;
+            bool typeMatches = true;
+
+            if (!string.Equals(SelectedDeviceType, "All", comparison))
+            {
+                typeMatches = string.Equals(row.Type, SelectedDeviceType, comparison);
+            }
+            return textMatches && typeMatches;
         }
 
 

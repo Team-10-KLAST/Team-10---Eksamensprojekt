@@ -146,10 +146,10 @@
                             <DataGridTextColumn Header="Expires" Binding="{Binding ExpiryDate}" />
 
                             <!-- Actions column -->
-                            <DataGridTemplateColumn Header="Actions">
+                            <DataGridTemplateColumn Header="Update">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Open"
+                                        <Button Content="Update"
                                             Style="{StaticResource PrimaryButtonStyle}"
                                             Command="{Binding DataContext.OpenDeviceCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}" />
@@ -162,6 +162,6 @@
             </Grid>
         </Viewbox>
 
-        <!--<local:OverlayHost DataContext="{Binding}" />-->
+        <local:OverlayHost DataContext="{Binding}" />
     </Grid>
 </UserControl>
