@@ -62,11 +62,11 @@ namespace Presentation.Wpf.ViewModels
         : string.Empty;
 
 
-        private string _requestComment = string.Empty;
-        public string RequestComment
+        private string _justification = string.Empty;
+        public string Justification
         {
-            get => _requestComment;
-            set => SetProperty(ref _requestComment, value);
+            get => _justification;
+            set => SetProperty(ref _justification, value);
         }
 
         //Validation of approver
@@ -145,7 +145,7 @@ namespace Presentation.Wpf.ViewModels
                 DeviceType = displayModel.DeviceType;
                 OperatingSystem = displayModel.OperatingSystem;
                 Location = displayModel.Location;
-                RequestComment = displayModel.RequestComment;
+                Justification = displayModel.Justification;
                 NeededByDate = displayModel.NeededByDate;
             }
         }
