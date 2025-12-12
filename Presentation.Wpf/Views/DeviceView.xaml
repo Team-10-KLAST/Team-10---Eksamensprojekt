@@ -100,10 +100,9 @@
                           VerticalAlignment="Center"
                           Margin="0,0,8,0"
                           SelectedIndex="0"
+                              ItemsSource="{Binding ComboBoxDeviceType}"
                         SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}">
-                        <ComboBoxItem Content="All" />
-                        <ComboBoxItem Content="Laptop" />
-                        <ComboBoxItem Content="Mobile" />
+
                     </ComboBox>
 
                     <!-- Filter by device status -->
@@ -111,12 +110,9 @@
                           Style="{StaticResource InputFieldComboStyle}"
                           Width="140"
                           VerticalAlignment="Center"
-                          SelectedIndex="0">
-                        <ComboBoxItem Content="Status" />
-                        <ComboBoxItem Content="In use" />
-                        <ComboBoxItem Content="Not in use" />
-                        <ComboBoxItem Content="Received" />
-                        <ComboBoxItem Content="Ordered" />
+                          SelectedIndex="0"
+                              ItemsSource="{Binding ComboBoxStatus}"
+                              SelectedItem="{Binding SelectedStatus, Mode=TwoWay}">
                     </ComboBox>
                 </Grid>
 
