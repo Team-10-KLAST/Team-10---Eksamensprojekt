@@ -8,7 +8,7 @@ using Application.Interfaces;
 using Application.Services;
 using Data;
 
-namespace AssetManagement_Test;
+namespace AssetManagerTest;
 
 [TestClass]
 public class DecisionRepositoryTest

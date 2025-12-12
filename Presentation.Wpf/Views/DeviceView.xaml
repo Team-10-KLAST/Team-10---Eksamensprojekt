@@ -71,7 +71,7 @@
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
                     <!-- Sort field selection (which column to sort by) -->
-                    <ComboBox Grid.Column="1"
+                    <!--<ComboBox Grid.Column="1"
                           Style="{StaticResource InputFieldComboStyle}"
                           Width="150"
                           VerticalAlignment="Center"
@@ -80,10 +80,10 @@
                         <ComboBoxItem Content="Sort: Date/type" />
                         <ComboBoxItem Content="Sort: Device id" />
                         <ComboBoxItem Content="Sort: Owner" />
-                    </ComboBox>
+                    </ComboBox>-->
 
                     <!-- Sort direction selection (ascending/descending) -->
-                    <ComboBox Grid.Column="2"
+                    <!--<ComboBox Grid.Column="2"
                           Style="{StaticResource InputFieldComboStyle}"
                           Width="70"
                           VerticalAlignment="Center"
@@ -91,7 +91,7 @@
                           SelectedIndex="0">
                         <ComboBoxItem Content="↓" />
                         <ComboBoxItem Content="↑" />
-                    </ComboBox>
+                    </ComboBox>-->
 
                     <!-- Filter by device type -->
                     <ComboBox Grid.Column="3"
@@ -99,10 +99,10 @@
                           Width="140"
                           VerticalAlignment="Center"
                           Margin="0,0,8,0"
-                          SelectedIndex="0">
-                        <ComboBoxItem Content="Laptop" />
-                        <ComboBoxItem Content="Phone" />
-                        <ComboBoxItem Content="Other" />
+                          SelectedIndex="0"
+                              ItemsSource="{Binding ComboBoxDeviceType}"
+                        SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}">
+
                     </ComboBox>
 
                     <!-- Filter by device status -->
@@ -110,12 +110,9 @@
                           Style="{StaticResource InputFieldComboStyle}"
                           Width="140"
                           VerticalAlignment="Center"
-                          SelectedIndex="0">
-                        <ComboBoxItem Content="Status" />
-                        <ComboBoxItem Content="In use" />
-                        <ComboBoxItem Content="Not in use" />
-                        <ComboBoxItem Content="Received" />
-                        <ComboBoxItem Content="Ordered" />
+                          SelectedIndex="0"
+                              ItemsSource="{Binding ComboBoxStatus}"
+                              SelectedItem="{Binding SelectedStatus, Mode=TwoWay}">
                     </ComboBox>
                 </Grid>
 
@@ -145,10 +142,10 @@
                             <DataGridTextColumn Header="Expires" Binding="{Binding ExpiryDate}" />
 
                             <!-- Actions column -->
-                            <DataGridTemplateColumn Header="Actions">
+                            <DataGridTemplateColumn Header="Update">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Open"
+                                        <Button Content="Update"
                                             Style="{StaticResource PrimaryButtonStyle}"
                                             Command="{Binding DataContext.OpenDeviceCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}" />
@@ -160,7 +157,7 @@
                 </Border>
             </Grid>
         </Viewbox>
-        
+
         <local:OverlayHost DataContext="{Binding}" />
     </Grid>
 </UserControl>

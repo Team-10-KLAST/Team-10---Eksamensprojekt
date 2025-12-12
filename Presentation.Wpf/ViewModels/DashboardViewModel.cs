@@ -152,14 +152,20 @@ namespace Presentation.Wpf.ViewModels
             if (deviceDisplayModel is null)
                 return;
 
-            var deviceDisplay = new DeviceDisplayModel
-            {
-                DeviceID = deviceDisplayModel.DeviceID
-            };
+            var deviceDisplay = _deviceService.GetDeviceDisplayByID(deviceDisplayModel.DeviceID);
 
-            var overlay = new UpdateDeviceViewModel(deviceDisplay);
+            if (deviceDisplay == null)
+            {
+                ErrorMessage = "Could not load device from database.";
+                return;
+            }
+
+            // Pass the service into the viewmodel so it can persist changes
+            var overlay = new UpdateDeviceViewModel(deviceDisplay, _deviceService);
+
             ShowOverlayAndReload(overlay);
         }
+
 
     }
 }

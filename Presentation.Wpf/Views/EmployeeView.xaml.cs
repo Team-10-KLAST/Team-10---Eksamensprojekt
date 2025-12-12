@@ -25,5 +25,10 @@ namespace Presentation.Wpf.Views
         {
             InitializeComponent();
         }
+
+        private void OverlayHost_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

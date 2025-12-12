@@ -21,6 +21,7 @@ namespace Presentation.Wpf.ViewModels
         private readonly IEmployeeService _employeeService;
         private readonly IDeviceDescriptionService _deviceDescriptionService;
         private readonly IDashboardService _dashboardService;
+        private readonly ILoanService _loanService;
 
 
         private object _currentView;
@@ -42,17 +43,18 @@ namespace Presentation.Wpf.ViewModels
         private readonly EmployeeViewModel _employees;
         private readonly DeviceViewModel _devices;
 
-        public NavigationViewModel(IRequestService requestService, IDeviceService deviceService, IEmployeeService employeeService, IDeviceDescriptionService deviceDescriptionService, IDashboardService dashboardService)
+        public NavigationViewModel(IRequestService requestService, IDeviceService deviceService, IEmployeeService employeeService, IDeviceDescriptionService deviceDescriptionService, IDashboardService dashboardService, ILoanService loanService)
         {   
             _requestService = requestService;
             _deviceService = deviceService;
             _employeeService = employeeService;
             _deviceDescriptionService = deviceDescriptionService;
             _dashboardService = dashboardService;
+            _loanService = loanService;
 
             _dashboard = new DashboardViewModel(dashboardService,requestService, deviceService, employeeService, deviceDescriptionService);
             _employees = new EmployeeViewModel(employeeService);
-            _devices = new DeviceViewModel(deviceService, deviceDescriptionService);
+            _devices = new DeviceViewModel(deviceService, deviceDescriptionService, loanService, employeeService);
 
             ShowDashboardCommand = new RelayCommand(() => CurrentView = _dashboard);
             ShowEmployeesCommand = new RelayCommand(() => CurrentView = _employees);

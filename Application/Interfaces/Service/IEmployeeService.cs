@@ -10,25 +10,16 @@ namespace Application.Interfaces
 {
     public interface IEmployeeService
     {
-        void AddEmployee(Employee employee); //--adds a new employee
-        /*void UpdateEmployee(Employee employee); //--updates an existing employee*/
-        void DeleteEmployee(int employeeID); //--deletes an employee by unique ID
-        IEnumerable<Employee> GetAllEmployees(); //--retrieves all employees
-        Employee GetEmployeeByID(int employeeID); //--finds employee by unique ID
-        Employee GetEmployeeByEmail(string email); //--finds employee by unique Email
+        void AddEmployee(Employee employee); 
+        IEnumerable<Employee> GetAllEmployees(); 
+        Employee GetEmployeeByID(int employeeID); 
+        Employee GetEmployeeByEmail(string email); 
         IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels();
         IEnumerable<Department> GetAllDepartments();
         IEnumerable<Role> GetAllRoles();
         IEnumerable<string> GetAllEmployeeEmails();
         void TerminateEmployee(int employeeID, DateOnly terminationDate);
         IEnumerable<Employee> GetTerminatedEmployees();
-
-        /*IEnumerable<Employee> GetEmployeesByDepartment(Department department); //--finds employees by department*/
-        /*Employee GetEmployeeByEmail(string email); //--finds employee by email*/
-
-        /*IEnumerable<Employee> GetAll(); //--retrieves all employees
-        IEnumerable<string> GetEmployeeByLastName(string lastName); //--finds employees by last name
-        Employee GetEmployeeByEmail(string email); //--finds employee by email
-        IEnumerable<Employee> GetEmployeesByRole(Role role); //--finds employees by role*/
     }
+
 }

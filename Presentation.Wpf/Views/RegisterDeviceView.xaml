@@ -35,11 +35,7 @@
                 <RowDefinition Height="auto"/>
                 <!-- OS-->
                 <RowDefinition Height="auto"/>
-                <!-- Ownership-->
-                <RowDefinition Height="auto"/>
                 <!-- Location-->
-                <RowDefinition Height="auto"/>
-                <!-- Owner name-->
                 <RowDefinition Height="auto"/>
                 <!-- Dates-->
                 <RowDefinition Height="auto"/>
@@ -73,26 +69,10 @@
                          SelectedItem="{Binding SelectedOS, Mode=TwoWay}"/>
 
             </StackPanel>
-            
-            <!-- Ownership-->
-            <StackPanel Grid.Row="2" HorizontalAlignment="Left">
-                <TextBlock Text="Ownership" 
-                           Style="{StaticResource BaseHeaderTextStyle}"
-                           FontSize="12"/>
-                <ComboBox Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
-                         Width="375"
-                         Height="30"
-                         Margin="0,5,0,10"
-                         ItemsSource="{Binding OwnershipOptions}"
-                         SelectedItem="{Binding SelectedOwnership, Mode=TwoWay}"/>
 
-
-            </StackPanel>
-            
             <!-- Location-->
-            <StackPanel Grid.Row="3" HorizontalAlignment="Left">
-                 <TextBlock Text="Location (country)" 
+            <StackPanel Grid.Row="2" HorizontalAlignment="Left">
+                <TextBlock Text="Location (country)" 
                             Style="{StaticResource BaseHeaderTextStyle}"
                             FontSize="12"/>
                 <ComboBox Background="{StaticResource InputFieldBackgroundBrush}"
@@ -104,22 +84,9 @@
                          SelectedItem="{Binding SelectedLocation, Mode=TwoWay}"/>
 
             </StackPanel>
-            
-            <!-- Owner Name-->
-            <StackPanel Grid.Row="4" HorizontalAlignment="Left">
-                <TextBlock Text="Owner name (optional)" 
-                           Style="{StaticResource BaseHeaderTextStyle}"
-                           FontSize="12"/>
-                <TextBox Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
-                         Width="375"
-                         Height="30"
-                         Margin="0,5,0,10"
-                         Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
 
             <!-- Dates-->
-            <Grid Grid.Row="5">
+            <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>

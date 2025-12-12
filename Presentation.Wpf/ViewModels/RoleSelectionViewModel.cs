@@ -78,7 +78,8 @@ namespace Presentation.Wpf.ViewModels
                     _deviceService,
                     _employeeService,
                     _deviceDescriptionService,
-                    _dashboardService
+                    _dashboardService,
+                    _loanService
                 );
             });
         }

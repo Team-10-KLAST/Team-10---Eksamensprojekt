@@ -1,18 +1,18 @@
-﻿using Application.Interfaces;
-using Application.Models.DisplayModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using Application.Interfaces.Service;
+using Application.Models;
+using Application.Models.DisplayModels;
 using Presentation.Wpf.Commands;
-using System.Buffers;
 
 namespace Presentation.Wpf.ViewModels
 {
     public class UpdateDeviceViewModel : OverlayPanelViewModelBase
     {
+        private readonly IDeviceService _deviceService;
+
         private DeviceDisplayModel _selectedDevice;
         public DeviceDisplayModel SelectedDevice
         {
@@ -23,22 +23,36 @@ namespace Presentation.Wpf.ViewModels
                 {
                     _selectedDevice = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(Type));
+                    OnPropertyChanged(nameof(OS));
+                    OnPropertyChanged(nameof(Location));
+                    OnPropertyChanged(nameof(StatusHistory));
+                    OnPropertyChanged(nameof(StatusHistoryString));
+                    OnPropertyChanged(nameof(Owner));
+                    OnPropertyChanged(nameof(RegistrationDate));
+                    OnPropertyChanged(nameof(ExpirationDate));
+                    OnPropertyChanged(nameof(SelectedStatus));
+                    OnPropertyChanged(nameof(Wiped));
                 }
             }
         }
 
-        // Properties for binding, fx:
+        // Read-only convenience properties for bindings
         public string Type => SelectedDevice?.Type ?? string.Empty;
         public string OS => SelectedDevice?.OS ?? string.Empty;
         public List<string> StatusHistory => SelectedDevice?.StatusHistory ?? new List<string>();
         public string StatusHistoryString => string.Join(Environment.NewLine, StatusHistory);
 
+        public Array StatusOptions => Enum.GetValues(typeof(DeviceStatus));
 
         public string Owner
         {
-            get => SelectedDevice.OwnerFullName;
+            get => SelectedDevice?.OwnerFullName ?? string.Empty;
             set
             {
+                if (SelectedDevice == null)
+                    return;
+
                 if (SelectedDevice.OwnerFullName != value)
                 {
                     SelectedDevice.OwnerFullName = value;
@@ -46,11 +60,19 @@ namespace Presentation.Wpf.ViewModels
                 }
             }
         }
+
+        public DateTime? NeededByDate
+        {
+            get => SelectedDevice?.NeededByDate;
+        }
         public string Location
         {
-            get => SelectedDevice.Location;
+            get => SelectedDevice?.Location ?? string.Empty;
             set
             {
+                if (SelectedDevice == null)
+                    return;
+
                 if (SelectedDevice.Location != value)
                 {
                     SelectedDevice.Location = value;
@@ -58,50 +80,65 @@ namespace Presentation.Wpf.ViewModels
                 }
             }
         }
-        public string Status
+
+        public DeviceStatus SelectedStatus
         {
-            get => SelectedDevice.Status;
+            get
+            {
+                if (SelectedDevice == null)
+                    return DeviceStatus.REGISTERED;
+
+                if (Enum.TryParse<DeviceStatus>(SelectedDevice.Status, out var statusEnum))
+                    return statusEnum;
+
+                return DeviceStatus.REGISTERED;
+            }
             set
             {
-                if (SelectedDevice.Status != value)
+                if (SelectedDevice == null)
+                    return;
+
+                var newValue = value.ToString();
+                if (SelectedDevice.Status != newValue)
                 {
-                    SelectedDevice.Status = value;
+                    SelectedDevice.Status = newValue;
+                    OnPropertyChanged(nameof(SelectedStatus));
+                }
+            }
+        }
+
+        public DateTime? RegistrationDate
+        {
+            get => SelectedDevice?.RegistrationDate;
+            set
+            {
+                if (SelectedDevice == null)
+                    return;
+
+                if (SelectedDevice.RegistrationDate != value)
+                {
+                    SelectedDevice.RegistrationDate = value;
+
+                    // Automatically set ExpirationDate = RegistrationDate + 3 years
+                    if (value.HasValue)
+                    {
+                        SelectedDevice.ExpirationDate = value.Value.AddYears(3);
+                        OnPropertyChanged(nameof(ExpirationDate));
+                    }
+
                     OnPropertyChanged();
                 }
             }
         }
 
-        public DateTime EventDate
+        public DateTime? ExpirationDate
         {
-            get => SelectedDevice.EventDate;
+            get => SelectedDevice?.ExpirationDate;
             set
             {
-                if (SelectedDevice.EventDate != value)
-                {
-                    SelectedDevice.EventDate = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+                if (SelectedDevice == null)
+                    return;
 
-        public string RegistrationDate
-        {
-            get => SelectedDevice.RegistrationDate.ToString("yyyy-MM-dd");
-            set
-            {
-                if (DateTime.TryParse(value, out var date))
-                {
-                    SelectedDevice.RegistrationDate = date;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public DateTime ExpirationDate
-        {
-            get => SelectedDevice.ExpirationDate;
-            set
-            {
                 if (SelectedDevice.ExpirationDate != value)
                 {
                     SelectedDevice.ExpirationDate = value;
@@ -112,9 +149,12 @@ namespace Presentation.Wpf.ViewModels
 
         public bool Wiped
         {
-            get => SelectedDevice.Wiped;
+            get => SelectedDevice?.Wiped ?? false;
             set
             {
+                if (SelectedDevice == null)
+                    return;
+
                 if (SelectedDevice.Wiped != value)
                 {
                     SelectedDevice.Wiped = value;
@@ -126,24 +166,45 @@ namespace Presentation.Wpf.ViewModels
         public ICommand UpdateDeviceCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public UpdateDeviceViewModel(DeviceDisplayModel device)
+        public UpdateDeviceViewModel(DeviceDisplayModel device, IDeviceService deviceService)
         {
-            SelectedDevice = device ?? new DeviceDisplayModel();
-            /*UpdateDeviceCommand = new RelayCommand(UpdateDevice);*/
+            SelectedDevice = device;
+            _deviceService = deviceService;
+
+            UpdateDeviceCommand = new RelayCommand(UpdateDevice);
             CancelCommand = new RelayCommand(Cancel);
         }
 
-        /*private void UpdateDevice()
+        private void UpdateDevice()
         {
-            _deviceService.UpdateDevice(SelectedDevice); // Saves changes
+            // UI validation: show a friendly message first
+            if (SelectedStatus == DeviceStatus.INSTOCK && !Wiped)
+            {
+                MessageBox.Show(
+                    "The device must be wiped before it can be set to 'In stock'. " +
+                    "Please mark the device as wiped first.",
+                    "Cannot update device",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
 
-            //Gets updated status history
-            var updatedHistory = _deviceService.GetStatusHistory(SelectedDevice.DeviceID);
-            SelectedDevice.StatusHistory = updatedHistory;
-            OnPropertyChanged(nameof(StatusHistory));
+                return;
+            }
 
-            CloseOverlay();
-        }*/
+            try
+            {
+                _deviceService.UpdateDevice(SelectedDevice);
+                CloseOverlay();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error during update",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
 
         private void Cancel()
         {
@@ -151,4 +212,3 @@ namespace Presentation.Wpf.ViewModels
         }
     }
 }
-

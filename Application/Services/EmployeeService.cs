@@ -22,6 +22,8 @@ namespace Application.Services
         private readonly IRepository<Role> _roleRepository;
         private readonly IRepository<Loan> _loanRepository;
 
+        private readonly List<Employee> _employees = new();
+
         public EmployeeService(IRepository<Employee> employeeRepository, IRepository<Department> departmentRepository, 
             IRepository<Role> roleRepository, IRepository<Loan> loanRepository)
         {
@@ -77,13 +79,6 @@ namespace Application.Services
             employee.TerminationDate = terminationDate;
 
             _employeeRepository.Update(employee);
-        }
-
-
-        //Deletes employee by ID
-        public void DeleteEmployee(int employeeID)
-        {
-            _employeeRepository.Delete(employeeID);
         }
 
         //Gets all employees
@@ -164,150 +159,5 @@ namespace Application.Services
             var employees = GetAllEmployees();
             return employees.FirstOrDefault(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
-
-        /*//Gets employees by department
-        public IEnumerable<Employee> GetEmployeesByDepartment(Department department)
-        {
-            return _employeeRepository.GetByDepartment(department); //-- skal det laves til en filtreret liste i stedet metoden GetByDepartment?
-        }*/
-
-        //Updates existing employee details (all fields except EmployeeId)
-        /*public void UpdateEmployee(Employee employee)
-        {
-            using var connection = new SqlConnection(_connectionString);
-            connection.Open();
-
-            //Checks for existing email in the database
-            string checkEmailQuery = @"
-                SELECT COUNT(*) FROM Employee 
-                WHERE Email = @Email AND EmployeeId <> @EmployeeId;";
-
-            using var checkEmailCommand = new SqlCommand(checkEmailQuery, connection);
-            checkEmailCommand.Parameters.AddWithValue("@Email", employee.Email);
-            checkEmailCommand.Parameters.AddWithValue("@EmployeeId", employee.EmployeeId);
-            int emailExists = (int)checkEmailCommand.ExecuteScalar();
-            if (emailExists > 0)
-            {
-                throw new InvalidOperationException("Email already exists for another employee.");
-            }
-
-            //Updates employee details
-            string query = @"
-                UPDATE Employee
-                SET Role = @Role,
-                    Department = @Department,
-                    FirstName = @FirstName,
-                    LastName = @LastName,
-                    Email = @Email
-                WHERE EmployeeId = @EmployeeId;";
-
-            var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Role", employee.Role);
-            command.Parameters.AddWithValue("@Department", employee.Department);
-            command.Parameters.AddWithValue("@FirstName", employee.FirstName);
-            command.Parameters.AddWithValue("@LastName", employee.LastName);
-            command.Parameters.AddWithValue("@Email", employee.Email);
-            command.Parameters.AddWithValue("@EmployeeId", employee.EmployeeId);
-
-            command.ExecuteNonQuery();
-        }*/
-        //Gets employee by email
-        /*public Employee GetEmployeeByEmail(string email)
-        {
-            Employee employee = null;
-            string query = @"
-                SELECT e.EmployeeId, e.Role, e.Department, e.FirstName, e.LastName, e.Email 
-                FROM Employee e
-                JOIN (SELECT EmployeeId, CONCAT(FirstName, ' ', LastName) AS FullName FROM Employee) f ON e.EmployeeId = f.EmployeeId
-                WHERE e.Email = @Email;";
-
-            using var connection = new SqlConnection(_connectionString);
-            var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Email", email);
-
-            connection.Open();
-            using var reader = command.ExecuteReader();
-            if (reader.Read())
-            {
-                employee = new Employee(
-                    (int)reader["EmployeeId"],
-                    (Role)reader["Role"],
-                    (Department)reader["Department"],
-                    (string)reader["FirstName"],
-                    (string)reader["LastName"],
-                    (string)reader["Email"]
-                );
-            }
-            else
-            {
-                throw new InvalidOperationException("No employee found with the given email.");
-            }
-            return employee;
-        }
-
-        //Gets employees by last name
-        public IEnumerable<Employee> GetByLastName(string lastName)
-        {
-            var employees = new List<Employee>();
-            string query = @"
-                SELECT e.EmployeeId, e.Role, e.Department, e.FirstName, e.LastName, e.Email 
-                FROM Employee e
-                JOIN (SELECT EmployeeId, CONCAT(FirstName, ' ', LastName) AS FullName FROM Employee) f ON e.EmployeeId = f.EmployeeId
-                WHERE e.LastName = @LastName;";
-            using var connection = new SqlConnection(_connectionString);
-            var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@LastName", lastName);
-            connection.Open();
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                employees.Add(new Employee(
-                    (int)reader["EmployeeId"],
-                    (Role)reader["Role"],
-                    (Department)reader["Department"],
-                    (string)reader["FirstName"],
-                    (string)reader["LastName"],
-                    (string)reader["Email"]
-                ));
-            }
-            if (employees.Count == 0)
-            {
-                throw new InvalidOperationException("No employees found with the given lastname.");
-            }
-            return employees;
-        }*/
-
-
-        //Gets employees by role
-        /*public IEnumerable<Employee> GetByRole(Role role)
-        {
-            var employees = new List<Employee>();
-            string query = @"
-                SELECT e.EmployeeId, e.Role, e.Department, e.FirstName, e.LastName, e.Email 
-                FROM Employee e
-                JOIN (SELECT EmployeeId, CONCAT(FirstName, ' ', LastName) AS FullName FROM Employee) f ON e.EmployeeId = f.EmployeeId
-                WHERE e.Role = @Role;";
-            using var connection = new SqlConnection(_connectionString);
-            var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Role", role);
-            connection.Open();
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                employees.Add(new Employee(
-                    (int)reader["EmployeeId"],
-                    (Role)reader["Role"],
-                    (Department)reader["Department"],
-                    (string)reader["FirstName"],
-                    (string)reader["LastName"],
-                    (string)reader["Email"]
-                ));
-            }
-            if (employees.Count == 0)
-            {
-                throw new InvalidOperationException("No employees found in the given role.");
-            }
-            return employees;
-        }*/
     }
 }

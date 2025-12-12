@@ -16,13 +16,17 @@
     <Color x:Key="BorderColor">#D0D5DD</Color>
     <Color x:Key="InputFieldBackgroundColor">#FFFFFF</Color>
     <Color x:Key="InputFieldBorderColor">#D0D5DD</Color>
+    <Color x:Key="ReadonlyInputBackgroundColor">#F0F2F5</Color>
 
 
     <!-- Brushes -->
     <!-- Layout og baggrunde -->
     <SolidColorBrush x:Key="PageBackgroundBrush" Color="{StaticResource PageBackgroundColor}" />
     <SolidColorBrush x:Key="PanelBackgroundBrush" Color="{StaticResource PanelBackgroundColor}" />
-    <SolidColorBrush x:Key="HeaderBackgroundBrush" Color="{StaticResource HeaderBackgroundColor}" /> <!-- Mørk blå baggrund til fx navigation --> 
+    <SolidColorBrush x:Key="HeaderBackgroundBrush" Color="{StaticResource HeaderBackgroundColor}" /> <!-- Mørk blå baggrund til fx navigation -->
+    <SolidColorBrush x:Key="ReadonlyInputBackgroundBrush" Color="{StaticResource ReadonlyInputBackgroundColor}" />
+
+
 
     <!-- Tekst -->
     <SolidColorBrush x:Key="PrimaryTextBrush" Color="{StaticResource PrimaryTextColor}" />
