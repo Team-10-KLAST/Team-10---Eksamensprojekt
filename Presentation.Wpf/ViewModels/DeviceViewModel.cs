@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Numerics;
 using System.Windows.Data;
 using System.Windows.Input;
 using Application.Interfaces;
@@ -74,22 +75,59 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        public ObservableCollection<string> ComboBoxDeviceType { get; } =
+            new ObservableCollection<string>
+            {
+                "Device Type",
+                "Laptop",
+                "Mobile"
+            };
+
+        public ObservableCollection<string> ComboBoxStatus { get; } =
+            new ObservableCollection<string>
+            {
+                "Status",
+                "Registered",
+                "Canceled",
+                "Planned",
+                "Ordered",
+                "Received",
+                "In Use",
+                "In Stock"
+            };
+
         //For Combobox filter
-        //private string _selectedDeviceType;
-        //public string SelectedDeviceType
-        //{
-        //    get => _selectedDeviceType;
-        //    set
-        //    {
-        //        if (_selectedDeviceType != value)
-        //        {
-        //            _selectedDeviceType = value;
-        //            OnPropertyChanged(nameof(SelectedDeviceType));
-        //            var view = CollectionViewSource.GetDefaultView(Devices);
-        //            view?.Refresh();
-        //        }
-        //    }
-        //}
+        private string _selectedDeviceType = "Device Type";
+        public string SelectedDeviceType
+        {
+            get => _selectedDeviceType;
+            set
+            {
+                if (_selectedDeviceType != value)
+                {
+                    _selectedDeviceType = value;
+                    OnPropertyChanged(nameof(SelectedDeviceType));
+                    var view = CollectionViewSource.GetDefaultView(Devices);
+                    view.Refresh();
+                }
+            }
+        }
+
+        private string _selectedStatus = "Status";
+        public string SelectedStatus
+        {
+            get => _selectedStatus;
+            set
+            {
+                if (_selectedStatus != value)
+                {
+                    _selectedStatus = value;
+                    OnPropertyChanged(nameof(SelectedStatus));
+                    var view = CollectionViewSource.GetDefaultView(Devices);
+                    view.Refresh();
+                }
+            }
+        }
 
         // Reloads data from the service
         public ICommand RefreshCommand { get; }
@@ -105,7 +143,6 @@ namespace Presentation.Wpf.ViewModels
             _deviceDescriptionService = deviceDescriptionService;
             _loanService = loanService;
             _employeeService = employeeService;
-            //SelectedDeviceType = "All";
 
             var view = CollectionViewSource.GetDefaultView(Devices);
             view.Filter = DeviceFilter;
@@ -153,12 +190,12 @@ namespace Presentation.Wpf.ViewModels
         {
             if (obj is not DeviceRow row)
                 return false;
+            var comparison = StringComparison.OrdinalIgnoreCase;
 
             bool textMatches = true;
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
                 var search = SearchText.Trim();
-                var comparison = StringComparison.OrdinalIgnoreCase;
 
                 bool matchesId = row.DeviceId.ToString()
                     .Contains(search, comparison);
@@ -176,9 +213,23 @@ namespace Presentation.Wpf.ViewModels
                     .Contains(search, comparison);
 
                 textMatches = matchesId || matchesType || matchesOs || matchesLocation || matchesOwner;
-            }          
+            }
 
-            return textMatches ;
+            bool typeMatches = true;
+
+            if (!string.Equals(SelectedDeviceType, "Device Type", comparison))
+            {
+                typeMatches = string.Equals(row.Type, SelectedDeviceType, comparison);
+            }
+
+            bool statusMatches = true;
+
+            if (!string.Equals(SelectedStatus, "Status", comparison))
+            {
+                typeMatches = string.Equals(row.Status, SelectedStatus.Replace(" ",""), comparison);
+            }
+
+            return textMatches && typeMatches && statusMatches;
         }
 
 
