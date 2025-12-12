@@ -109,7 +109,7 @@ namespace Data.AdoNet
         public void Update(Decision entity)
         {
             using var connection = _databaseConnection.CreateConnection();
-            using var command = new SqlCommand("usppdateDecision", connection)
+            using var command = new SqlCommand("uspUpdateDecision", connection)
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };

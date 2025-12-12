@@ -4,9 +4,9 @@ namespace Application.Models
 {
     public enum DecisionStatus
     {
-        PENDING,
-        APPROVED,
-        REJECTED
+        PENDING = 0,
+        APPROVED = 1,
+        REJECTED = 2
     }
 
     public class Decision
