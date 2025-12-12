@@ -13,6 +13,6 @@ namespace Application.Models.DisplayModels
         public string OperatingSystem { get; set; } = "";
         public string Location { get; set; } = "";
         public DateTime NeededByDate { get; set; }
-        public string RequestComment { get; set; } = "";
+        public string Justification { get; set; } = "";
     }
 }

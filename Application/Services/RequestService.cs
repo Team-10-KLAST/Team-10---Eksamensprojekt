@@ -138,17 +138,17 @@ public class RequestService : IRequestService
             DeviceType = description.DeviceType,
             OperatingSystem = description.OperatingSystem,
             Location = description.Location,
-            RequestComment = request.Justification,
+            Justification = request.Justification,
             NeededByDate = request.NeededByDate.ToDateTime(TimeOnly.MinValue),
 };
     }
 
-    // pass on the infromation from AddRequest form
-    public void SubmitRequest(string email, string deviceType, string OS, string country, string requestComment, DateOnly neededByDate)
+    // pass on the information from AddRequest form
+    public void SubmitRequest(string email, string deviceType, string OS, string country, string justification, DateOnly neededByDate)
     {
         Request _request = new Request
         {
-            Justification = requestComment,
+            Justification = justification,
             RequestDate = DateOnly.FromDateTime(DateTime.Now),
             NeededByDate = neededByDate,
             Status = RequestStatus.PENDING,

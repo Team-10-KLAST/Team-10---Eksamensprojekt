@@ -66,13 +66,13 @@ namespace Presentation.Wpf.ViewModels
             private set => SetProperty(ref _emailErrorMsg, value);
         }
 
-        private string _requestComment = string.Empty;
+        private string _justification = string.Empty;
         public string RequestComment
         {
-            get => _requestComment;
+            get => _justification;
             set
             {
-                if (SetProperty(ref _requestComment, value))
+                if (SetProperty(ref _justification, value))
                 {
                     (SubmitCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
