@@ -162,6 +162,6 @@
             </Grid>
         </Viewbox>
 
-        <!--<local:OverlayHost DataContext="{Binding}" />-->
+        <local:OverlayHost DataContext="{Binding}" />
     </Grid>
 </UserControl>
