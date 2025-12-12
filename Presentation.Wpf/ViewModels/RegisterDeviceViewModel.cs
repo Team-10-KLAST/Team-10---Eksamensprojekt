@@ -18,7 +18,6 @@ namespace Presentation.Wpf.ViewModels
         public ObservableCollection<string> DeviceTypeOptions { get; }
         public ObservableCollection<string> OSOptions { get; }
         public ObservableCollection<string> CountryOptions { get; }
-        public ObservableCollection<string> OwnershipOptions { get; }
 
         // Selected values 
         private string _selectedDeviceType = string.Empty;
@@ -58,27 +57,6 @@ namespace Presentation.Wpf.ViewModels
                     (RegisterCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
-        }
-
-        private string _selectedOwnership = string.Empty;
-        public string SelectedOwnership
-        {
-            get => _selectedOwnership;
-            set
-            {
-                if (SetProperty(ref _selectedOwnership, value))
-                {
-                    (RegisterCommand as RelayCommand)?.RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        // Optional owner name field
-        private string _ownerName = string.Empty;
-        public string OwnerName
-        {
-            get => _ownerName;
-            set => SetProperty(ref _ownerName, value);
         }
 
         // Date fields
@@ -145,18 +123,10 @@ namespace Presentation.Wpf.ViewModels
             CountryOptions = new ObservableCollection<string>(
                 _deviceDescriptionService.GetAllCountryOptions());
 
-            // Ownership options are currently UI only (DB has no column yet)
-            OwnershipOptions = new ObservableCollection<string>
-            {
-                "Company device",
-                "BYOD (employee owned)"
-            };
-
             // Set default selections
             SelectedDeviceType = DeviceTypeOptions.FirstOrDefault() ?? string.Empty;
             SelectedOS = OSOptions.FirstOrDefault() ?? string.Empty;
             SelectedCountry = CountryOptions.FirstOrDefault() ?? string.Empty;
-            SelectedOwnership = OwnershipOptions.FirstOrDefault() ?? string.Empty;
 
             RegisterCommand = new RelayCommand(RegisterDevice, CanRegisterDevice);
             CancelCommand = new RelayCommand(Cancel);
@@ -172,11 +142,6 @@ namespace Presentation.Wpf.ViewModels
             // 1) Get DeviceDescriptionID from selected options
             int deviceDescriptionId = _deviceDescriptionService
                 .GetDeviceDescriptionID(SelectedDeviceType, SelectedOS, SelectedCountry);
-
-            // 2) Determine device status based on owner name
-            string status = string.IsNullOrWhiteSpace(OwnerName)
-                ? "Not in use"
-                : "In use";
 
             // 3) Create Device object
             var device = new Device
@@ -201,7 +166,6 @@ namespace Presentation.Wpf.ViewModels
             if (string.IsNullOrWhiteSpace(SelectedDeviceType) ||
                 string.IsNullOrWhiteSpace(SelectedOS) ||
                 string.IsNullOrWhiteSpace(SelectedCountry) ||
-                string.IsNullOrWhiteSpace(SelectedOwnership) ||
                 RegistrationDate is null ||
                 ExpiryDate is null)
             {
@@ -220,12 +184,9 @@ namespace Presentation.Wpf.ViewModels
 
         private void ClearFields()
         {
-            OwnerName = string.Empty;
-
             SelectedDeviceType = DeviceTypeOptions.FirstOrDefault() ?? string.Empty;
             SelectedOS = OSOptions.FirstOrDefault() ?? string.Empty;
             SelectedCountry = CountryOptions.FirstOrDefault() ?? string.Empty;
-            SelectedOwnership = OwnershipOptions.FirstOrDefault() ?? string.Empty;
 
             RegistrationDate = DateTime.Today;
             ExpiryDate = DateTime.Today.AddYears(3);
