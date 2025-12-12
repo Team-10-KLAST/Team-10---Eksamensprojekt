@@ -21,10 +21,5 @@ namespace Presentation.Wpf.Views
         {
             InitializeComponent();
         }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
