@@ -30,7 +30,11 @@ namespace Application.Services
 
         public IEnumerable<string> GetAllDeviceTypeOptions()
         {
-            return _deviceDescriptions.Select(d => d.DeviceType).Distinct();
+            return _deviceDescriptions
+                .Select(description => description.DeviceType)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(deviceType => deviceType)
+                .ToList();
         }
 
         public IEnumerable<string> GetAllCountryOptions()
@@ -57,6 +61,11 @@ namespace Application.Services
         {
             return _deviceDescriptions
                 .FirstOrDefault(d => d.DeviceDescriptionID == id);
+        }
+
+        public IEnumerable<DeviceDescription> GetAllDescriptions()
+        {
+            return _deviceDescriptions;
         }
     }
 }

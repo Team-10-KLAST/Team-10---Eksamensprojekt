@@ -8,11 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="600">
 
-    <UserControl.Resources>
-        <DataTemplate DataType="{x:Type vm:AddEmployeeViewModel}">
-            <local:AddEmployeeView />
-        </DataTemplate>
-    </UserControl.Resources>
+
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource PageBackgroundBrush}">
         <!-- Main content -->
@@ -95,7 +91,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Assign"
-                                        Command="{Binding AssignDeviceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        Command="{Binding DataContext.AssignDeviceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}" 
                                         Style="{StaticResource PrimaryButtonStyle}" />
                             </DataTemplate>

@@ -59,7 +59,9 @@ namespace Application.Services
 
             // Find loan for this device
             var loan = _loanRepository.GetAll()
-                .FirstOrDefault(l => l.DeviceID == device.DeviceID);
+                .Where(loan => loan.DeviceID == device.DeviceID)
+                .OrderByDescending(l => l.LoanID)
+                .FirstOrDefault();
 
             // Find borrower
             var employee = loan is null
@@ -71,9 +73,9 @@ namespace Application.Services
                 : $"{employee.FirstName} {employee.LastName}";
 
             // Find original request to get NeededByDate
-            Request? request = loan is null
-                ? null
-                : _requestRepository.GetByID(loan.RequestID);
+            Request? request = (loan?.RequestID is int requestId)
+                ? _requestRepository.GetByID(requestId)
+                : null;
 
             DateTime? neededByDate = request?.NeededByDate.ToDateTime(new TimeOnly(0, 0));
 
@@ -95,7 +97,6 @@ namespace Application.Services
                 StatusHistory = new List<string>()
             };
         }
-
 
         // Gets all devices in the system
         public IEnumerable<Device> GetAllDevices()
@@ -189,6 +190,66 @@ namespace Application.Services
             };
             AddDevice(device);
             return device.DeviceID;
+        }
+
+        // Gets all devices by type that are currently in stock
+        public IEnumerable<Device> GetAvailableDevicesByType(string deviceType)
+        {
+            if (string.IsNullOrWhiteSpace(deviceType))
+                throw new ArgumentException("Device type cannot be empty.", nameof(deviceType));
+
+            return GetAllDevices()
+                .Where(device => device.Status == DeviceStatus.INSTOCK)
+                .Where(device =>
+                {
+                    var deviceDescription = _deviceDescriptionService.GetByID(device.DeviceDescriptionID);
+                    return deviceDescription != null &&
+                           deviceDescription.DeviceType.Equals(deviceType, StringComparison.OrdinalIgnoreCase);
+                })
+                .ToList();
+        }
+
+        // Gets all available device display models, optionally filtered by device type
+        public IEnumerable<DeviceDisplayModel> GetAvailableDeviceDisplayModels(string? deviceType)
+        {
+            var devices = _deviceRepository
+                .GetAll()
+                .Where(d => d.Status == DeviceStatus.INSTOCK);
+
+            if (!string.IsNullOrWhiteSpace(deviceType))
+            {
+                devices = devices.Where(d =>
+                {
+                    var desc = _deviceDescriptionService.GetByID(d.DeviceDescriptionID);
+                    return desc != null &&
+                           desc.DeviceType.Equals(deviceType, StringComparison.OrdinalIgnoreCase);
+                });
+            }
+
+            var descriptions = _deviceDescriptionService
+                .GetAllDescriptions()
+                .ToDictionary(d => d.DeviceDescriptionID);
+
+            return devices.Select(device =>
+            {
+                var desc = descriptions[device.DeviceDescriptionID];
+                return MapToDisplayModel(device, desc);
+            });
+        }
+
+        // Helper method to map Device and DeviceDescription to DeviceDisplayModel
+        private DeviceDisplayModel MapToDisplayModel(Device device, DeviceDescription desc)
+        {
+            return new DeviceDisplayModel
+            {
+                DeviceID = device.DeviceID,
+                Type = desc.DeviceType,
+                OS = desc.OperatingSystem,
+                Location = desc.Location,
+                Status = device.Status.ToString(),
+                RegistrationDate = device.PurchaseDate?.ToDateTime(TimeOnly.MinValue),
+                ExpirationDate = device.ExpectedEndDate?.ToDateTime(TimeOnly.MinValue)
+            };
         }
     }
 }

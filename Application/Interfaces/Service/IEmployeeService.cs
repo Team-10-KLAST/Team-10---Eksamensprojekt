@@ -20,6 +20,7 @@ namespace Application.Interfaces
         IEnumerable<string> GetAllEmployeeEmails();
         void TerminateEmployee(int employeeID, DateOnly terminationDate);
         IEnumerable<Employee> GetTerminatedEmployees();
+        string ValidateApproverEmail(string email);
     }
 
 }

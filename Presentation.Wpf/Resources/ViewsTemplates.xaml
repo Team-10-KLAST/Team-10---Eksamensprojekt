@@ -58,4 +58,8 @@
         <views:TerminateEmployeeView />
     </DataTemplate>
 
+    <!-- AssignDevice -->
+    <DataTemplate DataType="{x:Type vm:AssignDeviceViewModel}">
+        <views:AssignDeviceView />
+    </DataTemplate>
 </ResourceDictionary>

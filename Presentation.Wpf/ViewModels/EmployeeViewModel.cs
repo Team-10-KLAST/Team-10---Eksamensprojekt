@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using Application.Interfaces;
+using Application.Interfaces.Service;
 using Application.Models;
 using Application.Models.DisplayModels;
 using Presentation.Wpf.Commands;
@@ -16,7 +17,11 @@ namespace Presentation.Wpf.ViewModels
 {
     public class EmployeeViewModel : OverlayHostViewModel
     {
+        // Services
         private readonly IEmployeeService _employeeService;
+        private readonly ILoanService _loanService;
+        private readonly IDeviceService _deviceService;
+        private readonly IDeviceDescriptionService _deviceDescriptionService;
 
         // Collection of all employees (unfiltered)
         public ObservableCollection<EmployeeDisplayModel> AllEmployees { get; } = new();
@@ -62,15 +67,21 @@ namespace Presentation.Wpf.ViewModels
 
         // Commands
         public ICommand AddEmployeeCommand { get; }
-        public ICommand DeleteEmployeeCommand { get; }
+        public ICommand AssignDeviceCommand { get; }
         public ICommand TerminateEmployeeCommand { get; }
 
         // Constructor
-        public EmployeeViewModel(IEmployeeService employeeService)
+        public EmployeeViewModel(IEmployeeService employeeService, ILoanService loanService,
+            IDeviceService deviceService, IDeviceDescriptionService deviceDescriptionService)
         {
             _employeeService = employeeService;
+            _loanService = loanService;
+            _deviceService = deviceService;
+            _deviceDescriptionService = deviceDescriptionService;
 
             AddEmployeeCommand = new RelayCommand(OpenAddEmployeeOverlay);
+            AssignDeviceCommand = new RelayCommand<EmployeeDisplayModel>(OpenAssignDeviceOverlay,
+                employee => employee != null && employee.TerminationDate == null);
             TerminateEmployeeCommand = new RelayCommand<EmployeeDisplayModel>(OpenTerminateEmployeeOverlay,
                 employee => employee != null && employee.TerminationDate == null);
 
@@ -79,6 +90,7 @@ namespace Presentation.Wpf.ViewModels
 
             LoadEmployees();
         }
+
 
         // Loads employees and departments from the service layer
         private void LoadEmployees()
@@ -138,6 +150,26 @@ namespace Presentation.Wpf.ViewModels
         private void OpenAddEmployeeOverlay()
         {
             ShowOverlayAndReload(new AddEmployeeViewModel(_employeeService));
+        }
+
+        // Opens the Assign Device overlay for the selected employee
+        private void OpenAssignDeviceOverlay(EmployeeDisplayModel displayModel)
+        {
+            // Her skal du kende approverID — typisk den bruger der er logget ind.
+            // Hvis du har en CurrentUserService, så brug den.
+            int approverID = 1; // midlertidigt — vi sætter den rigtigt senere
+
+            var overlayVm = new AssignDeviceViewModel(
+                displayModel.EmployeeID,
+                displayModel.Email,
+                displayModel.DepartmentName,
+                _employeeService,               
+                _loanService,
+                _deviceService,
+                _deviceDescriptionService
+            );
+
+            ShowOverlayAndReload(overlayVm);
         }
 
         // Opens the Terminate Employee overlay for the selected employee

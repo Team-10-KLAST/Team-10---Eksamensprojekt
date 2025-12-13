@@ -180,6 +180,7 @@ namespace Data.AdoNet
             var endDateOrdinal = reader.GetOrdinal("EndDate");
             var approverOrdinal = reader.GetOrdinal("ApproverID");
             var startDateOrdinal = reader.GetOrdinal("StartDate");
+            var requestOrdinal = reader.GetOrdinal("RequestID");
 
             return new Loan
             {
@@ -191,10 +192,12 @@ namespace Data.AdoNet
                 EndDate = reader.IsDBNull(endDateOrdinal)
                     ? null
                     : DateOnly.FromDateTime(reader.GetDateTime(endDateOrdinal)),
-                RequestID = reader.GetInt32(reader.GetOrdinal("RequestID")),
+                RequestID = reader.IsDBNull(requestOrdinal)
+                ? null
+                : reader.GetInt32(requestOrdinal),
                 BorrowerID = reader.GetInt32(reader.GetOrdinal("BorrowerID")),
                 ApproverID = reader.IsDBNull(approverOrdinal)
-                    ? 0
+                    ? null
                     : reader.GetInt32(approverOrdinal),
                 DeviceID = reader.GetInt32(reader.GetOrdinal("DeviceID"))
             };
@@ -204,11 +207,17 @@ namespace Data.AdoNet
         private static void AddLoanParameters(SqlCommand command, Loan loan)
         {
             command.Parameters.Add("@Status", SqlDbType.Int).Value = (int)loan.Status;
-            command.Parameters.Add("@RequestID", SqlDbType.Int).Value = loan.RequestID;
+            var requestParam = command.Parameters.Add("@RequestID", SqlDbType.Int);
+            requestParam.Value = loan.RequestID.HasValue
+                ? loan.RequestID.Value
+                : DBNull.Value;
+
             command.Parameters.Add("@BorrowerID", SqlDbType.Int).Value = loan.BorrowerID;
 
             var approverParam = command.Parameters.Add("@ApproverID", SqlDbType.Int);
-            approverParam.Value = loan.ApproverID == 0 ? DBNull.Value : loan.ApproverID;
+            approverParam.Value = loan.ApproverID.HasValue
+                ? loan.ApproverID.Value
+                : DBNull.Value;
 
             command.Parameters.Add("@DeviceID", SqlDbType.Int).Value = loan.DeviceID;
 
