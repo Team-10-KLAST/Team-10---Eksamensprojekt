@@ -147,7 +147,7 @@ namespace Presentation.Wpf.ViewModels
             var device = new Device
             {
                 DeviceDescriptionID = deviceDescriptionId,
-                /*DeviceStatus = status,*/ // Status enum mapping will be handled in service layer
+                Status = DeviceStatus.INSTOCK,
                 PurchaseDate = DateOnly.FromDateTime(RegistrationDate.Value),
                 ExpectedEndDate = DateOnly.FromDateTime(ExpiryDate.Value)
             };

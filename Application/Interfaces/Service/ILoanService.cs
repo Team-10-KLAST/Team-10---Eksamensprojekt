@@ -17,4 +17,5 @@ public interface ILoanService
     void AddLoan (Loan loan);
 
     Loan GetMostRecentLoanByDeviceID(int deviceID);
+    void AssignDeviceToEmployee(int deviceID, int employeeID, int approverID);
 }

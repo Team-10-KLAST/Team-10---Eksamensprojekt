@@ -53,7 +53,7 @@ namespace Presentation.Wpf.ViewModels
             _loanService = loanService;
 
             _dashboard = new DashboardViewModel(dashboardService,requestService, deviceService, employeeService, deviceDescriptionService);
-            _employees = new EmployeeViewModel(employeeService);
+            _employees = new EmployeeViewModel(employeeService, loanService, deviceService, deviceDescriptionService);
             _devices = new DeviceViewModel(deviceService, deviceDescriptionService, loanService, employeeService);
 
             ShowDashboardCommand = new RelayCommand(() => CurrentView = _dashboard);

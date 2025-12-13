@@ -14,7 +14,7 @@ namespace Application.Interfaces.Service
         void DeleteDevice(int deviceID);
         int CreateVirtualDeviceID(string DeviceType, string OS, string country);
         DeviceDisplayModel? GetDeviceDisplayByID(int deviceID);
-
-
+        IEnumerable<Device> GetAvailableDevicesByType(string deviceType);
+        IEnumerable<DeviceDisplayModel> GetAvailableDeviceDisplayModels(string? deviceType);
     }
 }

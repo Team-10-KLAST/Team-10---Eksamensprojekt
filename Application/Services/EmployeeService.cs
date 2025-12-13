@@ -159,5 +159,30 @@ namespace Application.Services
             var employees = GetAllEmployees();
             return employees.FirstOrDefault(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
+
+        // Validates that the approver email exists and belongs to a manager
+        public string ValidateApproverEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return "Approver email is required.";
+
+            try
+            {
+                var addr = new MailAddress(email);
+            }
+            catch
+            {
+                return "Invalid email format.";
+            }
+
+            var employee = GetEmployeeByEmail(email);
+            if (employee == null)
+                return "No employee found with that email.";
+
+            if (employee.RoleID != 1)
+                return "Only managers can approve device assignments.";
+
+            return string.Empty;
+        }
     }
 }
