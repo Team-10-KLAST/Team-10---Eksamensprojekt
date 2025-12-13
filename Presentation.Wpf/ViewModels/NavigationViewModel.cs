@@ -16,6 +16,7 @@ namespace Presentation.Wpf.ViewModels
 {
     public class NavigationViewModel : ViewModelBase
     {
+        // Services
         private readonly IRequestService _requestService;
         private readonly IDeviceService _deviceService;
         private readonly IEmployeeService _employeeService;
@@ -23,9 +24,12 @@ namespace Presentation.Wpf.ViewModels
         private readonly IDashboardService _dashboardService;
         private readonly ILoanService _loanService;
 
+        // Navigation action to go back to role selection
+        private readonly Action _navigateBack;
 
-        private object _currentView;
-        public object CurrentView
+        // CurrentView property for navigation
+        private object? _currentView;
+        public object? CurrentView
         {
             get => _currentView;
             set
@@ -35,16 +39,21 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        // Commands
+        public ICommand LogoutCommand { get; }
         public ICommand ShowDashboardCommand { get; }
         public ICommand ShowEmployeesCommand { get; }
         public ICommand ShowDevicesCommand { get; }
 
+        // ViewModel instances for each section
         private readonly DashboardViewModel _dashboard;
         private readonly EmployeeViewModel _employees;
         private readonly DeviceViewModel _devices;
 
-        public NavigationViewModel(IRequestService requestService, IDeviceService deviceService, IEmployeeService employeeService, IDeviceDescriptionService deviceDescriptionService, IDashboardService dashboardService, ILoanService loanService)
-        {   
+        // Constructor
+        public NavigationViewModel(Action navigateBack, IRequestService requestService, IDeviceService deviceService, IEmployeeService employeeService, IDeviceDescriptionService deviceDescriptionService, IDashboardService dashboardService, ILoanService loanService)
+        {
+            _navigateBack = navigateBack;
             _requestService = requestService;
             _deviceService = deviceService;
             _employeeService = employeeService;
@@ -56,12 +65,12 @@ namespace Presentation.Wpf.ViewModels
             _employees = new EmployeeViewModel(employeeService, loanService, deviceService, deviceDescriptionService);
             _devices = new DeviceViewModel(deviceService, deviceDescriptionService, loanService, employeeService);
 
+            LogoutCommand = new RelayCommand(() => _navigateBack());
             ShowDashboardCommand = new RelayCommand(() => CurrentView = _dashboard);
             ShowEmployeesCommand = new RelayCommand(() => CurrentView = _employees);
             ShowDevicesCommand = new RelayCommand(() => CurrentView = _devices);
 
-            CurrentView = _dashboard;
-            
+            CurrentView = _dashboard;            
         }
     }
 }

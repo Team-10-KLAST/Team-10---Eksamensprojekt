@@ -23,14 +23,14 @@ namespace Presentation.Wpf.ViewModels
         private readonly ILoanService _loanService;
         private readonly IDashboardService _dashboardService;
 
-        
-
-
+        // Commands for selecting roles
         public ICommand SelectEmployeeCommand { get; }
         public ICommand SelectAssetManagerCommand { get; }
 
+        // Reference to MainWindowViewModel for navigation
         private readonly MainWindowViewModel _mainWindow;
 
+        // Constructor
         public RoleSelectionViewModel(
         MainWindowViewModel mainWindow,
         IRequestService requestService,
@@ -74,6 +74,7 @@ namespace Presentation.Wpf.ViewModels
             SelectAssetManagerCommand = new RelayCommand(() =>
             {
                 _mainWindow.CurrentView = new NavigationViewModel(
+                    NavigateBackToRoleSelection,
                     _requestService,
                     _deviceService,
                     _employeeService,

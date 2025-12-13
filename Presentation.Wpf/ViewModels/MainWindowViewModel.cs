@@ -22,8 +22,9 @@ namespace Presentation.Wpf.ViewModels
         private readonly ILoanService _loanService;
         private readonly IDashboardService _dashboardService;
 
-        private object _currentView;
-        public object CurrentView
+        // CurrentView property for navigation
+        private object? _currentView;
+        public object? CurrentView
         {
             get => _currentView;
             set
@@ -33,10 +34,7 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
-        private readonly Action _navigateBack;
-        public ICommand SelectEmployeeCommand { get; }
-        public ICommand SelectAssetManagerCommand { get; }
-
+        // Constructor
         public MainWindowViewModel(
         IRequestService requestService,
         IDeviceDescriptionService deviceDescriptionService,
@@ -52,43 +50,15 @@ namespace Presentation.Wpf.ViewModels
             _loanService = loanService;
             _dashboardService = dashboardService;
 
-
-            // Start på rollevalg
             CurrentView = new RoleSelectionViewModel(
-            this,
-            _requestService,
-            _deviceDescriptionService,
-            _employeeService,
-            _deviceService,
-            _loanService,
-            _dashboardService
-        );
-
-
-            SelectEmployeeCommand = new RelayCommand(() =>
-            {
-                CurrentView = new AddRequestViewModel(
-                    _requestService,
-                    _deviceDescriptionService,
-                    _employeeService,
-                    _navigateBack
-                );
-                OnPropertyChanged(nameof(CurrentView));
-            });
-
-            SelectAssetManagerCommand = new RelayCommand(() =>
-            {
-                CurrentView = new NavigationViewModel(
-                    _requestService,
-                    _deviceService,
-                    _employeeService,
-                    _deviceDescriptionService,
-                    _dashboardService,
-                    _loanService
-                );
-                OnPropertyChanged(nameof(CurrentView));
-            });
+                this,
+                _requestService,
+                _deviceDescriptionService,
+                _employeeService,
+                _deviceService,
+                _loanService,
+                _dashboardService
+            );
         }
-
     }
 }
