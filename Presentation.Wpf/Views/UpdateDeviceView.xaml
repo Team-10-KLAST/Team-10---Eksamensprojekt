@@ -81,6 +81,7 @@
                            Margin="0,0,0,4"/>
                 <DatePicker SelectedDate="{Binding RegistrationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             HorizontalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
                             Height="33"
                             Margin="0,0,0,12"/>
 
@@ -139,6 +140,7 @@
                            FontWeight="SemiBold"
                            Margin="0,0,0,4"/>
                 <DatePicker SelectedDate="{Binding ExpirationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            VerticalContentAlignment="Center"
                             HorizontalAlignment="Stretch"
                             Height="33"/>
             </StackPanel>
