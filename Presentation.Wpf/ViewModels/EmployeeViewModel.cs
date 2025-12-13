@@ -155,10 +155,6 @@ namespace Presentation.Wpf.ViewModels
         // Opens the Assign Device overlay for the selected employee
         private void OpenAssignDeviceOverlay(EmployeeDisplayModel displayModel)
         {
-            // Her skal du kende approverID — typisk den bruger der er logget ind.
-            // Hvis du har en CurrentUserService, så brug den.
-            int approverID = 1; // midlertidigt — vi sætter den rigtigt senere
-
             var overlayVm = new AssignDeviceViewModel(
                 displayModel.EmployeeID,
                 displayModel.Email,
