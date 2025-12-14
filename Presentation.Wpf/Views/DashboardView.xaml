@@ -16,27 +16,19 @@
         <!-- Inner grid  -->
         <Grid Margin="24,0,24,24">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <!-- Quick actions sektion -->
-                <RowDefinition Height="*"   />
-                <!-- Tasks sektion -->
                 <RowDefinition Height="Auto"/>
-                <!-- EmployeeTerminationList sektion -->
+                <!-- Quick actions -->
+                <RowDefinition Height="*"/>
+                <!-- All status cards -->
             </Grid.RowDefinitions>
 
             <!-- 1. Quick actions user control -->
-            <dash:QuickActionsUserControl Grid.Row="0" Margin="0,0,0,16"/>
+            <dash:QuickActionsUserControl Grid.Row="0"/>
 
             <!-- 2. Tasks user control -->
             <dash:TasksUserControl Grid.Row="1"/>
 
-            <!--  Terminate employee user control -->
-            <!--
-            <dash:HandleTerminationUserControl Grid.Row="2" Margin="0,24,0,0"/>
-            -->
         </Grid>
-
         <local:OverlayHost DataContext="{Binding}" />
-
     </Grid>
 </UserControl>
