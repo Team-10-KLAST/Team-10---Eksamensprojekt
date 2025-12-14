@@ -124,13 +124,27 @@ namespace Application.Services
             if (device.DeviceID <= 0)
                 throw new ArgumentOutOfRangeException(nameof(device.DeviceID), "DeviceID must be greater than zero.");
 
-            // Business rule: device must be wiped before it can be set to 'In stock'
             if (device.Status == DeviceStatus.INSTOCK && !device.IsWiped)
             {
                 throw new InvalidOperationException(
                     "The device must be wiped before it can be set to 'In stock'.");
             }
 
+            if (device.Status == DeviceStatus.INSTOCK)
+            {
+                var activeLoan = _loanRepository
+                    .GetAll()
+                    .FirstOrDefault(loan => loan.DeviceID == device.DeviceID &&
+                                         loan.Status == LoanStatus.ACTIVE);
+
+                if (activeLoan != null)
+                {
+                    activeLoan.Status = LoanStatus.INACTIVE;
+                    activeLoan.EndDate = DateOnly.FromDateTime(DateTime.Now);
+
+                    _loanRepository.Update(activeLoan);
+                }
+            }
             _deviceRepository.Update(device);
         }
 

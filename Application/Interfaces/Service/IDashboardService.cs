@@ -8,5 +8,6 @@ namespace Application.Interfaces.Service
     {
         IReadOnlyList<RequestDashboardDisplayModel> GetPendingRequests();
         IReadOnlyList<DeviceDashboardDisplayModel> GetDevicesByStatus(DeviceStatus status);
+        IReadOnlyList<DeviceDashboardDisplayModel> GetDevicesWithTerminatedBorrowers();
     }
 }

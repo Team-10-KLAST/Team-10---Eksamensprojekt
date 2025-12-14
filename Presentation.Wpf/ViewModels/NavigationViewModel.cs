@@ -66,7 +66,11 @@ namespace Presentation.Wpf.ViewModels
             _devices = new DeviceViewModel(deviceService, deviceDescriptionService, loanService, employeeService);
 
             LogoutCommand = new RelayCommand(() => _navigateBack());
-            ShowDashboardCommand = new RelayCommand(() => CurrentView = _dashboard);
+            ShowDashboardCommand = new RelayCommand(() =>
+            {
+                _dashboard.Refresh();
+                CurrentView = _dashboard;
+            });
             ShowEmployeesCommand = new RelayCommand(() => CurrentView = _employees);
             ShowDevicesCommand = new RelayCommand(() => CurrentView = _devices);
 

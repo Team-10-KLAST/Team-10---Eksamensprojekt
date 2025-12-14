@@ -19,6 +19,7 @@
         <Setter Property="Padding" Value="12" />
         <Setter Property="Margin" Value="0,8,0,0" />
         <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
     </Style>
     
 </ResourceDictionary>

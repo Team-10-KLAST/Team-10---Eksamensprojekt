@@ -16,7 +16,7 @@
 
         <!-- Section header -->
         <TextBlock Grid.Row="0"
-                   Margin="0,0,0,8"
+                   Margin="8,8,0,8"
                    Text="Quick actions"
                    FontFamily="{StaticResource PrimaryFont}"
                    FontSize="16"
@@ -33,7 +33,7 @@
             <!-- QUICK ACTION: Register device (left card) -->
             <Border Grid.Column="0"
                     Style="{StaticResource QuickActionCardBorderStyle}"
-                    Margin="0,0,16,24">
+                    Margin="8,0,8,24">
                 <!-- Layout for the "Register device" card -->
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -83,7 +83,7 @@
             <!-- QUICK ACTION: Register employee (right card) -->
             <Border Grid.Column="1"
                     Style="{StaticResource QuickActionCardBorderStyle}"
-                    Margin="16,0,0,24">
+                    Margin="8,0,8,24">
                 <!-- Layout for the "Register employee" card -->
                 <Grid>
                     <Grid.ColumnDefinitions>
