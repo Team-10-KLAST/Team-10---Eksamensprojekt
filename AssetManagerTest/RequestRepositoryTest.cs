@@ -8,198 +8,110 @@ using Microsoft.Data.SqlClient;
 using Application.Interfaces; // For IDbAccess
 using Application.Interfaces.Repository;
 using Application.Models;
+using Data.AdoNet;
+using AssetManagerTest;
+using Data;
 
+namespace AssetManagerTest;
 
-// --- UNIT TEST KLASSE MED MOQ ---
-// Vi tester her den refaktorerede version, som afhænger af IDbAccess
 [TestClass]
-public class RequestRepositoryMoqTest
+public class RequestRepositoryTest
 {
-    private Mock<IDbAccess> _mockDbAccess;
-    private Data.AdoNet.Refactored.RequestRepository _repository;
+    private RequestRepository _requestRepository;
 
+    //setup the repository
     [TestInitialize]
     public void Setup()
     {
-        // 1. Opret Mock-instansen af databaseadgangsinterfacet
-        _mockDbAccess = new Mock<IDbAccess>();
-
-        // 2. Initialiser Repository med Mock-objektet (Dependency Injection)
-        // Vi bruger Data.AdoNet.Refactored.RequestRepository her.
-        _repository = new Data.AdoNet.Refactored.RequestRepository(_mockDbAccess.Object);
+        var dbConnection = DatabaseConnection.GetInstance();
+        _requestRepository = new RequestRepository(dbConnection);
     }
 
-    // --- Hjælpefunktion til at mocke IDataReader adfærd ---
-    private Mock<IDataReader> SetupMockReader(List<object[]> dataRows)
-    {
-        var mockReader = new Mock<IDataReader>();
-        var queue = new Queue<object[]>(dataRows);
 
-        // Simuler Read() kald: Returner true, så længe der er rækker
-        mockReader.Setup(r => r.Read())
-            .Returns(() => queue.Count > 0)
-            .Callback(() =>
-            {
-                if (queue.Count > 0)
-                {
-                    var currentRow = queue.Dequeue();
-                    // Opsæt værdireturnering baseret på kolonne-indeks
-                    mockReader.Setup(r => r.GetInt32(It.Is<int>(i => i == 0))).Returns((int)currentRow[0]);
-                    mockReader.Setup(r => r.GetDateTime(It.Is<int>(i => i == 1))).Returns((DateTime)currentRow[1]);
-                    mockReader.Setup(r => r.GetString(It.Is<int>(i => i == 2))).Returns((string)currentRow[2]);
-                    mockReader.Setup(r => r.GetInt32(It.Is<int>(i => i == 3))).Returns((int)currentRow[3]);
-                }
-            });
-
-        // Opsæt GetOrdinal til at returnere de korrekte kolonneindeks
-        mockReader.Setup(r => r.GetOrdinal("RequestID")).Returns(0);
-        mockReader.Setup(r => r.GetOrdinal("RequestDate")).Returns(1);
-        mockReader.Setup(r => r.GetOrdinal("Justification")).Returns(2);
-        mockReader.Setup(r => r.GetOrdinal("RequestStatus")).Returns(3);
-
-        return mockReader;
-    }
-
+    // --- Add and GetByID Test (Initial data check) ---
 
     [TestMethod]
-    public void GetByID_ShouldReturnRequest_WhenFound()
+    public void Add_ReturnAValidID()
     {
-        // Arrange
-        const int expectedId = 101;
-        var expectedDate = DateTime.Today;
-
-        var data = new List<object[]>
-        {
-            // RequestID, RequestDate, Justification, RequestStatus (som int)
-            new object[] { expectedId, expectedDate, "Test Justification", (int)RequestStatus.PENDING }
-        };
-
-        var mockReader = SetupMockReader(data);
-
-        // Mock: Konfigurer ExecuteReader til at returnere vores mockede læser
-        _mockDbAccess
-            .Setup(db => db.ExecuteReader(
-                "uspGetRequestByID",
-                // Verificer at RequestID parameter blev sendt
-                It.Is<Dictionary<string, object>>(dict => (int)dict["@RequestID"] == expectedId)
-            ))
-            .Returns(mockReader.Object);
-
-        // Act
-        var result = _repository.GetByID(expectedId);
-
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual(expectedId, result.RequestID);
-    }
-
-    [TestMethod]
-    public void GetAll_ShouldReturnListOfRequests_WhenDataExists()
-    {
-        // Arrange
-        var today = DateTime.Today;
-        var data = new List<object[]>
-        {
-            new object[] { 1, today.AddDays(-1), "Request A", (int)RequestStatus.PENDING },
-            new object[] { 2, today, "Request B", (int)RequestStatus.CLOSED }
-        };
-
-        var mockReader = SetupMockReader(data);
-
-        // Mock: Konfigurer ExecuteReader til at returnere vores mockede læser for GetAll
-        _mockDbAccess
-            .Setup(db => db.ExecuteReader("uspGetAllRequests", null))
-            .Returns(mockReader.Object);
-
-        // Act
-        var result = _repository.GetAll().ToList();
-
-        // Assert
-        Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(2, result[1].RequestID);
-        Assert.AreEqual(RequestStatus.CLOSED, result[1].Status);
-    }
-
-    [TestMethod]
-    public void Add_ShouldSetRequestID_WhenSuccessful()
-    {
-        // Arrange
-        const int generatedId = 55;
-        var todayDateOnly = DateOnly.FromDateTime(DateTime.Today);
+        //Arrange
         var newRequest = new Request
         {
-            RequestDate = todayDateOnly,
-            Justification = "New item",
-            Status = RequestStatus.PENDING
+            RequestDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-1)),
+            NeededByDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7)),
+            Justification = "Test",
+            Status = RequestStatus.PENDING,
         };
+        //Act add request to DB and retrieve it back
+        _requestRepository.Add(newRequest);
+        var retrievedRequest = _requestRepository.GetByID(newRequest.RequestID);
 
-        // Mock: Konfigurer ExecuteScalar til at returnere det autogenererede ID (55)
-        _mockDbAccess
-            .Setup(db => db.ExecuteScalar(
-                "uspAddRequest",
-                // Verificer at Justification og Status er korrekt i parametrene
-                It.Is<Dictionary<string, object>>(dict =>
-                    (string)dict["@Justification"] == newRequest.Justification &&
-                    (int)dict["@RequestStatus"] == (int)RequestStatus.PENDING
-                )
-            ))
-            .Returns(generatedId);
+        //Assert
+        // Assert 1: A valid ID was generated (> 0). This is the key validity check.
+        Assert.IsTrue(newRequest.RequestID > 0, "RequestID should be set by the Add method.");
 
-        // Act
-        _repository.Add(newRequest);
+        // Assert 2: The request was successfully retrieved
+        Assert.IsNotNull(retrievedRequest, $"Request with ID {newRequest.RequestID} should be retrieved by ID.");
 
-        // Assert
-        Assert.AreEqual(generatedId, newRequest.RequestID); // Verificer at ID'et blev sat
-        _mockDbAccess.Verify(db => db.ExecuteScalar(
-            "uspAddRequest",
-            It.IsAny<Dictionary<string, object>>()
-        ), Times.Once); // Verificer at metoden blev kaldt
+        // Assert 3: Data integrity check
+        Assert.AreEqual(newRequest.RequestID, retrievedRequest.RequestID);
+        Assert.AreEqual(newRequest.Justification, retrievedRequest.Justification);
+        Assert.AreEqual(newRequest.Status, retrievedRequest.Status);
+        Assert.AreEqual(newRequest.RequestDate, retrievedRequest.RequestDate);
     }
 
     [TestMethod]
-    [ExpectedException(typeof(KeyNotFoundException))]
-    public void Delete_ShouldThrowException_WhenNoRowsAffected()
+    public void Delete_RemovesRequestFromDatabase()
     {
         // Arrange
-        const int idToDelete = 999;
+        var requestToDelete = new Request { RequestDate = DateOnly.FromDateTime(DateTime.Today), NeededByDate = DateOnly.FromDateTime(DateTime.Today.AddDays(1)), Justification = "DeleteTest", Status = RequestStatus.PENDING };
+        _requestRepository.Add(requestToDelete);
+        var idToDelete = requestToDelete.RequestID;
 
-        // Mock: Simuler at ExecuteNonQuery returnerer 0 (ingen rækker fundet/slettet)
-        _mockDbAccess
-            .Setup(db => db.ExecuteNonQuery(
-                "uspDeleteRequest",
-                It.Is<Dictionary<string, object>>(dict => (int)dict["@RequestID"] == idToDelete)
-            ))
-            .Returns(0);
+        // Pre-Assert
+        Assert.IsNotNull(_requestRepository.GetByID(idToDelete), "Request should exist before deletion.");
 
         // Act
-        _repository.Delete(idToDelete);
-
-        // Assert (Handled by [ExpectedException])
-    }
-
-    [TestMethod]
-    public void Update_ShouldCallExecuteNonQuery_Once()
-    {
-        // Arrange
-        var requestToUpdate = new Request { RequestID = 1, Justification = "Updated" };
-
-        // Mock: Simuler at ExecuteNonQuery returnerer 1 (én række opdateret)
-        _mockDbAccess
-            .Setup(db => db.ExecuteNonQuery(
-                "uspUpdateRequest",
-                // Verificer at RequestID parameteren er korrekt
-                It.Is<Dictionary<string, object>>(dict => (int)dict["@RequestID"] == requestToUpdate.RequestID)
-            ))
-            .Returns(1); // Returnerer 1 for at indikere succes
-
-        // Act
-        _repository.Update(requestToUpdate);
+        _requestRepository.Delete(idToDelete);
 
         // Assert
-        // Verificer at ExecuteNonQuery blev kaldt præcis én gang
-        _mockDbAccess.Verify(db => db.ExecuteNonQuery(
-            "uspUpdateRequest",
-            It.IsAny<Dictionary<string, object>>()
-        ), Times.Once);
+        Assert.IsNull(_requestRepository.GetByID(idToDelete), "Request should be null after deletion.");
+    }
+        
+
+    [TestMethod]
+    public void Update_RequestAttributesChange()
+    {
+        // Arrange
+        var newRequest = new Request
+        {
+            RequestDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-1)),
+            NeededByDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7)),
+            Justification = "Test",
+            Status = RequestStatus.PENDING,
+        };
+        
+        // Act
+        _requestRepository.Add(newRequest);
+        int ID = newRequest.RequestID;
+
+        newRequest.RequestDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-10));
+        newRequest.NeededByDate = DateOnly.FromDateTime(DateTime.Today.AddDays(17));
+        newRequest.Justification = "Updated";
+        newRequest.Status = RequestStatus.CLOSED;
+
+        _requestRepository.Update(newRequest);
+
+        var retrievedRequest = _requestRepository.GetByID(ID);
+
+        // Assert
+        // 1. Ensure the retrieved object is not null
+        Assert.IsNotNull(retrievedRequest, $"Updated Request with ID {ID} should be retrieved.");
+
+        // 2. Assert that all attributes were correctly updated
+        Assert.AreEqual(ID, retrievedRequest.RequestID, "RequestID should remain unchanged.");
+        Assert.AreEqual(newRequest.RequestDate, retrievedRequest.RequestDate, "RequestDate was not updated correctly.");
+        Assert.AreEqual(newRequest.NeededByDate, retrievedRequest.NeededByDate, "NeededByDate was not updated correctly.");
+        Assert.AreEqual(newRequest.Justification, retrievedRequest.Justification, "Justification was not updated correctly.");
+        Assert.AreEqual(newRequest.Status, retrievedRequest.Status, "Status was not updated correctly.");
     }
 }
