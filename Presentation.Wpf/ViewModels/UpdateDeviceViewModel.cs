@@ -26,8 +26,6 @@ namespace Presentation.Wpf.ViewModels
                     OnPropertyChanged(nameof(Type));
                     OnPropertyChanged(nameof(OS));
                     OnPropertyChanged(nameof(Location));
-                    OnPropertyChanged(nameof(StatusHistory));
-                    OnPropertyChanged(nameof(StatusHistoryString));
                     OnPropertyChanged(nameof(Owner));
                     OnPropertyChanged(nameof(RegistrationDate));
                     OnPropertyChanged(nameof(ExpirationDate));
@@ -40,8 +38,6 @@ namespace Presentation.Wpf.ViewModels
         // Read-only convenience properties for bindings
         public string Type => SelectedDevice?.Type ?? string.Empty;
         public string OS => SelectedDevice?.OS ?? string.Empty;
-        public List<string> StatusHistory => SelectedDevice?.StatusHistory ?? new List<string>();
-        public string StatusHistoryString => string.Join(Environment.NewLine, StatusHistory);
 
         public Array StatusOptions => Enum.GetValues(typeof(DeviceStatus));
 

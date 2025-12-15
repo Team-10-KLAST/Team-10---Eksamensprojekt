@@ -93,8 +93,7 @@ namespace Application.Services
                 ExpirationDate = expirationDate,
                 NeededByDate = neededByDate,
                 Wiped = device.IsWiped,
-                OwnerFullName = ownerFullName,
-                StatusHistory = new List<string>()
+                OwnerFullName = ownerFullName
             };
         }
 

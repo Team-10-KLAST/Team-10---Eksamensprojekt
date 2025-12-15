@@ -146,21 +146,7 @@
             </StackPanel>
         </Grid>
 
-        <!-- Status history -->
-        <StackPanel Grid.Row="2" Margin="0,16,0,0">
-            <TextBlock Text="Status history" 
-                       Style="{StaticResource BodyTextStyle}" 
-                       FontWeight="SemiBold"
-                       Margin="0,0,0,5"/>
-
-            <TextBox Text="{Binding StatusHistoryString, Mode=OneWay}"
-                     Height="80"
-                     HorizontalAlignment="Stretch"
-                     TextWrapping="Wrap"
-                     IsReadOnly="True"
-                     Background="{StaticResource InputFieldBackgroundBrush}"
-                     BorderBrush="{StaticResource InputFieldBorderBrush}"/>
-        </StackPanel>
+       
 
         <!-- Action Buttons -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
