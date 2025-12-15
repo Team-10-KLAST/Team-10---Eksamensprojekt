@@ -22,7 +22,7 @@ namespace Presentation.Wpf.ViewModels
         private readonly IDeviceDescriptionService _deviceDescriptionService;
 
         // Collection of status cards for the dashboard
-        public ObservableCollection<StatusCardData> StatusCards { get; } = new();
+        public ObservableCollection<StatusCardViewModel> StatusCards { get; } = new();
 
         // Observable collections for each dashboard section
         public ObservableCollection<RequestDashboardDisplayModel> PendingRequests { get; } = new();
@@ -125,7 +125,7 @@ namespace Presentation.Wpf.ViewModels
         // Helper method to create and add a status card
         private void CreateCard(string title, string icon, IEnumerable items, int count, ICommand command)
         {
-            StatusCards.Add(new StatusCardData
+            StatusCards.Add(new StatusCardViewModel
             {
                 Title = title,
                 Icon = icon,
