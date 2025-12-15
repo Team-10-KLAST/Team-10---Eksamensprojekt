@@ -2,11 +2,17 @@
 
 namespace Application.Models
 {
+    public enum LoanStatus
+    {
+        INACTIVE,
+        ACTIVE
+    }
+
     public class Loan
     {
         public int LoanID { get; set; }
-        public string LoanStatus { get; set; } = "";
-        public DateOnly StartDate { get; set; }
+        public LoanStatus Status { get; set; } = LoanStatus.INACTIVE;
+        public DateOnly? StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
         public int RequestID { get; set; }
         public int BorrowerID { get; set; }
@@ -19,10 +25,10 @@ namespace Application.Models
         }
 
         // Constructor with parameters (excluding LoanID).
-        public Loan(string loanStatus, DateOnly startDate, DateOnly? endDate,
+        public Loan(LoanStatus loanStatus, DateOnly startDate, DateOnly? endDate,
                     int requestID, int borrowerID, int approverID, int deviceID)
         {
-            LoanStatus = loanStatus;
+            Status = loanStatus;
             StartDate = startDate;
             EndDate = endDate;
             RequestID = requestID;

@@ -12,7 +12,7 @@ namespace Application.Models
     public class Decision
     {
         public int DecisionID { get; set; }
-        public DecisionStatus DecisionStatus { get; set; } = DecisionStatus.PENDING;
+        public DecisionStatus Status { get; set; } = DecisionStatus.PENDING;
         public DateOnly DecisionDate { get; set; }
         public string Comments { get; set; } = "";
         public int LoanID { get; set; }

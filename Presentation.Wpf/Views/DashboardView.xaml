@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:Presentation.Wpf.Views"
              mc:Ignorable="d"
              d:DesignHeight="600"
              d:DesignWidth="1000"
@@ -37,7 +38,8 @@
     </UserControl.Resources>
 
     <!-- Dashboardet skaleres, når vinduet ændrer størrelse -->
-    <Viewbox Stretch="Uniform">
+    <Grid x:Name="Root">
+        <Viewbox Stretch="Uniform">
         <Grid Width="1000" Height="600" Margin="24">
 
             <!-- Rækker: 0 = titel, 1 = "Quick actions", 2 = quick cards, 3 = status-kolonner -->
@@ -209,7 +211,7 @@
                                        FontSize="16"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource PrimaryTextBrush}"
-                                       Text="Requests (pending)" />
+                                       Text="Pending requests" />
 
                             <Button Grid.Column="2"
                                     Margin="0,0,8,0"
@@ -218,9 +220,7 @@
                                     Background="{StaticResource PanelBackgroundBrush}"
                                     Foreground="{StaticResource PrimaryTextBrush}" />
 
-                            <Button Grid.Column="3"
-                                    Content="Approve all"
-                                    Style="{StaticResource PrimaryButtonStyle}" />
+                            
                         </Grid>
 
                         <ScrollViewer Grid.Row="1"
@@ -301,9 +301,7 @@
                                     Background="{StaticResource PanelBackgroundBrush}"
                                     Foreground="{StaticResource PrimaryTextBrush}" />
 
-                            <Button Grid.Column="3"
-                                    Content="Approve all"
-                                    Style="{StaticResource PrimaryButtonStyle}" />
+                            
                         </Grid>
 
                         <ScrollViewer Grid.Row="1"
@@ -384,9 +382,7 @@
                                     Foreground="{StaticResource PrimaryTextBrush}" />
 
 
-                            <Button Grid.Column="3"
-                                    Content="Approve all"
-                                    Style="{StaticResource PrimaryButtonStyle}" />
+                       
                         </Grid>
 
                         <ScrollViewer Grid.Row="1"
@@ -456,7 +452,7 @@
                                        FontSize="16"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource PrimaryTextBrush}"
-                                       Text="Ready to approve / assign" />
+                                       Text="Ready to assign" />
 
                             <Button Grid.Column="2"
                                     Margin="0,0,8,0"
@@ -466,9 +462,7 @@
                                     Foreground="{StaticResource PrimaryTextBrush}" />
 
 
-                            <Button Grid.Column="3"
-                                    Content="Approve all"
-                                    Style="{StaticResource PrimaryButtonStyle}" />
+                            
                         </Grid>
 
                         <ScrollViewer Grid.Row="1"
@@ -507,4 +501,8 @@
             </Grid>
         </Grid>
     </Viewbox>
+
+        <local:OverlayHost DataContext="{Binding}" />
+    </Grid>
+
 </UserControl>

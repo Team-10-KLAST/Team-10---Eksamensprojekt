@@ -24,7 +24,9 @@ namespace Presentation.Wpf
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            var connectionString = config.GetConnectionString("DefaultConnection");
+            var connectionString = config.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            
             DatabaseConnection.Initialize(connectionString);
 
             // Hent en instans af DatabaseConnection
@@ -44,9 +46,10 @@ namespace Presentation.Wpf
             var deviceDescriptionService = new DeviceDescriptionService(deviceDescriptionRepository);
             var deviceService = new DeviceService(deviceRepository, deviceDescriptionService);
             var employeeService = new EmployeeService(employeeRepository, departmentRepository, roleRepository, loanRepository);
-            var loanService = new LoanService(loanRepository);
+            var loanService = new LoanService(loanRepository, deviceService);
             var requestService = new RequestService(requestRepository, employeeRepository, deviceRepository,
                 deviceDescriptionRepository, loanRepository, decisionRepository, deviceService, loanService, employeeService);
+            var dashboardService = new DashboardService(requestService, deviceService, loanRepository, employeeRepository, deviceDescriptionRepository);
 
             // 3. Opret MainWindowViewModel med services og repos
             var mainWindowVm = new MainWindowViewModel(
@@ -55,9 +58,7 @@ namespace Presentation.Wpf
                 employeeService,
                 deviceService,
                 loanService,
-                loanRepository,
-                employeeRepository,
-                deviceDescriptionRepository
+                dashboardService
             );
 
             var mainWindow = new MainWindow

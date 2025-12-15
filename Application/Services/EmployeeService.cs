@@ -126,8 +126,8 @@ namespace Application.Services
                     DepartmentName = departments.TryGetValue(employee.DepartmentID, out var departmentName) ? departmentName : "Unknown",
                     RoleName = roles.TryGetValue(employee.RoleID, out var roleName) ? roleName : "Unknown",
                     TerminationDate = employee.TerminationDate,
-                    DeviceCount = allLoans.Count(l => l.BorrowerID == employee.EmployeeID
-                                           && l.LoanStatus == "Active")
+                    DeviceCount = allLoans.Count(loan => loan.BorrowerID == employee.EmployeeID &&
+                        loan.Status == LoanStatus.ACTIVE)
                 };
 
                 employeeDisplayModels.Add(employeeDisplayModel);

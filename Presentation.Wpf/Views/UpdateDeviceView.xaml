@@ -73,6 +73,16 @@
                     ItemsSource="{Binding RegistrationDate}"   
                     SelectedItem="{Binding SelectedDate, Mode=TwoWay}"
                     Width="177" Height="33"/>
+
+                <!-- Wiped flag -->
+                <TextBlock Text="Wiped"
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,12,0,4"/>
+
+                <CheckBox Content="Device has been wiped"
+                          IsChecked="{Binding Wiped, Mode=TwoWay}"/>
+
             </StackPanel>
 
             <!-- Right -->
@@ -127,10 +137,7 @@
         <!-- Status history -->
         <StackPanel Grid.Row="2" Margin="0,0,0,16">
             <!-- Textbox -->
-            <TextBlock Text="Price" 
-                Style="{StaticResource BaseTextStyle}" 
-                FontWeight="SemiBold"/>
-            <TextBlock Text="{Binding Price.Price}" Style="{StaticResource BaseTextStyle}" Height="21"/>
+            
 
 
             <!-- Textbox -->
@@ -138,7 +145,12 @@
                        Style="{StaticResource BodyTextStyle}" 
                        FontWeight="SemiBold"
                        Margin="0,0,0,5"/>
-            <TextBox Text="{Binding StatusHistory}" Height="64" Width="354"/>
+
+            <TextBox Text="{Binding StatusHistoryString}"
+                       Height="64"
+                       Width="354"
+                       IsReadOnly="True"
+                       TextWrapping="Wrap"/>
         </StackPanel>
 
         <!-- Action Buttons -->

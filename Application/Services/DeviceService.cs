@@ -62,6 +62,13 @@ namespace Application.Services
                 throw new ArgumentOutOfRangeException(nameof(device.DeviceID), "DeviceID must be greater than zero.");
             }
 
+            //--- 'Not in use or In stock?---
+            if (device.Status == DeviceStatus.INSTOCK && device.IsWiped == false)
+            {
+                throw new InvalidOperationException(
+                    "The device must be wiped before its status can be set to 'Not in use/In Stock'.");
+            }
+
             _deviceRepository.Update(device);
         }
 

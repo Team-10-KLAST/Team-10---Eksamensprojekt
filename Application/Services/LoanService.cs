@@ -12,10 +12,12 @@ namespace Application.Services;
 public class LoanService : ILoanService
 {
     private readonly IRepository<Loan> _loanRepository;
+    private readonly IDeviceService _deviceService;
 
-    public LoanService(IRepository<Loan> loanRepository)
+    public LoanService(IRepository<Loan> loanRepository, IDeviceService deviceService)
     {
         _loanRepository = loanRepository;
+        _deviceService = deviceService;
     }
 
 
@@ -28,23 +30,40 @@ public class LoanService : ILoanService
             RequestID = requestID,
             BorrowerID = borrowerID,
             DeviceID = deviceID,
-            LoanStatus = "new"
+            Status = LoanStatus.INACTIVE,
+            StartDate = null,
+            EndDate = null
         };
         AddLoan(loan);
     }
+
     public void CloseLoan(int loanID)
     {
 
     }
-    public void UpdateLoanStatus(int loanID, string newStatus)
+    public void UpdateLoanStatus(int loanID, LoanStatus newStatus)
     {
+        var loan = _loanRepository.GetByID(loanID)
+            ?? throw new InvalidOperationException("Loan not found.");
 
+        loan.Status = newStatus;
+        _loanRepository.Update(loan);
     }
 
     public void AddLoan(Loan loan)
     {
-        if (loan.BorrowerID==null) { throw new ArgumentException("BorrowerID cannot be empty"); }
-        if (loan.DeviceID == null) { throw new ArgumentException("DeviceID cannot be empty"); }        
+        if (loan.BorrowerID <= 0) { throw new ArgumentException("BorrowerID cannot be empty"); }
+        if (loan.DeviceID <= 0) { throw new ArgumentException("DeviceID cannot be empty"); }
         _loanRepository.Add(loan);
+
+        if (loan.Status == LoanStatus.INACTIVE || loan.Status == LoanStatus.ACTIVE)
+        {
+            var device = _deviceService.GetDeviceByID(loan.DeviceID)
+                ?? throw new InvalidOperationException("Device not found.");
+
+            device.IsWiped = false;
+            _deviceService.UpdateDevice(device);
+        }
+
     }
 }

@@ -75,6 +75,15 @@
                     ItemsSource="{Binding CountryOptions}"
                     SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"
                     Width="240" Height="33"/>
+                    
+                    <TextBlock Text="Needed by date"
+                     Style="{StaticResource BaseTextStyle}"
+                     FontWeight="SemiBold"
+                     Margin="0,12,0,4"/>
+
+<DatePicker SelectedDate="{Binding NeededByDate, Mode=TwoWay}"
+     Height="33"
+     HorizontalAlignment="Stretch"/>
                 </StackPanel>
             </Grid>
 
@@ -89,6 +98,7 @@
                      Background="{StaticResource InputFieldBackgroundBrush}"
                      BorderBrush="{StaticResource InputFieldBorderBrush}"
                      Text="{Binding RequestComment, UpdateSourceTrigger=PropertyChanged}"/>
+
             </StackPanel>
 
             <!-- Buttons -->

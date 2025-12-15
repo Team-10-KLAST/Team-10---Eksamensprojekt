@@ -16,7 +16,7 @@ namespace Application.Services
         //Collection of all DeviceDescription from DB
         IEnumerable<DeviceDescription> _deviceDescriptions;
 
-        public DeviceDescriptionService (IRepository<DeviceDescription> deviceDescriptionRepository)
+        public DeviceDescriptionService(IRepository<DeviceDescription> deviceDescriptionRepository)
         {
             _deviceDescriptionRepository = deviceDescriptionRepository;
             _deviceDescriptions = _deviceDescriptionRepository.GetAll();
@@ -42,7 +42,7 @@ namespace Application.Services
         {
             DeviceDescription matchingDeviceDescription =
                 _deviceDescriptions.FirstOrDefault(d =>
-                d.DeviceType.Equals(DeviceType, System.StringComparison.OrdinalIgnoreCase) && 
+                d.DeviceType.Equals(DeviceType, System.StringComparison.OrdinalIgnoreCase) &&
                 d.OperatingSystem.Equals(OS, System.StringComparison.OrdinalIgnoreCase) &&
                 d.Location.Equals(Country, System.StringComparison.OrdinalIgnoreCase)
                 );

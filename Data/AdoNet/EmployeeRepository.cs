@@ -11,17 +11,15 @@ namespace Data.AdoNet
 {
     public class EmployeeRepository : IRepository<Employee>
     {
-        // Dependency on DatabaseConnection for creating connections.
+        // Dependency on DatabaseConnection, used to create SQL connections.
         private readonly DatabaseConnection _databaseConnection;
 
-        // Stored procedure names.
         private const string SpAddEmployee = "uspAddEmployee";
         private const string SpUpdateEmployee = "uspUpdateEmployee";
         private const string SpDeleteEmployee = "uspDeleteEmployee";
         private const string SpGetAllEmployees = "uspGetAllEmployees";
         private const string SpGetEmployeeByID = "uspGetEmployeeByID";
 
-        // Constructor. Dependency injection of DatabaseConnection. 
         public EmployeeRepository(DatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
@@ -138,7 +136,6 @@ namespace Data.AdoNet
             }
         }
 
-        // GET ALL: Returns all employees using a stored procedure.
         public IEnumerable<Employee> GetAll()
         {
             var employees = new List<Employee>();
