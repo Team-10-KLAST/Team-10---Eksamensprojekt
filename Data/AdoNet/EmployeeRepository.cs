@@ -35,13 +35,12 @@ namespace Data.AdoNet
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@FirstName", employee.FirstName);
-                    command.Parameters.AddWithValue("@LastName", employee.LastName);
-                    command.Parameters.AddWithValue("@Email", employee.Email);
-                    command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentID);
-                    command.Parameters.AddWithValue("@RoleID", employee.RoleID);
-                    command.Parameters.AddWithValue("@TerminationDate",
-                        employee.TerminationDate?.ToDateTime(TimeOnly.MinValue) ?? (object)DBNull.Value);
+                    command.Parameters.Add("@FirstName", SqlDbType.NVarChar, 100).Value = employee.FirstName;
+                    command.Parameters.Add("@LastName", SqlDbType.NVarChar, 100).Value = employee.LastName;
+                    command.Parameters.Add("@Email", SqlDbType.NVarChar, 255).Value = employee.Email;
+                    command.Parameters.Add("@DepartmentID", SqlDbType.Int).Value = employee.DepartmentID;
+                    command.Parameters.Add("@RoleID", SqlDbType.Int).Value = employee.RoleID;
+                    command.Parameters.Add("@TerminationDate", SqlDbType.Date).Value = employee.TerminationDate?.ToDateTime(TimeOnly.MinValue);
 
                     connection.Open();
 
@@ -75,14 +74,13 @@ namespace Data.AdoNet
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@EmployeeID", employee.EmployeeID);
-                    command.Parameters.AddWithValue("@FirstName", employee.FirstName);
-                    command.Parameters.AddWithValue("@LastName", employee.LastName);
-                    command.Parameters.AddWithValue("@Email", employee.Email);
-                    command.Parameters.AddWithValue("@DepartmentID", employee.DepartmentID);
-                    command.Parameters.AddWithValue("@RoleID", employee.RoleID);
-                    command.Parameters.AddWithValue("@TerminationDate",
-                        employee.TerminationDate?.ToDateTime(TimeOnly.MinValue) ?? (object)DBNull.Value);
+                    command.Parameters.Add("@EmployeeID", SqlDbType.Int).Value = employee.EmployeeID;
+                    command.Parameters.Add("@FirstName", SqlDbType.NVarChar, 100).Value = employee.FirstName;
+                    command.Parameters.Add("@LastName", SqlDbType.NVarChar, 100).Value = employee.LastName;
+                    command.Parameters.Add("@Email", SqlDbType.NVarChar, 255).Value = employee.Email;
+                    command.Parameters.Add("@DepartmentID", SqlDbType.Int).Value = employee.DepartmentID;
+                    command.Parameters.Add("@RoleID", SqlDbType.Int).Value = employee.RoleID;
+                    command.Parameters.Add("@TerminationDate", SqlDbType.Date).Value = employee.TerminationDate?.ToDateTime(TimeOnly.MinValue);
 
                     connection.Open();
 
@@ -114,7 +112,7 @@ namespace Data.AdoNet
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@EmployeeID", id);
+                    command.Parameters.Add("@EmployeeID", SqlDbType.Int).Value = id);
 
                     connection.Open();
 
@@ -180,7 +178,7 @@ namespace Data.AdoNet
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@EmployeeID", id);
+                    command.Parameters.Add("@EmployeeID", SqlDbType.Int).Value = id;
 
                     connection.Open();
 
