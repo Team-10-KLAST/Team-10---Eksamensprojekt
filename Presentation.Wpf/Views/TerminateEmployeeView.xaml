@@ -1,69 +1,125 @@
 ﻿<UserControl x:Class="Presentation.Wpf.Views.TerminateEmployeeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:Presentation.Wpf.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             Background="{StaticResource PageBackgroundBrush}"
              d:DesignHeight="800" d:DesignWidth="450">
-    <StackPanel Margin="20" VerticalAlignment="Stretch">
+
+    <Grid Margin="20" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Employee info -->
+            <RowDefinition Height="Auto"/>
+            <!-- Termination date -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+        </Grid.RowDefinitions>
 
         <!-- Header -->
         <TextBlock Text="Terminate employee"
                    Style="{StaticResource HeaderTextStyle}"
-                   Margin="0 0 0 20"/>
+                   Margin="0,0,0,20"
+                   Grid.Row="0"/>
 
-        <!-- Employee info section -->
-        <StackPanel Margin="0 0 0 20">
-            <TextBlock Text="Employee information"
-                       Style="{StaticResource BodyTextStyle}"
-                       FontWeight="SemiBold"
-                       Margin="0 0 0 10"/>
+        <!-- Employee info  -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{Binding Employee.FullName}"
-                       Style="{StaticResource BodyTextStyle}"
-                       FontSize="16"/>
+            <!-- Left column -->
+            <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,0,16,0">
 
-            <TextBlock Text="{Binding Employee.Email}"
-                       Style="{StaticResource BodyTextStyle}"
-                       Foreground="{StaticResource SecondaryTextBrush}"/>
+                <TextBlock Text="Full name"
+                           Style="{StaticResource BaseTextStyle}"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Text="{Binding Employee.FullName, Mode=OneWay}"
+                         Height="33"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         Style="{StaticResource ReadonlyInputFieldStyle}"
+                         Margin="0,0,0,12"/>
 
-            <TextBlock Text="{Binding Employee.RoleName}"
-                       Style="{StaticResource BodyTextStyle}"
-                       Margin="0 5 0 0"/>
+                <TextBlock Text="Email"
+                           Style="{StaticResource BaseTextStyle}"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Text="{Binding Employee.Email, Mode=OneWay}"
+                         Height="33"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         Style="{StaticResource ReadonlyInputFieldStyle}"
+                         Margin="0,0,0,12"/>
+            </StackPanel>
 
-            <TextBlock Text="{Binding Employee.DepartmentName}"
-                       Style="{StaticResource BodyTextStyle}"/>
-        </StackPanel>
+            <!-- Right column -->
+            <StackPanel Grid.Column="1" Orientation="Vertical" Margin="16,0,0,0">
 
+                <TextBlock Text="Role"
+                           Style="{StaticResource BaseTextStyle}"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Text="{Binding Employee.RoleName, Mode=OneWay}"
+                         Height="33"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         Style="{StaticResource ReadonlyInputFieldStyle}"
+                         Margin="0,0,0,12"/>
+
+                <TextBlock Text="Department"
+                           Style="{StaticResource BaseTextStyle}"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Text="{Binding Employee.DepartmentName, Mode=OneWay}"
+                         Height="33"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         Style="{StaticResource ReadonlyInputFieldStyle}"
+                         Margin="0,0,0,12"/>
+            </StackPanel>
+        </Grid>
 
         <!-- Termination date -->
-        <StackPanel Margin="0 0 0 20">
-            <TextBlock Text="Termination date:"
-                       Style="{StaticResource BodyTextStyle}"/>
+        <StackPanel Grid.Row="2" Margin="0,0,0,24">
 
-            <DatePicker SelectedDate="{Binding TerminationDate, Mode=TwoWay}"
+            <TextBlock Text="Termination date"
+                       Style="{StaticResource BaseTextStyle}"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,4"/>
+
+           
+            <DatePicker SelectedDate="{Binding TerminationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         DisplayDateStart="{x:Static sys:DateTime.Today}"
-                        Margin="0 5 0 0"
+                        Height="33"
+                        HorizontalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
                         Background="{StaticResource InputFieldBackgroundBrush}"
                         BorderBrush="{StaticResource InputFieldBorderBrush}"/>
         </StackPanel>
 
-
         <!-- Buttons -->
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,0,0">
 
             <Button Content="Cancel"
                     Command="{Binding CloseCommand}"
                     Style="{StaticResource RejectButtonStyle}"
-                    Width="100"/>
+                    Margin="0,0,8,0"/>
 
             <Button Content="Confirm"
                     Command="{Binding ConfirmCommand}"
-                    Style="{StaticResource PrimaryButtonStyle}"
-                    Width="100"/>
+                    Style="{StaticResource PrimaryButtonStyle}"/>
         </StackPanel>
-    </StackPanel>
+
+    </Grid>
 </UserControl>
