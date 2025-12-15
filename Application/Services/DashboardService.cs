@@ -172,7 +172,7 @@ namespace Application.Services
         // Builds the subtext line
         private string BuildSubText(string employeeName, string location, string dateText)
         {
-            return $"{employeeName} · {location} · {dateText}";
+            return $"{employeeName} · {location} · Registrated: {dateText}";
         }
 
         // Builds employee name consistently
