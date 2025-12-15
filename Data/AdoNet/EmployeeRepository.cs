@@ -112,7 +112,7 @@ namespace Data.AdoNet
                 {
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.Parameters.Add("@EmployeeID", SqlDbType.Int).Value = id);
+                    command.Parameters.Add("@EmployeeID", SqlDbType.Int).Value = id;
 
                     connection.Open();
 
