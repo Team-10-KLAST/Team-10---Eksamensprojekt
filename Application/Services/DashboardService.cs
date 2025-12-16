@@ -66,8 +66,8 @@ namespace Application.Services
                 var employeeName = BuildEmployeeName(employee);
                 var location = description?.Location ?? "Unknown";
                 var dateText = request.NeededByDate.ToString("dd.MM.yyyy");
-                var subText = BuildSubText(employeeName, location, dateText);
-
+                //var subText = BuildSubText(employeeName, location, dateText);
+                var subText = $"{employeeName} · {location} · Needed by: {dateText} ";
                 result.Add(new RequestDashboardDisplayModel
                 {
                     RequestID = request.RequestID,
@@ -172,7 +172,7 @@ namespace Application.Services
         // Builds the subtext line
         private string BuildSubText(string employeeName, string location, string dateText)
         {
-            return $"{employeeName} · {location} · {dateText}";
+            return $"{employeeName} · {location} · Registrated: {dateText}";
         }
 
         // Builds employee name consistently
