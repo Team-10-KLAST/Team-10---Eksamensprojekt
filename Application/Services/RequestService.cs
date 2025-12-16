@@ -58,6 +58,8 @@ public class RequestService : IRequestService
     public void ApproveRequest(int requestId, int approverId, string? comment = null)
     {
         var loan = ProcessBaseRequest(requestId, approverId);
+        loan.Status = LoanStatus.ACTIVE;
+        _loanRepository.Update(loan);
 
         var device = _deviceRepository.GetByID(loan.DeviceID)
                  ?? throw new InvalidOperationException("Device not found");
@@ -94,7 +96,7 @@ public class RequestService : IRequestService
         _decisionRepository.Add(decision);
     }
 
-    // Common processing for both approval and rejection of requests
+    // Common processing for both approval and rejection of requests. Update loan with ApproverID and change request.Status to CLOSED.
     private Loan ProcessBaseRequest(int requestId, int approverId)
     {
         var loan = _loanRepository.GetAll().FirstOrDefault(l => l.RequestID == requestId);
