@@ -8,6 +8,7 @@ using System.Windows.Input;
 
 namespace Presentation.Wpf.ViewModels
 {
+    // ViewModel for a status card on the dashboard
     public class StatusCardViewModel
     {
         public string Title { get; set; } = null!;

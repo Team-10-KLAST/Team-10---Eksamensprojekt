@@ -7,248 +7,162 @@ using System.Windows.Input;
 using Application.Interfaces;
 using Application.Interfaces.Service;
 using Application.Models;
+using Application.Models.DisplayModels;
+using Application.Services;
 using Presentation.Wpf.Commands;
+using Presentation.Wpf.Views;
 
 namespace Presentation.Wpf.ViewModels
 {
+    // ViewModel for the device view
     public class DeviceViewModel : OverlayHostViewModel
     {
         // Service used to retrieve devices from the database
         private readonly IDeviceService _deviceService;
         private readonly IDeviceDescriptionService _deviceDescriptionService;
-        private readonly ILoanService _loanService;
-        private readonly IEmployeeService _employeeService;
 
-        // View-only representation of a device row for the Devices table
-        public class DeviceRow
-        {
-            public int DeviceId { get; set; }
+        // Collection of all devices (unfiltered)
+        public ObservableCollection<DeviceDisplayModel> Devices { get; } = new();
 
-            public string Type { get; set; } = string.Empty;
+        // Collectionview for filtered devices
+        public ICollectionView DevicesView { get; }
 
-            public string Os { get; set; } = string.Empty;
+        // Device types for filtering
+        public ObservableCollection<string> DeviceTypes { get; } = new();
 
-            public string Owner { get; set; } = string.Empty;
+        // Device status options for filtering
+        public ObservableCollection<string> DeviceStatusOptions { get; } = new();
 
-            public string Location { get; set; } = string.Empty;
-
-            public string Status { get; set; } = string.Empty;
-
-            public DateOnly? RegisteredDate { get; set; }
-
-            public DateOnly? ExpiryDate { get; set; }
-        }
-
-        public ObservableCollection<DeviceRow> Devices { get; } = new();
-
-        private DeviceRow? _selectedDevice;
-
-        public DeviceRow? SelectedDevice
-        {
-            get => _selectedDevice;
-            set
-            {
-                if (!Equals(_selectedDevice, value))
-                {
-                    _selectedDevice = value;
-                    OnPropertyChanged(nameof(SelectedDevice));
-                }
-            }
-        }
-
+        // Search text
         private string _searchText = string.Empty;
-
         public string SearchText
         {
             get => _searchText;
             set
             {
-                if (_searchText != value)
-                {
-                    _searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
-
-                    // Trigger refiltering when the search text changes
-                    var view = CollectionViewSource.GetDefaultView(Devices);
-                    view.Refresh();
-                }
+                if (SetProperty(ref _searchText, value))
+                    DevicesView.Refresh();
             }
         }
 
-        public ObservableCollection<string> ComboBoxDeviceType { get; } =
-            new ObservableCollection<string>
-            {
-                "Device Type",
-                "Laptop",
-                "Mobile"
-            };
-
-        public ObservableCollection<string> ComboBoxStatus { get; } =
-            new ObservableCollection<string>
-            {
-                "Status",
-                "Registered",
-                "Canceled",
-                "Planned",
-                "Ordered",
-                "Received",
-                "In Use",
-                "In Stock"
-            };
-
-        //For Combobox filter
-        private string _selectedDeviceType = "Device Type";
+        // Selected device type
+        private const string AllDeviceTypes = "Device Type";
+        private string _selectedDeviceType = AllDeviceTypes;
         public string SelectedDeviceType
         {
             get => _selectedDeviceType;
             set
             {
-                if (_selectedDeviceType != value)
-                {
-                    _selectedDeviceType = value;
-                    OnPropertyChanged(nameof(SelectedDeviceType));
-                    var view = CollectionViewSource.GetDefaultView(Devices);
-                    view.Refresh();
-                }
+                if (SetProperty(ref _selectedDeviceType, value))
+                    DevicesView.Refresh();
             }
         }
 
-        private string _selectedStatus = "Status";
+        // Selected status
+        private const string AllStatuses = "Status";
+        private string _selectedStatus = AllStatuses;
         public string SelectedStatus
         {
             get => _selectedStatus;
             set
             {
-                if (_selectedStatus != value)
-                {
-                    _selectedStatus = value;
-                    OnPropertyChanged(nameof(SelectedStatus));
-                    var view = CollectionViewSource.GetDefaultView(Devices);
-                    view.Refresh();
-                }
+                if (SetProperty(ref _selectedStatus, value))
+                    DevicesView.Refresh();
             }
         }
 
-        // Reloads data from the service
+        // Commands
         public ICommand RefreshCommand { get; }
-
-        // Opens/highlights the selected device row
         public ICommand OpenDeviceCommand { get; }
-
         public ICommand RegisterDeviceCommand { get; }
 
-        public DeviceViewModel(IDeviceService deviceService, IDeviceDescriptionService deviceDescriptionService, ILoanService loanService, IEmployeeService employeeService)
+        // Constructor
+        public DeviceViewModel(IDeviceService deviceService, IDeviceDescriptionService deviceDescriptionService)
         {
-            _deviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
+            _deviceService = deviceService;
             _deviceDescriptionService = deviceDescriptionService;
-            _loanService = loanService;
-            _employeeService = employeeService;
 
-            var view = CollectionViewSource.GetDefaultView(Devices);
-            view.Filter = DeviceFilter;
+            DevicesView = CollectionViewSource.GetDefaultView(Devices);
+            DevicesView.Filter = DeviceFilter;
 
             RefreshCommand = new RelayCommand(LoadDevices);
-            OpenDeviceCommand = new RelayCommand<DeviceRow>(OpenDevice);
+            OpenDeviceCommand = new RelayCommand<DeviceDisplayModel>(OpenDevice);
             RegisterDeviceCommand = new RelayCommand(OpenRegisterDeviceOverlay);
 
             LoadDevices();
         }
 
+        // Loads devices from the service into the Devices collection
         private void LoadDevices()
         {
             Devices.Clear();
+            foreach (var d in _deviceService.GetAllDeviceDisplayModels())
+                Devices.Add(d);
 
-            foreach (Device device in _deviceService.GetAllDevices())
-            {
-                var deviceDescription = _deviceDescriptionService.GetByID(device.DeviceDescriptionID);
-                var loan = _loanService.GetMostRecentLoanByDeviceID(device.DeviceID);
+            DeviceTypes.Clear();
+            DeviceTypes.Add(AllDeviceTypes);
+            foreach (var type in _deviceDescriptionService.GetAllDeviceTypeOptions())
+                DeviceTypes.Add(type);
 
-                var row = new DeviceRow
-                {
-                    DeviceId = device.DeviceID,
+            DeviceStatusOptions.Clear();
+            DeviceStatusOptions.Add(AllStatuses);
+            foreach (var status in Enum.GetNames(typeof(DeviceStatus)))
+                DeviceStatusOptions.Add(status);
 
-                    Type = deviceDescription.DeviceType,
-                    Os = deviceDescription.OperatingSystem,
-                    Location = deviceDescription.Location,
-                    
-                    Owner = loan!=null? _employeeService.GetEmployeeByID(loan.BorrowerID).Email:string.Empty,
+            SelectedDeviceType = AllDeviceTypes;
+            SelectedStatus = AllStatuses;
 
-                    Status = device.Status.ToString(),
-                    RegisteredDate = device.PurchaseDate,
-                    ExpiryDate = device.ExpectedEndDate
-                }; 
+            DevicesView.Refresh();
+        }
 
-                Devices.Add(row);
-            }
-
-            var view = CollectionViewSource.GetDefaultView(Devices);
-            view.Refresh();
+        // Public method to refresh the device list
+        public void Refresh()
+        {
+            LoadDevices();
         }
 
         // Defines how the Devices collection is filtered based on SearchText & combobox
         private bool DeviceFilter(object obj)
         {
-            if (obj is not DeviceRow row)
-                return false;
+            if (obj is not DeviceDisplayModel row) return false;
             var comparison = StringComparison.OrdinalIgnoreCase;
 
-            bool textMatches = true;
-            if (!string.IsNullOrWhiteSpace(SearchText))
-            {
-                var search = SearchText.Trim();
+            bool matchesSearch =
+            string.IsNullOrWhiteSpace(SearchText)
+            || row.DeviceID.ToString().Contains(SearchText, comparison)
+            || row.Type.Contains(SearchText, comparison)
+            || row.OS.Contains(SearchText, comparison)
+            || row.Location.Contains(SearchText, comparison)
+            || row.OwnerEmail.Contains(SearchText, comparison);
 
-                bool matchesId = row.DeviceId.ToString()
-                    .Contains(search, comparison);
+            bool matchesType =
+                SelectedDeviceType == AllDeviceTypes
+                || string.Equals(row.Type, SelectedDeviceType, comparison);
 
-                bool matchesType = row.Type
-                    .Contains(search, comparison);
+            bool matchesStatus =
+                SelectedStatus == AllStatuses
+                || string.Equals(row.Status, SelectedStatus, comparison);
 
-                bool matchesOs = row.Os
-                    .Contains(search, comparison);
-
-                bool matchesLocation = row.Location
-                    .Contains(search, comparison);
-
-                bool matchesOwner = row.Owner
-                    .Contains(search, comparison);
-
-                textMatches = matchesId || matchesType || matchesOs || matchesLocation || matchesOwner;
-            }
-
-            bool typeMatches = true;
-
-            if (!string.Equals(SelectedDeviceType, "Device Type", comparison))
-            {
-                typeMatches = string.Equals(row.Type, SelectedDeviceType, comparison);
-            }
-
-            bool statusMatches = true;
-
-            if (!string.Equals(SelectedStatus, "Status", comparison))
-            {
-                typeMatches = string.Equals(row.Status, SelectedStatus.Replace(" ",""), comparison);
-            }
-
-            return textMatches && typeMatches && statusMatches;
+            return matchesSearch && matchesType && matchesStatus;
         }
 
-
-
-        private void OpenDevice(DeviceRow? row)
+        // Opens the device update overlay for the selected device
+        private void OpenDevice(DeviceDisplayModel? row)
         {
             if (row == null)
                 return;
 
-            SelectedDevice = row;
-            var deviceDisplayModel = _deviceService.GetDeviceDisplayByID(row.DeviceId);
-            var overlayUpdateDeviceVM = new UpdateDeviceViewModel(deviceDisplayModel, _deviceService);
-            ShowOverlay(overlayUpdateDeviceVM);
+            var deviceDisplayModel = _deviceService.GetDeviceDisplayByID(row.DeviceID);
+            if (deviceDisplayModel == null)
+                return;
+
+            ShowOverlay(new UpdateDeviceViewModel(deviceDisplayModel, _deviceService));
         }
 
+        // Opens the register device overlay
         private void OpenRegisterDeviceOverlay()
         {
-            var overlayVm = new RegisterDeviceViewModel(_deviceDescriptionService, _deviceService);
-            ShowOverlay(overlayVm);
+            ShowOverlay(new RegisterDeviceViewModel(_deviceDescriptionService, _deviceService));
         }
     }
 }
