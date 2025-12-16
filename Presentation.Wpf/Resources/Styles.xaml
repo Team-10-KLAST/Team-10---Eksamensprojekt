@@ -117,13 +117,13 @@
         </Style.Triggers>
     </Style>
 
-    <!-- DataGrid column header style (uses for all list views (DeviceView + EmployeeView)) -->
+    <!-- DataGrid column header style (used for all list views (DeviceView + EmployeeView)) -->
     <Style x:Key="StandardDataGridHeaderStyle"
            TargetType="DataGridColumnHeader">
 
         <!-- Header text styling -->
         <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
 
@@ -133,18 +133,39 @@
         <Setter Property="BorderThickness" Value="0,0,0,1" />
 
         <!-- Header content alignment -->
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
 
         <!-- Header padding (controls spacing around "Device", "Type", etc.) -->
-        <Setter Property="Padding" Value="24,12" />
+        <Setter Property="Padding" Value="10,6" />
+
+        <!-- Cursor og hover-effekt -->
+        <Setter Property="Cursor" Value="Hand" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource PrimaryActionHoverBrush}" />
+                <Setter Property="Foreground" Value="White" />
+            </Trigger>
+        </Style.Triggers>
+
     </Style>
 
 
-
     <!-- DataGrid style -->
-    <Style TargetType="DataGrid" x:Key="EmployeeDataGridStyle">
+    <Style TargetType="DataGrid" x:Key="StandardDataGridStyle">
+        <!-- General behavior -->
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="CanUserDeleteRows" Value="False" />
+        <Setter Property="CanUserResizeRows" Value="False" />
+        <Setter Property="CanUserReorderColumns" Value="False" />
+        <Setter Property="CanUserResizeColumns" Value="False" />
+        <Setter Property="IsReadOnly" Value="True" />
+
         <!-- Font for all list views -->
         <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+        <Setter Property="FontSize" Value="15" />
 
         <!-- Zebra rows: white / light grey / white / light grey -->
         <Setter Property="RowBackground" Value="{DynamicResource PanelBackgroundBrush}" />
@@ -160,9 +181,27 @@
         <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource BorderBrush}" />
 
         <!-- Column header appearance -->
-        <Setter Property="ColumnHeaderHeight" Value="40" />
+        <Setter Property="ColumnHeaderHeight" Value="44" />
         <Setter Property="ColumnHeaderStyle"
                 Value="{StaticResource StandardDataGridHeaderStyle}" />
+
+        <!-- Row selection behavior -->
+        <Setter Property="SelectionUnit" Value="FullRow" />
+        <Setter Property="SelectionMode" Value="Single" />
+
+        <!-- Row height -->
+        <Setter Property="RowHeight" Value="36" />
+
+        <!-- Cell alignment (centrerer indholdet) -->
+        <Setter Property="CellStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Padding" Value="4,2" />
+                </Style>
+            </Setter.Value>
+        </Setter>
 
         <!-- Row style (hover and selected states) -->
         <Setter Property="RowStyle">
@@ -184,6 +223,81 @@
                 </Style>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <!-- Centered cell text style for datagrid cells -->
+    <Style x:Key="CenteredCellTextStyle" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="Padding" Value="4,2" />
+    </Style>
+    
+    <!-- Left-aligned cell text style for datagrid cells -->
+    <Style x:Key="LeftCellTextStyle" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Left" />
+        <Setter Property="Padding" Value="4,2" />
+    </Style>
+
+    <!-- Action button style for buttons inside DataGrid cells -->
+    <Style x:Key="GridActionButtonStyle"
+       TargetType="Button"
+       BasedOn="{StaticResource PrimaryButtonStyle}">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10,6" />
+    </Style>
+
+
+    <!-- SearchbarPanel style -->
+    <Style x:Key="SearchPanelStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource PanelBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Margin" Value="0,0,0,20" />
+    </Style>
+
+    <!-- List container style for border around lists -->
+    <Style x:Key="ListContainerStyle" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Margin" Value="0,10,0,0" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <!-- Search input base style -->
+    <Style x:Key="SearchInputBaseStyle" TargetType="Control">
+        <Setter Property="Height" Value="30" />
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+        <Setter Property="Background" Value="{DynamicResource InputFieldBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InputFieldBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="4,0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <!-- Search input TextBox style -->
+    <Style x:Key="SearchInputTextBoxStyle"
+       TargetType="TextBox"
+       BasedOn="{StaticResource SearchInputBaseStyle}">
+    </Style>
+
+    <!-- Search input ComboBox style -->
+    <Style x:Key="SearchInputComboBoxStyle"
+       TargetType="ComboBox"
+       BasedOn="{StaticResource SearchInputBaseStyle}">
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="IsEditable" Value="False" />
     </Style>
 
     <!-- Card / panel style -->

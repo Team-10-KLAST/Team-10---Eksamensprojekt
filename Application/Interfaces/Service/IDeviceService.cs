@@ -16,5 +16,6 @@ namespace Application.Interfaces.Service
         DeviceDisplayModel? GetDeviceDisplayByID(int deviceID);
         IEnumerable<Device> GetAvailableDevicesByType(string deviceType);
         IEnumerable<DeviceDisplayModel> GetAvailableDeviceDisplayModels(string? deviceType);
+        IEnumerable<DeviceDisplayModel> GetAllDeviceDisplayModels();
     }
 }

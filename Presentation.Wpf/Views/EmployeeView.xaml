@@ -6,13 +6,10 @@
              xmlns:local="clr-namespace:Presentation.Wpf.Views" 
              xmlns:vm="clr-namespace:Presentation.Wpf.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="600">
-
-
+             d:DesignHeight="600" d:DesignWidth="1000">
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource PageBackgroundBrush}">
         <!-- Main content -->
-
         <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -24,83 +21,94 @@
             <Grid Grid.Row="0" Margin="0,0,0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" MinWidth="158" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Title and subtitle -->
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="55" Margin="0,0,131,0">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
                     <TextBlock Text="Employees" Style="{StaticResource HeaderTextStyle}" />
-                    <TextBlock Text="Add, find and manage employees." Style="{StaticResource BodyTextStyle}" Margin="0,8,0,0"/>
+                    <TextBlock Text="Add, find and manage employees." 
+                               Style="{StaticResource BodyTextStyle}" 
+                               Margin="0,8,0,0"/>
                 </StackPanel>
 
-                <!-- Action buttons aligned to the right and vertically centered -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Height="20">
-                    <Button Content="Export" Command="{Binding ExportCommand}" Margin="0,0,10,0" Style="{StaticResource PrimaryButtonStyle}"/>
-                    <Button Content="Add employee" Command="{Binding AddEmployeeCommand}" Style="{StaticResource PrimaryButtonStyle}"/>
+                <!-- Action button -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="Add employee"
+                            Command="{Binding AddEmployeeCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}"/>
                 </StackPanel>
             </Grid>
 
-
             <!-- Search and filter box -->
-            <Border Grid.Row="1" Background="{StaticResource PanelBackgroundBrush}" CornerRadius="4" Padding="10" Margin="0,0,0,20" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+            <Border Grid.Row="1" Style="{StaticResource SearchPanelStyle}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBox Width="200"
-                     Margin="0,0,10,0"
-                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     VerticalAlignment="Center"
-                     Height="30"
-                     Style="{StaticResource InputFieldStyle}" />
 
+                    <!-- Search -->
+                    <TextBox Width="200"
+                             Margin="0,0,10,0"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource SearchInputTextBoxStyle}" />
+
+                    <!-- Department filter -->
                     <ComboBox Width="150"
-          ItemsSource="{Binding Departments}"
-          SelectedItem="{Binding SelectedDepartment}"
-          Margin="0,0,10,0"
-          VerticalAlignment="Center"
-          Height="30"
-          IsEditable="False"
-          Style="{StaticResource InputFieldComboStyle}"/>
+                              Margin="0,0,10,0"
+                              ItemsSource="{Binding Departments}"
+                              SelectedItem="{Binding SelectedDepartment}"
+                              Style="{StaticResource SearchInputComboBoxStyle}" />
                 </StackPanel>
             </Border>
 
             <!-- Employee table -->
-            <DataGrid Grid.Row="2" ItemsSource="{Binding EmployeesView}"
-              AutoGenerateColumns="False"
-              CanUserAddRows="False"
-              HeadersVisibility="Column"
-              GridLinesVisibility="Horizontal"
-              Style="{StaticResource EmployeeDataGridStyle}">
+            <Border Grid.Row="2" Style="{StaticResource ListContainerStyle}">
+            <DataGrid ItemsSource="{Binding EmployeesView}"
+                      Style="{StaticResource StandardDataGridStyle}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="*"/>
-                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
-                    <DataGridTextColumn Header="Role" Binding="{Binding RoleName}" Width="*"/>
-                    <DataGridTextColumn Header="Department" Binding="{Binding DepartmentName}" Width="*"/>
-                    <DataGridTextColumn Header="Devices" Binding="{Binding DeviceCount}" Width="*"/>
-                    <DataGridTextColumn Header="Termination date"
-                    Binding="{Binding TerminationDate, StringFormat=\{0:yyyy-MM-dd\}}" Width="*"/>
-                    <DataGridTemplateColumn Header="Terminate">
-                        <DataGridTemplateColumn.CellTemplate>
+                        <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="158" ElementStyle="{StaticResource LeftCellTextStyle}"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="230" ElementStyle="{StaticResource LeftCellTextStyle}"/>
+                        <DataGridTextColumn Header="Role" Binding="{Binding RoleName}" Width="100" ElementStyle="{StaticResource LeftCellTextStyle}"/>
+                        <DataGridTextColumn Header="Department" Binding="{Binding DepartmentName}" Width="130" ElementStyle="{StaticResource LeftCellTextStyle}"/>
+                        <DataGridTextColumn Header="Devices" Binding="{Binding DeviceCount}" Width="90" ElementStyle="{StaticResource CenteredCellTextStyle}"/>
+                        <DataGridTextColumn Header="Termination date" Binding="{Binding TerminationDate, StringFormat='{}{0:dd-MM-yyyy}'}" Width="170" ElementStyle="{StaticResource CenteredCellTextStyle}"/>
+                    <DataGridTemplateColumn Header="Terminate" Width="115">
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+
+                            <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Terminate"
                                         Command="{Binding DataContext.TerminateEmployeeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}"
-                                        Style="{StaticResource PrimaryButtonStyle}" />
+                                        Style="{StaticResource GridActionButtonStyle}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Assign">
-                        <DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn Header="Assign" Width="115">
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+
+                            <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Assign"
                                         Command="{Binding DataContext.AssignDeviceCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}" 
-                                        Style="{StaticResource PrimaryButtonStyle}" />
+                                        Style="{StaticResource GridActionButtonStyle}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+            </Border>
         </Grid>
-
+            
         <!-- Error message -->
         <TextBlock Text="{Binding ErrorMessage}"
                    Foreground="{StaticResource ErrorBrush}"

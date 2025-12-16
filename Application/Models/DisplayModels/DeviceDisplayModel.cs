@@ -18,6 +18,7 @@ namespace Application.Models.DisplayModels
 
         public bool Wiped { get; set; }
         public string OwnerFullName { get; set; } = string.Empty;
+        public string OwnerEmail { get; set; } = string.Empty;
         public List<string> StatusHistory { get; set; } = new();
     }
 }
