@@ -5,14 +5,14 @@ using Application.Interfaces.Repository;
 using Application.Models;
 using Microsoft.Data.SqlClient;
 
-namespace Data.AdoNet
+namespace Data.Repositories
 {
     public class LoanRepository : IRepository<Loan>
     {
         // Holds the database connection dependency
         private readonly DatabaseConnection _databaseConnection;
 
-        // Stores the DatabaseConnection instance passed from DI
+        // Constructor injection of the DatabaseConnection
         public LoanRepository(DatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
@@ -25,24 +25,26 @@ namespace Data.AdoNet
         private const string SpUpdateLoan = "uspUpdateLoan";
         private const string SpDeleteLoan = "uspDeleteLoan";
 
-        // Retrieves all loans from the database using a stored procedure
+        // Retrieves all loans
         public IEnumerable<Loan> GetAll()
         {
             var loans = new List<Loan>();
+
             try
             {
-                using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(SpGetAllLoans, connection)
+                using (var connection = _databaseConnection.CreateConnection())
+                using (var command = new SqlCommand(SpGetAllLoans, connection))
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
 
-                connection.Open();
-                using var reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    loans.Add(MapLoan(reader));
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            loans.Add(MapLoan(reader));
+                        }
+                    }
                 }
                 return loans;
             }
@@ -50,9 +52,13 @@ namespace Data.AdoNet
             {
                 throw new DataException("An error occurred while retrieving loans from the database.", exception);
             }
+            catch (Exception exception)
+            {
+                throw new DataException("Unexpected error while retrieving loans.", exception);
+            }
         }
 
-        // Retrieves a single loan by its LoanID using a stored procedure
+        // Retrieves a single loan by its LoanID
         public Loan? GetByID(int loanID)
         {
             if (loanID <= 0)
@@ -60,30 +66,34 @@ namespace Data.AdoNet
 
             try
             {
-                using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(SpGetLoanByID, connection)
+                using (var connection = _databaseConnection.CreateConnection())
+                using (var command = new SqlCommand(SpGetLoanByID, connection))
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@LoanID", SqlDbType.Int).Value = loanID;
 
-                command.Parameters.Add("@LoanID", SqlDbType.Int).Value = loanID;
+                    connection.Open();
 
-                connection.Open();
-                using var reader = command.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    return MapLoan(reader);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            return MapLoan(reader);
+                    }
                 }
+
                 return null;
             }
             catch (SqlException exception)
             {
-                throw new DataException($"An error occurred while retrieving the loan with ID {loanID} from the database.", exception);
+                throw new DataException($"An error occurred while retrieving the loan with ID {loanID}.", exception);
+            }
+            catch (Exception exception)
+            {
+                throw new DataException("Unexpected error while retrieving loan by ID.", exception);
             }
         }
 
-        // Adds a new loan to the database using a stored procedure
+        // Adds a new loan
         public void Add(Loan loan)
         {
             if (loan is null)
@@ -91,30 +101,34 @@ namespace Data.AdoNet
 
             try
             {
-                using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(SpAddLoan, connection)
+                using (var connection = _databaseConnection.CreateConnection())
+                using (var command = new SqlCommand(SpAddLoan, connection))
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
+                    command.CommandType = CommandType.StoredProcedure;
 
-                AddLoanParameters(command, loan);
+                    AddLoanParameters(command, loan);
 
-                connection.Open();
+                    connection.Open();
 
-                var result = command.ExecuteScalar();
+                    var result = command.ExecuteScalar();
 
-                if (result == null || result == DBNull.Value)
-                    throw new KeyNotFoundException("Could not get generated LoanID from stored procedure.");
+                    if (result == null || result == DBNull.Value)
+                        throw new KeyNotFoundException("Could not get generated LoanID from stored procedure.");
 
-                loan.LoanID = Convert.ToInt32(result);
+                    loan.LoanID = Convert.ToInt32(result);
+                }
             }
             catch (SqlException exception)
             {
                 throw new DataException("An error occurred while adding a new loan to the database.", exception);
             }
+            catch (Exception exception)
+            {
+                throw new DataException("Unexpected error while adding loan.", exception);
+            }
         }
 
-        // Updates an existing loan in the database using a stored procedure
+        // Updates an existing loan
         public void Update(Loan loan)
         {
             if (loan is null)
@@ -125,28 +139,33 @@ namespace Data.AdoNet
 
             try
             {
-                using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(SpUpdateLoan, connection)
+                using (var connection = _databaseConnection.CreateConnection())
+                using (var command = new SqlCommand(SpUpdateLoan, connection))
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
+                    command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.Add("@LoanID", SqlDbType.Int).Value = loan.LoanID;
-                AddLoanParameters(command, loan);
+                    command.Parameters.Add("@LoanID", SqlDbType.Int).Value = loan.LoanID;
+                    AddLoanParameters(command, loan);
 
-                connection.Open();
-                var rowsAffected = command.ExecuteNonQuery();
+                    connection.Open();
 
-                if (rowsAffected == 0)
-                    throw new KeyNotFoundException($"No loan found with ID {loan.LoanID} to update.");
+                    var rowsAffected = command.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                        throw new KeyNotFoundException($"No loan found with ID {loan.LoanID} to update.");
+                }
             }
             catch (SqlException exception)
             {
-                throw new DataException($"An error occurred while updating the loan with ID {loan.LoanID} in the database.", exception);
+                throw new DataException($"An error occurred while updating the loan with ID {loan.LoanID}.", exception);
+            }
+            catch (Exception exception)
+            {
+                throw new DataException("Unexpected error while updating loan.", exception);
             }
         }
 
-        // Deletes a loan from the database using a stored procedure
+        // Deletes a loan
         public void Delete(int loanID)
         {
             if (loanID <= 0)
@@ -154,27 +173,31 @@ namespace Data.AdoNet
 
             try
             {
-                using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(SpDeleteLoan, connection)
+                using (var connection = _databaseConnection.CreateConnection())
+                using (var command = new SqlCommand(SpDeleteLoan, connection))
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@LoanID", SqlDbType.Int).Value = loanID;
 
-                command.Parameters.Add("@LoanID", SqlDbType.Int).Value = loanID;
+                    connection.Open();
 
-                connection.Open();
-                var rowsAffected = command.ExecuteNonQuery();
+                    var rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected == 0)
-                    throw new KeyNotFoundException($"No loan found with ID {loanID} to delete.");
+                    if (rowsAffected == 0)
+                        throw new KeyNotFoundException($"No loan found with ID {loanID} to delete.");
+                }
             }
             catch (SqlException exception)
             {
-                throw new DataException($"An error occurred while deleting the loan with ID {loanID} from the database.", exception);
+                throw new DataException($"An error occurred while deleting the loan with ID {loanID}.", exception);
+            }
+            catch (Exception exception)
+            {
+                throw new DataException("Unexpected error while deleting loan.", exception);
             }
         }
 
-        // Maps a SqlDataReader row to a Loan object
+        // Maps a SqlDataReader row to a Loan object for GetAll and GetByID methods
         private static Loan MapLoan(SqlDataReader reader)
         {
             var endDateOrdinal = reader.GetOrdinal("EndDate");
@@ -203,7 +226,7 @@ namespace Data.AdoNet
             };
         }
 
-        // Adds parameters for a Loan object to a SqlCommand
+        // Adds parameters for a Loan object to a SqlCommand for Add and Update methods
         private static void AddLoanParameters(SqlCommand command, Loan loan)
         {
             command.Parameters.Add("@Status", SqlDbType.Int).Value = (int)loan.Status;

@@ -1,5 +1,5 @@
 using Application.Models;
-using Data.AdoNet;
+using Data.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -24,6 +24,59 @@ public class DecisionRepositoryTest
         _repository = new DecisionRepository(database);
     }
 
+    // Test to verify that GetAll method returns all decisions
+    [TestMethod]
+    public void GetAll_ShouldReturnAllDecisions()
+    {
+        //Arrange (Handled in Setup)
+
+        //Act
+        var result = _repository.GetAll().ToList();
+
+        //Assert
+        Assert.IsTrue(result.Count > 0, "Should return at least one decision.");
+        Assert.IsTrue(result.All(decision => Enum.IsDefined(typeof(DecisionStatus), decision.Status)), "All decisions should have a valid status.");
+    }
+
+    // Test to verify that GetByID method retrieves the correct decision
+    [TestMethod]
+    public void GetByID_ShouldReturnCorrectDecision()
+    {
+        // Arrange
+        var decision = new Decision
+        {
+            Status = DecisionStatus.REJECTED,
+            DecisionDate = DateOnly.FromDateTime(DateTime.Today),
+            Comment = "Test get by id",
+            LoanID = 1
+        };
+        _repository.Add(decision);
+
+        var added = _repository.GetAll().Last(d => d.Comment == "Test get by id" && d.LoanID == 1);
+
+        // Act
+        var result = _repository.GetByID(added.DecisionID);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual("Test get by id", result!.Comment);
+    }
+
+    // Test to verify that GetByID returns null for non-existing ID
+    [TestMethod]
+    public void GetByID_ShouldReturnNullForNonExisting()
+    {
+        // Arrange
+        int nonExistingId = 99999;
+
+        // Act
+        var result = _repository.GetByID(nonExistingId);
+
+        // Assert
+        Assert.IsNull(result);
+    }
+
+    // Test to verify that Add method inserts a new decision
     [TestMethod]
     public void Add_ShouldInsertDecision()
     {
@@ -42,31 +95,9 @@ public class DecisionRepositoryTest
         // Assert
         var all = _repository.GetAll().ToList();
         Assert.IsTrue(all.Any(d => d.Comment == "Test add"));
-    }
+    }   
 
-    [TestMethod]
-    public void GetByID_ShouldReturnCorrectDecision()
-    {
-        // Arrange
-        var decision = new Decision
-        {
-            Status = DecisionStatus.REJECTED,
-            DecisionDate = DateOnly.FromDateTime(DateTime.Today),
-            Comment = "Test get by id",
-            LoanID = 1
-        };
-        _repository.Add(decision);
-        // Find den rigtige beslutning baseret på unikke felter
-        var added = _repository.GetAll().Last(d => d.Comment == "Test get by id" && d.LoanID == 1);
-
-        // Act
-        var result = _repository.GetByID(added.DecisionID);
-
-        // Assert
-        Assert.IsNotNull(result);
-        Assert.AreEqual("Test get by id", result!.Comment);
-    }
-
+    // Test to verify that update method modifies the decision
     [TestMethod]
     public void Update_ShouldModifyDecision()
     {
@@ -79,7 +110,8 @@ public class DecisionRepositoryTest
             LoanID = 1
         };
         _repository.Add(decision);
-        var added = _repository.GetAll().Last();
+        
+        var added = _repository.GetByID(decision.DecisionID)!;
 
         // Act
         added.Comment = "Updated comment";
@@ -91,6 +123,7 @@ public class DecisionRepositoryTest
         Assert.AreEqual("Updated comment", updated!.Comment);
     }
 
+    // Test to verify that Delete method removes the decision
     [TestMethod]
     public void Delete_ShouldRemoveDecision()
     {
@@ -111,30 +144,6 @@ public class DecisionRepositoryTest
         // Assert
         var deleted = _repository.GetByID(added.DecisionID);
         Assert.IsNull(deleted);
-    }
-
-    [TestMethod]
-    public void GetByID_ShouldReturnNullForNonExisting()
-    {
-        // Act
-        var result = _repository.GetByID(-1);
-
-        // Assert
-        Assert.IsNull(result);
-    }
-
-    // Test
-    [TestMethod]
-    public void GetAll_ShouldReturnAllDecisions()
-    {
-        //Arrange (Handled in Setup)
-
-        //Act
-        var result = _repository.GetAll().ToList();
-
-        //Assert
-        Assert.IsTrue(result.Count > 0, "Should return at least one decision.");
-        Assert.IsTrue(result.All(decision => Enum.IsDefined(typeof(DecisionStatus), decision.Status)), "All decisions should have a valid status.");
-    }
+    }    
 }
 

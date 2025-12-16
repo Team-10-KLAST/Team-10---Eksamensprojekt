@@ -1,6 +1,5 @@
 ﻿using Application.Services;  
 using Data;                    
-using Data.AdoNet;
 using Presentation.Wpf.ViewModels;  
 using System.Windows.Controls;
 

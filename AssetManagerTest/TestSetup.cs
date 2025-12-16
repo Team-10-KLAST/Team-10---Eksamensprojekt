@@ -15,7 +15,7 @@ public class TestSetup
     public static void AssemblyInitialize(TestContext context)
     {
         DatabaseConnection.Initialize(
-            "Server=Annetes;Database=AssetManagement_Test;Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;"
+            "Server=ANNETTES;Database=AssetManagement_Test;Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;"
         );
     }
 }

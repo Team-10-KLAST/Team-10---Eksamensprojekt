@@ -118,6 +118,6 @@
                    HorizontalAlignment="Left" />
         
         <!-- Overlay -->
-        <local:OverlayHost DataContext="{Binding}" Loaded="OverlayHost_Loaded" />
+        <local:OverlayHost DataContext="{Binding}" />
     </Grid>
 </UserControl>

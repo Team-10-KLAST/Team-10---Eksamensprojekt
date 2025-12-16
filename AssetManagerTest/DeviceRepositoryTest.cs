@@ -1,6 +1,7 @@
+using System.Data;
 using Application.Models;
 using Data;
-using Data.AdoNet;
+using Data.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AssetManagerTest;
@@ -216,7 +217,7 @@ public class DeviceRepositoryTest
 
     // Test to verify that Update throws KeyNotFoundException when device does not exist
     [TestMethod]
-    [ExpectedException(typeof(KeyNotFoundException))]
+    [ExpectedException(typeof(DataException))]
     public void Update_ShouldThrow_WhenDeviceNotFound()
     {
         // Arrange
@@ -274,7 +275,7 @@ public class DeviceRepositoryTest
 
     // Test to verify that Delete throws KeyNotFoundException when device does not exist
     [TestMethod]
-    [ExpectedException(typeof(KeyNotFoundException))]
+    [ExpectedException(typeof(DataException))]
     public void Delete_ShouldThrow_WhenDeviceNotFound()
     {
         // Arrange (handled in Setup)
