@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Models;
-using Microsoft.Data.SqlClient; 
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 
 namespace Data.AdoNet
@@ -24,13 +25,16 @@ namespace Data.AdoNet
         public IEnumerable<Decision> GetAll()
         {
             var decisions = new List<Decision>();
+
             using var connection = _databaseConnection.CreateConnection();
             using var command = new SqlCommand("uspGetAllDecisions", connection)
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
+
             connection.Open();
             using var reader = command.ExecuteReader();
+
             while (reader.Read())
             {
                 DateTime dt = reader.GetDateTime(reader.GetOrdinal("DecisionDate"));
@@ -55,10 +59,11 @@ namespace Data.AdoNet
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
-            command.Parameters.AddWithValue("@DecisionStatus", (int)entity.Status);
-            _ = command.Parameters.AddWithValue("@DecisionDate", entity.DecisionDate);
-            command.Parameters.AddWithValue("@Comment", entity.Comment ?? "");
-            command.Parameters.AddWithValue("@LoanID", entity.LoanID);
+
+            command.Parameters.Add("@DecisionStatus", SqlDbType.Int).Value = (int)entity.Status;
+            command.Parameters.Add("@DecisionDate", SqlDbType.Date).Value = entity.DecisionDate.ToDateTime(TimeOnly.MinValue);
+            command.Parameters.Add("@Comment", SqlDbType.NVarChar, 2000).Value = entity.Comment ?? string.Empty;
+            command.Parameters.Add("@LoanID", SqlDbType.Int).Value = entity.LoanID;
 
             connection.Open();
             command.ExecuteNonQuery();
@@ -113,11 +118,14 @@ namespace Data.AdoNet
             {
                 CommandType = System.Data.CommandType.StoredProcedure
             };
-            command.Parameters.AddWithValue("@DecisionID", entity.DecisionID);
-            command.Parameters.AddWithValue("@DecisionStatus", (int)entity.Status);
-            command.Parameters.AddWithValue("@DecisionDate", entity.DecisionDate);
-            command.Parameters.AddWithValue("@Comment", entity.Comment ?? "");
-            command.Parameters.AddWithValue("@LoanID", entity.LoanID);
+            command.Parameters.Add("@DecisionID", SqlDbType.Int).Value = entity.DecisionID;
+            command.Parameters.Add("@DecisionStatus", SqlDbType.Int).Value = (int)entity.Status;
+
+            command.Parameters.Add("@DecisionDate", SqlDbType.Date).Value = entity.DecisionDate.ToDateTime(TimeOnly.MinValue);
+
+            command.Parameters.Add("@Comment", SqlDbType.NVarChar,2000).Value = entity.Comment ?? string.Empty;
+
+            command.Parameters.Add("@LoanID", SqlDbType.Int).Value = entity.LoanID;
 
             connection.Open();
             command.ExecuteNonQuery();
