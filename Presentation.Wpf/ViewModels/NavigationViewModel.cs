@@ -63,7 +63,7 @@ namespace Presentation.Wpf.ViewModels
 
             _dashboard = new DashboardViewModel(dashboardService,requestService, deviceService, employeeService, deviceDescriptionService);
             _employees = new EmployeeViewModel(employeeService, loanService, deviceService, deviceDescriptionService);
-            _devices = new DeviceViewModel(deviceService, deviceDescriptionService, loanService, employeeService);
+            _devices = new DeviceViewModel(deviceService, deviceDescriptionService);
 
             LogoutCommand = new RelayCommand(() => _navigateBack());
             ShowDashboardCommand = new RelayCommand(() =>
@@ -71,8 +71,16 @@ namespace Presentation.Wpf.ViewModels
                 _dashboard.Refresh();
                 CurrentView = _dashboard;
             });
-            ShowEmployeesCommand = new RelayCommand(() => CurrentView = _employees);
-            ShowDevicesCommand = new RelayCommand(() => CurrentView = _devices);
+            ShowEmployeesCommand = new RelayCommand(() =>
+            {
+                _employees.Refresh();
+                CurrentView = _employees;
+            });
+            ShowDevicesCommand = new RelayCommand(() =>
+            {
+                _devices.Refresh();
+                CurrentView = _devices;
+            });
 
             CurrentView = _dashboard;            
         }

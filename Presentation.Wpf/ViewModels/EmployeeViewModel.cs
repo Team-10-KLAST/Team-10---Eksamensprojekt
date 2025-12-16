@@ -15,6 +15,7 @@ using Presentation.Wpf.Commands;
 
 namespace Presentation.Wpf.ViewModels
 {
+    // ViewModel for the employee view
     public class EmployeeViewModel : OverlayHostViewModel
     {
         // Services
@@ -118,6 +119,12 @@ namespace Presentation.Wpf.ViewModels
             {
                 ErrorMessage = "Unable to load employees. Please try again later.";
             }
+        }
+
+        // Public method to refresh the employee list
+        public void Refresh()
+        {
+            LoadEmployees();
         }
 
 

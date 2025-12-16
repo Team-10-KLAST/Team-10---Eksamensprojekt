@@ -251,6 +251,47 @@ namespace Application.Services
             });
         }
 
+        // Gets all device display models for the deviceviewmodel
+        public IEnumerable<DeviceDisplayModel> GetAllDeviceDisplayModels()
+        {
+            var devices = _deviceRepository.GetAll();
+
+            foreach (var device in devices)
+            {
+                var description = _deviceDescriptionService.GetByID(device.DeviceDescriptionID);
+                if (description == null)
+                    continue;
+
+                var loan = _loanRepository.GetAll()
+                    .Where(loan => loan.DeviceID == device.DeviceID)
+                    .OrderByDescending(loan => loan.LoanID)
+                    .FirstOrDefault();
+
+                var employee = loan != null
+                    ? _employeeRepository.GetByID(loan.BorrowerID)
+                    : null;
+
+                string ownerEmail =
+                    loan != null
+                    && device.Status != DeviceStatus.INSTOCK
+                    && device.Status != DeviceStatus.CANCELLED
+                        ? employee?.Email ?? string.Empty
+                        : string.Empty;
+
+                yield return new DeviceDisplayModel
+                {
+                    DeviceID = device.DeviceID,
+                    Type = description.DeviceType,
+                    OS = description.OperatingSystem,
+                    Location = description.Location,
+                    Status = device.Status.ToString(),
+                    RegistrationDate = device.PurchaseDate?.ToDateTime(TimeOnly.MinValue),
+                    ExpirationDate = device.ExpectedEndDate?.ToDateTime(TimeOnly.MinValue),
+                    OwnerEmail = ownerEmail
+                };
+            }
+        }
+
         // Helper method to map Device and DeviceDescription to DeviceDisplayModel
         private DeviceDisplayModel MapToDisplayModel(Device device, DeviceDescription desc)
         {
