@@ -13,8 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Application.Services;
-using Data;
-using Data.AdoNet;
 using Presentation.Wpf.ViewModels;
 
 namespace Presentation.Wpf.Views
@@ -24,11 +22,6 @@ namespace Presentation.Wpf.Views
         public EmployeeView()
         {
             InitializeComponent();
-        }
-
-        private void OverlayHost_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

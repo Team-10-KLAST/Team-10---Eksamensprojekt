@@ -9,7 +9,7 @@ using Application.Interfaces.Repository;
 using Application.Interfaces.Service;
 using Application.Models;
 using Application.Services;
-using Data.AdoNet;
+using Data.Repositories;
 using Presentation.Wpf.Commands;
 
 namespace Presentation.Wpf.ViewModels

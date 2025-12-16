@@ -8,7 +8,7 @@ using Application.Interfaces.Repository;
 using Application.Models;
 using Microsoft.Data.SqlClient;
 
-namespace Data.AdoNet
+namespace Data.Repositories
 {
     public class DepartmentRepository : IRepository<Department>
     {
@@ -21,36 +21,44 @@ namespace Data.AdoNet
             _databaseConnection = databaseConnection;
         }
 
-        // Retrieves all departments from the database
+        // Stored procedure name
+        private const string SpGetAllDepartments = "uspGetAllDepartments";
+
+
+        // Retrieves all departments
         public IEnumerable<Department> GetAll()
         {
-            const string procedure = "uspGetAllDepartments";
             var departments = new List<Department>();
 
             try
             {
-                using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(procedure, connection)
+                using (var connection = _databaseConnection.CreateConnection())
+                using (var command = new SqlCommand(SpGetAllDepartments, connection))
                 {
-                    CommandType = System.Data.CommandType.StoredProcedure
-                };
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
 
-                connection.Open();
-                using var reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    departments.Add(new Department
+                    using (var reader = command.ExecuteReader())
                     {
-                        DepartmentID = reader.GetInt32(reader.GetOrdinal("DepartmentID")),
-                        Name = reader.GetString(reader.GetOrdinal("DepartmentName"))
-                    });
+                        while (reader.Read())
+                        {
+                            departments.Add(new Department
+                            {
+                                DepartmentID = reader.GetInt32(reader.GetOrdinal("DepartmentID")),
+                                Name = reader.GetString(reader.GetOrdinal("DepartmentName"))
+                            });
+                        }
+                    }
                 }
                 return departments;
             }
             catch (SqlException exception)
             {
                 throw new DataException("An error occurred while retrieving departments from the database.", exception);
+            }
+            catch (Exception exception)
+            {
+                throw new DataException("Unexpected error while retrieving departments.", exception);
             }
         }
 
@@ -60,5 +68,4 @@ namespace Data.AdoNet
         Department? IRepository<Department>.GetByID(int id) => throw new NotImplementedException();
         void IRepository<Department>.Update(Department entity) => throw new NotImplementedException();
     }
-
 }

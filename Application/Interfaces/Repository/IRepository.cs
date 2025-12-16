@@ -4,14 +4,10 @@ namespace Application.Interfaces.Repository
 {
     public interface IRepository<T>
     {
+        IEnumerable<T> GetAll();
+        T? GetByID(int id);
         void Add(T entity);
         void Update(T entity);
         void Delete(int id);
-
-        // Get all entities.
-        IEnumerable<T> GetAll();
-
-        // Get entity by primary key.
-        T? GetByID(int id);
     }
 }

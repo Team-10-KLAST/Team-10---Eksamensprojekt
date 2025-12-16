@@ -1,5 +1,5 @@
 using Data;
-using Data.AdoNet;
+using Data.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AssetManagerTest;
@@ -53,11 +53,11 @@ public class DeviceDescriptionRepositoryTest
 
     // Test to verify that GetByID method throws ArgumentException for invalid IDs
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
+    [ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void GetByID_ShouldThrowArgumentException_WhenIDIsInvalid()
     {
         // Arrange (handled in Setup)
-        
+
         // Act
         _repository.GetByID(0);
 

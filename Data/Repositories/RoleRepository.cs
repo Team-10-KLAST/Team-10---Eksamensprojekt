@@ -8,7 +8,7 @@ using Application.Interfaces.Repository;
 using Application.Models;
 using Microsoft.Data.SqlClient;
 
-namespace Data.AdoNet
+namespace Data.Repositories
 {
     public class RoleRepository : IRepository<Role>
     {
@@ -21,38 +21,45 @@ namespace Data.AdoNet
             _databaseConnection = databaseConnection;
         }
 
-        // Retrieves all roles from the database
+        // Stored procedure name
+        private const string SpGetAllRoles = "uspGetAllRoles";
+
+        // Retrieves all roles
         public IEnumerable<Role> GetAll()
         {
-            const string procedure = "uspGetAllRoles";
             var roles = new List<Role>();
 
             try
             {
-                using var connection = _databaseConnection.CreateConnection();
-                using var command = new SqlCommand(procedure, connection)
+                using (var connection = _databaseConnection.CreateConnection())
+                using (var command = new SqlCommand(SpGetAllRoles, connection))
                 {
-                    CommandType = System.Data.CommandType.StoredProcedure
-                };
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
 
-                connection.Open();
-                using (var reader = command.ExecuteReader())
-                    while (reader.Read())
+                    using (var reader = command.ExecuteReader())
                     {
-                        roles.Add(new Role
+                        while (reader.Read())
                         {
-                            RoleID = reader.GetInt32(reader.GetOrdinal("RoleID")),
-                            Name = reader.GetString(reader.GetOrdinal("RoleName"))
-                        });
+                            roles.Add(new Role
+                            {
+                                RoleID = reader.GetInt32(reader.GetOrdinal("RoleID")),
+                                Name = reader.GetString(reader.GetOrdinal("RoleName"))
+                            });
+                        }
                     }
+                }
                 return roles;
             }
             catch (SqlException exception)
             {
                 throw new DataException("An error occurred while retrieving roles from the database.", exception);
             }
+            catch (Exception exception)
+            {
+                throw new DataException("Unexpected error while retrieving roles.", exception);
+            }
         }
-
 
         // Not yet implemented methods. Can be implemented later as needed.
         void IRepository<Role>.Add(Role entity) => throw new NotImplementedException();
