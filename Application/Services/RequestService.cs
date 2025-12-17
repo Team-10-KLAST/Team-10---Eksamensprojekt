@@ -59,6 +59,7 @@ public class RequestService : IRequestService
     {
         var loan = ProcessBaseRequest(requestId, approverId);
         loan.Status = LoanStatus.ACTIVE;
+        loan.StartDate = DateOnly.FromDateTime(DateTime.Today);
         _loanRepository.Update(loan);
 
         var device = _deviceRepository.GetByID(loan.DeviceID)
