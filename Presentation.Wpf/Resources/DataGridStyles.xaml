@@ -1,0 +1,126 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- DataGrid column header style (used for all list views (DeviceView + EmployeeView)) -->
+    <Style x:Key="StandardDataGridHeaderStyle"
+       TargetType="DataGridColumnHeader">
+
+        <!-- Header text styling -->
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+
+        <!-- Header background and bottom border -->
+        <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+
+        <!-- Header content alignment -->
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+
+        <!-- Header padding (controls spacing around "Device", "Type", etc.) -->
+        <Setter Property="Padding" Value="10,6" />
+
+        <!-- Cursor og hover-effekt -->
+        <Setter Property="Cursor" Value="Hand" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource PrimaryActionHoverBrush}" />
+                <Setter Property="Foreground" Value="White" />
+            </Trigger>
+        </Style.Triggers>
+
+    </Style>
+
+    <!-- DataGrid style -->
+    <Style TargetType="DataGrid" x:Key="StandardDataGridStyle">
+        <!-- General behavior -->
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="CanUserDeleteRows" Value="False" />
+        <Setter Property="CanUserResizeRows" Value="False" />
+        <Setter Property="CanUserReorderColumns" Value="False" />
+        <Setter Property="CanUserResizeColumns" Value="False" />
+        <Setter Property="IsReadOnly" Value="True" />
+
+        <!-- Font for all list views -->
+        <Setter Property="FontFamily" Value="{StaticResource PrimaryFont}" />
+        <Setter Property="FontSize" Value="15" />
+
+        <!-- Zebra rows: white / light grey / white / light grey -->
+        <Setter Property="RowBackground" Value="{DynamicResource PanelBackgroundBrush}" />
+        <Setter Property="AlternatingRowBackground" Value="{DynamicResource PageBackgroundBrush}" />
+        <Setter Property="AlternationCount" Value="2" />
+
+        <!-- Outer border around the DataGrid -->
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+
+        <!-- Horizontal grid lines between rows -->
+        <Setter Property="GridLinesVisibility" Value="Horizontal" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource BorderBrush}" />
+
+        <!-- Column header appearance -->
+        <Setter Property="ColumnHeaderHeight" Value="44" />
+        <Setter Property="ColumnHeaderStyle"
+            Value="{StaticResource StandardDataGridHeaderStyle}" />
+
+        <!-- Row selection behavior -->
+        <Setter Property="SelectionUnit" Value="FullRow" />
+        <Setter Property="SelectionMode" Value="Single" />
+
+        <!-- Row height -->
+        <Setter Property="RowHeight" Value="36" />
+
+        <!-- Cell alignment (centrerer indholdet) -->
+        <Setter Property="CellStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Padding" Value="4,2" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Row style (hover and selected states) -->
+        <Setter Property="RowStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                    <Style.Triggers>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource PrimaryActionHoverBrush}" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                        <!-- Selected -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource PrimaryActionBrush}" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Centered cell text style for datagrid cells -->
+    <Style x:Key="CenteredCellTextStyle" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="Padding" Value="4,2" />
+    </Style>
+
+    <!-- Left-aligned cell text style for datagrid cells -->
+    <Style x:Key="LeftCellTextStyle" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Left" />
+        <Setter Property="Padding" Value="4,2" />
+    </Style>
+</ResourceDictionary>

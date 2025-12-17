@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 using Application.Interfaces; // For IDbAccess
 using Application.Interfaces.Repository;
 using Application.Models;
-using Data.AdoNet;
+using Data.Repositories;
 using AssetManagerTest;
 using Data;
 
