@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Application.Interfaces.Repository;
 using Data;
-using Data.AdoNet;
+using Data.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AssetManagerTest;
