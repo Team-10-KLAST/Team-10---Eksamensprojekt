@@ -16,5 +16,10 @@ namespace Application.Models
         public DateOnly DecisionDate { get; set; }
         public string Comment { get; set; } = "";
         public int LoanID { get; set; }
+
+        // Parameterless constructor for ADO.NET.
+        public Decision()
+        {
+        }
     }
 }
