@@ -29,7 +29,8 @@ public class RequestService : IRequestService
     // Constructor injecting the required repositories
     public RequestService(IRepository<Request> requestRepository, IRepository<Employee> employeeRepository, 
         IRepository<Device> deviceRepository, IRepository<DeviceDescription> deviceDescriptionRepository, 
-        IRepository<Loan> loanRepository, IRepository<Decision> decisionRepository, IDeviceService deviceService, ILoanService loanService, IEmployeeService employeeService)
+        IRepository<Loan> loanRepository, IRepository<Decision> decisionRepository, 
+        IDeviceService deviceService, ILoanService loanService, IEmployeeService employeeService)
     {
         _requestRepository = requestRepository;
         _employeeRepository = employeeRepository;

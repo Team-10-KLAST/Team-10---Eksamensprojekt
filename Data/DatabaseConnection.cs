@@ -9,14 +9,18 @@ namespace Data
 {
     public sealed class DatabaseConnection
     {
+        // Singleton instance
         private static DatabaseConnection? _instance;
 
         private readonly string _connectionString;
+
+        // Private constructor prevents external instantiation
         private DatabaseConnection(string connectionString)
         {
             _connectionString = connectionString;
         }
 
+        // Initializes the singleton instance once
         public static void Initialize(string connectionString)
         {
             if (_instance == null)
@@ -29,6 +33,7 @@ namespace Data
             }
         }
 
+        // Returns the single instance of DatabaseConnection
         public static DatabaseConnection GetInstance()
         {
             if (_instance == null)
@@ -37,9 +42,10 @@ namespace Data
             }
             return _instance;
         }
+
+        // Creates and returns a new SqlConnection
         public SqlConnection CreateConnection()
         {
-            // Create and return a new SqlConnection using the stored connection string
             return new SqlConnection(_connectionString);
         }
     }
