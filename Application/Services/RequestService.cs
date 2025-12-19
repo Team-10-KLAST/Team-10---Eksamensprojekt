@@ -56,9 +56,12 @@ public class RequestService : IRequestService
     }
 
     // Approves a request by updating the relevant entities and recording the decision
-    public void ApproveRequest(int requestId, int approverId, string? comment = null)
+    public void ApproveRequest(int requestId, string approverEmail, string? comment = null)
     {
-        var loan = ProcessBaseRequest(requestId, approverId);
+        var approver = _employeeService.GetEmployeeByEmail(approverEmail)
+                  ?? throw new InvalidOperationException("Approver not found");
+
+        var loan = ProcessBaseRequest(requestId, approver.EmployeeID);
         loan.Status = LoanStatus.ACTIVE;
         loan.StartDate = DateOnly.FromDateTime(DateTime.Today);
         _loanRepository.Update(loan);
@@ -79,9 +82,12 @@ public class RequestService : IRequestService
     }
 
     // Rejects a request by updating the relevant entities and recording the decision
-    public void RejectRequest(int requestId, int approverId, string comment)
+    public void RejectRequest(int requestId, string approverEmail, string comment)
     {
-        var loan = ProcessBaseRequest(requestId, approverId);
+        var approver = _employeeService.GetEmployeeByEmail(approverEmail)
+                  ?? throw new InvalidOperationException("Approver not found");
+
+        var loan = ProcessBaseRequest(requestId, approver.EmployeeID);
 
         var device = _deviceRepository.GetByID(loan.DeviceID)
                  ?? throw new InvalidOperationException("Device not found");
