@@ -17,5 +17,6 @@ namespace Application.Interfaces.Service
         IEnumerable<Device> GetAvailableDevicesByType(string deviceType);
         IEnumerable<DeviceDisplayModel> GetAvailableDeviceDisplayModels(string? deviceType);
         IEnumerable<DeviceDisplayModel> GetAllDeviceDisplayModels();
+        DateTime CalculateDefaultExpiryDate(DateTime registrationDate);
     }
 }

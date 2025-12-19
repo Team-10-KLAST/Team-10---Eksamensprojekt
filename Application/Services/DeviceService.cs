@@ -111,6 +111,8 @@ namespace Application.Services
                 throw new ArgumentNullException(nameof(device));
             }
 
+            device.Status = DeviceStatus.INSTOCK;
+
             _deviceRepository.Add(device);
         }
 
@@ -305,5 +307,8 @@ namespace Application.Services
                 ExpirationDate = device.ExpectedEndDate?.ToDateTime(TimeOnly.MinValue)
             };
         }
+
+        public DateTime CalculateDefaultExpiryDate(DateTime registrationDate)
+        => registrationDate.AddYears(3);
     }
 }
