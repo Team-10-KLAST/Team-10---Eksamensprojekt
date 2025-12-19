@@ -24,9 +24,9 @@
 
             <!-- Header -->
             <TextBlock Grid.Row="0"
-                   Text="Add request"
-                   Style="{StaticResource BaseHeaderTextStyle}"
-                   Margin="0,0,0,16" />
+                       Text="Add request"
+                       Style="{StaticResource BaseHeaderTextStyle}"
+                       Margin="0,0,0,16" />
 
             <!-- UI input -->
             <Grid Grid.Row="1">
@@ -37,67 +37,75 @@
                 <!-- Left -->
                 <StackPanel Grid.Column="0" Margin="0,0,16,0">                    
                     <TextBlock Text="Requester (e-mail)"
-                Style="{StaticResource BaseTextStyle}" 
-                FontWeight="SemiBold"
+                               Style="{StaticResource BaseTextStyle}" 
+                               FontWeight="SemiBold"
                                Margin="0,0,0,4"/>
                      
                     <TextBox Height="33"
-                HorizontalAlignment="Stretch"
-                Background="{StaticResource InputFieldBackgroundBrush}"
-                BorderBrush="{StaticResource InputFieldBorderBrush}"
-                Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Stretch"
+                             Background="{StaticResource InputFieldBackgroundBrush}"
+                             BorderBrush="{StaticResource InputFieldBorderBrush}"
+                             Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center"/>
                     
                     <!-- Email validering -->
-                    <TextBlock Text="{Binding EmailErrorMsg}" Foreground="Red" Style="{StaticResource BaseTextStyle}"/>
+                    <TextBlock Text="{Binding EmailErrorMsg}" 
+                               Foreground="Red" 
+                               Style="{StaticResource BaseTextStyle}"/>
 
                     <!-- ComboBox -->
                     <TextBlock Text="Operative System"
-                    Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"
-                    Margin="0,0,0,4"/>
+                               Style="{StaticResource BaseTextStyle}" 
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
                     <ComboBox Style="{StaticResource InputFieldComboStyle}"
-                    ItemsSource="{Binding OSOptions}"
-                    SelectedItem="{Binding SelectedOS, Mode=TwoWay}"
-                    Height="33"/>
+                              ItemsSource="{Binding OSOptions}"
+                              SelectedItem="{Binding SelectedOS, Mode=TwoWay}"
+                              Height="33"/>
                 </StackPanel>
                 <!-- Right -->
                 <StackPanel Grid.Column="1" Margin="16,0,0,0">
                     <TextBlock Text="Device Type"
-                    Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"
+                               Style="{StaticResource BaseTextStyle}" 
+                               FontWeight="SemiBold"
                                Margin="0,0,0,4"/>
+                    
                     <ComboBox Style="{StaticResource InputFieldComboStyle}"
-                    ItemsSource="{Binding DeviceTypeOptions}"
-                    SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}"
-                    Height="33"/>
+                              ItemsSource="{Binding DeviceTypeOptions}"
+                              SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}"
+                              Height="33"/>
+                    
                     <!-- Tom spacer for at matche valideringsfejlen i venstre side -->
                     <TextBlock Text="" Style="{StaticResource BaseTextStyle}"/>
 
                     <!-- ComboBox -->
                     <TextBlock Text="Location (country)"
-                    Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"
-                    Margin="0,0,0,4"/>
+                               Style="{StaticResource BaseTextStyle}" 
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
+                    
                     <ComboBox Style="{StaticResource InputFieldComboStyle}"
-                    ItemsSource="{Binding CountryOptions}"
-                    SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"
-                    Height="33"/>
+                              ItemsSource="{Binding CountryOptions}"
+                              SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"
+                              Height="33"/>
 
                     <!-- Needed by date -->
                     <TextBlock Text="Needed by date"
-                     Style="{StaticResource BaseTextStyle}"
-                     FontWeight="SemiBold"
-                     Margin="0,12,0,4"/>
+                               Style="{StaticResource BaseTextStyle}"
+                               FontWeight="SemiBold"
+                               Margin="0,12,0,4"/>
                     
 
-<DatePicker SelectedDate="{Binding NeededByDate, Mode=TwoWay}"
-     Height="33"
-     HorizontalAlignment="Stretch"
-            VerticalContentAlignment="Center"
-Background="{StaticResource InputFieldBackgroundBrush}"
-BorderBrush="{StaticResource InputFieldBorderBrush}"/>
-                    <TextBlock Text="{Binding DateErrorMsg}" Foreground="Red" Style="{StaticResource BaseTextStyle}"/>
+                    <DatePicker SelectedDate="{Binding NeededByDate, Mode=TwoWay}"
+                                Height="33"
+                                HorizontalAlignment="Stretch"
+                                VerticalContentAlignment="Center"
+                                Background="{StaticResource InputFieldBackgroundBrush}"
+                                BorderBrush="{StaticResource InputFieldBorderBrush}"/>
+                    
+                    <TextBlock Text="{Binding DateErrorMsg}" 
+                               Foreground="Red" 
+                               Style="{StaticResource BaseTextStyle}"/>
                 </StackPanel>
             </Grid>
 
@@ -105,13 +113,14 @@ BorderBrush="{StaticResource InputFieldBorderBrush}"/>
             <Border Grid.Row="2" Background="Transparent"/>
             <StackPanel Grid.Row="2" Margin="0,0,0,24">
                 <TextBlock Text="Comment / justification"
-                       Style="{StaticResource BaseTextStyle}" 
-                        FontWeight="SemiBold"/>
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"/>
+                
                 <TextBox Height="110"
-                     HorizontalAlignment="Stretch"
-                     Background="{StaticResource InputFieldBackgroundBrush}"
-                     BorderBrush="{StaticResource InputFieldBorderBrush}"
-                     Text="{Binding RequestComment, UpdateSourceTrigger=PropertyChanged}"/>
+                         HorizontalAlignment="Stretch"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         Text="{Binding RequestComment, UpdateSourceTrigger=PropertyChanged}"/>
 
             </StackPanel>
 
@@ -125,14 +134,15 @@ BorderBrush="{StaticResource InputFieldBorderBrush}"/>
 
                 <!-- Cancel button -->
                 <Button Grid.Column="1"
-                    Margin="0,0,8,0"
-                    Content="Cancel"
+                        Margin="0,0,8,0"
+                        Content="Cancel"
                         Style="{StaticResource RejectButtonStyle}"
-                    Command="{Binding CancelCommand}"/>
+                        Command="{Binding CancelCommand}"/>
+                
                 <!-- Submit button  -->
                 <Button Grid.Column="2"
-                    Content="Submit request"
-                    Command="{Binding SubmitCommand}"
+                        Content="Submit request"
+                        Command="{Binding SubmitCommand}"
                         Style="{StaticResource PrimaryButtonStyle}"/>
                 
             </Grid>

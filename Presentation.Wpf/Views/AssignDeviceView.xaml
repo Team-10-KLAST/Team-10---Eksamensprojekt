@@ -29,7 +29,7 @@
                    Text="Assign device"
                    Style="{StaticResource HeaderTextStyle}"
                    Margin="0,0,0,20"/>
-        
+
         <!-- Employee Info Section -->
         <Grid Grid.Row="1" Margin="0,0,0,16">
             <Grid.ColumnDefinitions>
@@ -71,11 +71,11 @@
                           SelectedItem="{Binding SelectedDeviceType}"
                           Style="{StaticResource InputFieldComboStyle}"
                           Height="33"/>
-            </StackPanel>            
+            </StackPanel>
         </Grid>
 
         <!-- Available Selection Section -->
-        <Grid Grid.Row="3" Margin="0,0,0,16">           
+        <Grid Grid.Row="3" Margin="0,0,0,16">
 
             <StackPanel Grid.Column="0" Margin="0,0,0,0">
                 <TextBlock Text="Available Devices"
@@ -142,119 +142,6 @@
                     Style="{StaticResource PrimaryButtonStyle}"/>
         </StackPanel>
     </Grid>
-    
-    <!--<Border Background="{StaticResource PanelBackgroundBrush}"
-            BorderBrush="{StaticResource BorderBrush}"
-            BorderThickness="1"
-            Padding="20"
-            CornerRadius="6"
-            VerticalAlignment="Stretch">
-
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-
-            <StackPanel Orientation="Vertical" Margin="0,0,0,10">
-
-                --><!-- Header --><!--
-                <TextBlock Text="Assign Device"
-                           Style="{StaticResource HeaderTextStyle}"
-                           Margin="0 0 0 20"/>
-
-                --><!-- Employee Email --><!--
-                <TextBlock Text="Employee Email"
-                           Style="{StaticResource BodyTextStyle}"
-                           FontWeight="SemiBold"/>
-                <TextBox Text="{Binding EmployeeEmail, Mode=OneWay}"
-                         Style="{StaticResource ReadonlyInputFieldStyle}"
-                         Margin="0 0 0 10"/>
-
-                --><!-- Department --><!--
-                <TextBlock Text="Department"
-                           Style="{StaticResource BodyTextStyle}"
-                           FontWeight="SemiBold"/>
-                <TextBox Text="{Binding Department, Mode=OneWay}"
-                         Style="{StaticResource ReadonlyInputFieldStyle}"
-                         Margin="0 0 0 20"/>
-
-                --><!-- Device Type --><!--
-                <TextBlock Text="Device Type"
-                           Style="{StaticResource BodyTextStyle}"
-                           FontWeight="SemiBold"/>
-                <ComboBox ItemsSource="{Binding DeviceTypes}"
-                          SelectedItem="{Binding SelectedDeviceType}"
-                          Background="{StaticResource InputFieldBackgroundBrush}"
-                          BorderBrush="{StaticResource InputFieldBorderBrush}"
-                          FontFamily="{StaticResource PrimaryFont}"
-                          FontSize="14"
-                          Height="28"
-                          Margin="0 0 0 20"/>
-
-                --><!-- Available Devices --><!--
-                <TextBlock Text="Available Devices"
-                           Style="{StaticResource BodyTextStyle}"
-                           FontWeight="SemiBold"/>
-                <ComboBox ItemsSource="{Binding AvailableDevices}"
-                          SelectedItem="{Binding SelectedDevice}"
-                          Background="{StaticResource InputFieldBackgroundBrush}"
-                          BorderBrush="{StaticResource InputFieldBorderBrush}"
-                          FontFamily="{StaticResource PrimaryFont}"
-                          FontSize="14"
-                          Height="28"
-                          Margin="0 0 0 20">
-
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Type}" FontWeight="Bold"/>
-                                <TextBlock Text="·"/>
-                                <TextBlock Text="{Binding OS}"/>
-                                <TextBlock Text="·"/>
-                                <TextBlock Text="{Binding Location}"/>
-                                <TextBlock Text=" (ID: "/>
-                                <TextBlock Text="{Binding DeviceID}"/>
-                                <TextBlock Text=")"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-
-                </ComboBox>
-
-
-                --><!-- Approver Email --><!--
-                <TextBlock Text="Approver Email"
-                           Style="{StaticResource BodyTextStyle}"
-                           FontWeight="SemiBold"/>
-                <TextBox Text="{Binding ApproverEmail, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource InputFieldStyle}"
-                         Margin="0 0 0 5"/>
-
-                --><!-- Approver Email Error --><!--
-                <TextBlock Text="{Binding ApproverEmailError}"
-                           Foreground="{StaticResource ErrorBrush}"
-                           Style="{StaticResource BodyTextStyle}"
-                           Margin="0 0 0 20"
-                           TextWrapping="Wrap"/>
-
-                --><!-- Buttons --><!--
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Margin="0 20 0 0">
-
-                    <Button Content="Cancel"
-                            Command="{Binding CloseCommand}"
-                            Style="{StaticResource RejectButtonStyle}"
-                            Width="90"
-                            Height="32"
-                            Margin="0,0,10,0"/>
-
-                    <Button Content="Assign"
-                            Command="{Binding AssignCommand}"
-                            Style="{StaticResource PrimaryButtonStyle}"
-                            Width="90"
-                            Height="32"/>
-                </StackPanel>
-            </StackPanel>
-        </ScrollViewer>
-    </Border>-->
 </UserControl>
 
 
