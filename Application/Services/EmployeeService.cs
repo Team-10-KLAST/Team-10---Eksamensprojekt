@@ -164,6 +164,12 @@ namespace Application.Services
             {
                 throw new ArgumentException("Invalid email");
             }
+            return GetEmployeeByEmailInternal(email);
+        }
+
+        // Internal helper to find employee by email without validation
+        private Employee? GetEmployeeByEmailInternal(string email)
+        {
             var employees = GetAllEmployees();
             return employees.FirstOrDefault(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
@@ -177,7 +183,7 @@ namespace Application.Services
             if (!IsValidEmailFormat(email))
                 return "Invalid email format.";
 
-            var employee = GetEmployeeByEmail(email);
+            var employee = GetEmployeeByEmailInternal(email);
             if (employee == null)
                 return "No employee found with that email.";
 

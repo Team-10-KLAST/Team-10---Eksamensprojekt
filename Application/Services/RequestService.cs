@@ -157,8 +157,21 @@ public class RequestService : IRequestService
             Status = RequestStatus.PENDING,
         };
         AddRequest(_request);
-        var employee = _employeeService.GetEmployeeByEmail(email) 
-            ?? throw new InvalidOperationException($"Employee with email {email} not found");
+        Employee? employee = null;
+        try
+        {
+            employee = _employeeService.GetEmployeeByEmail(email);
+        }
+        catch (ArgumentException ex)
+        {
+            throw new ArgumentException($"Invalid email format: {email}", ex);
+        }
+        
+        if (employee == null)
+        {
+            throw new InvalidOperationException($"Employee with email {email} not found");
+        }
+        
         int _borrowerID = employee.EmployeeID;
         int _deviceID = _deviceService.CreateVirtualDeviceID(deviceType, OS, country);
 
