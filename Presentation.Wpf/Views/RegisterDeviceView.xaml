@@ -20,7 +20,7 @@
         
         <!-- Header-->
         <TextBlock Text="Register device"
-                       Style="{StaticResource HeaderTextStyle}"
+                   Style="{StaticResource HeaderTextStyle}"
                    Margin="0,0,0,20"
                    Grid.Row="0"/>
 
@@ -44,7 +44,7 @@
                            FontWeight="SemiBold"
                            Margin="0,0,0,4"/>
                 <ComboBox ItemsSource="{Binding DeviceTypeOptions}"
-                         SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}"
+                          SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}"
                           Style="{StaticResource InputFieldComboStyle}"
                           Margin="0,0,0,12"/>
             </StackPanel>
@@ -56,7 +56,7 @@
                            FontWeight="SemiBold"
                            Margin="0,0,0,4"/>
                 <ComboBox ItemsSource="{Binding OSOptions}"
-                         SelectedItem="{Binding SelectedOS, Mode=TwoWay}"
+                          SelectedItem="{Binding SelectedOS, Mode=TwoWay}"
                           Style="{StaticResource InputFieldComboStyle}"
                           Margin="0,0,0,12"/>
 
@@ -65,11 +65,11 @@
             <!-- Location-->
             <StackPanel Grid.Row="2" HorizontalAlignment="Stretch">
                 <TextBlock Text="Location (country)" 
-                            Style="{StaticResource BaseTextStyle}"
-                            FontWeight="SemiBold"
+                           Style="{StaticResource BaseTextStyle}"
+                           FontWeight="SemiBold"
                            Margin="0,0,0,4"/>
                 <ComboBox ItemsSource="{Binding CountryOptions}"
-                         SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"
+                          SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"
                           Style="{StaticResource InputFieldComboStyle}"
                           Margin="0,0,0,12"/>
 

@@ -79,8 +79,8 @@
 
             <!-- Tentative comment -->
             <TextBlock Text="Tentative comment" 
-                    Style="{StaticResource BodyTextStyle}" 
-                    Margin="0,0,0,4"
+                       Style="{StaticResource BodyTextStyle}" 
+                       Margin="0,0,0,4"
                        FontWeight="SemiBold"/>
             <TextBox Text="{Binding Justification}" 
                      Style="{StaticResource ReadonlyInputFieldStyle}" 
