@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using Application.Interfaces.Service;
@@ -9,15 +8,21 @@ using Presentation.Wpf.Commands;
 
 namespace Presentation.Wpf.ViewModels
 {
+    // ViewModel for updating an existing device via an overlay panel
+    // Responsible for UI state and delegating domain rules to the service layer
     public class UpdateDeviceViewModel : OverlayPanelViewModelBase
     {
+        // Service used to validate and persist device updates
         private readonly IDeviceService _deviceService;
 
+        // Currently selected device being edited
         private DeviceDisplayModel _selectedDevice;
 
-        //event triggered when device is updated
+        // Raised after a device has been successfully updated
+        // Used by parent views to refresh device lists
         public event EventHandler? DeviceUpdated;
 
+        // Selected device bound to the overlay
         public DeviceDisplayModel SelectedDevice
         {
             get => _selectedDevice;
@@ -39,12 +44,14 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
-        // Read-only convenience properties for bindings
+        // Read-only convenience properties for display bindings
         public string Type => SelectedDevice?.Type ?? string.Empty;
         public string OS => SelectedDevice?.OS ?? string.Empty;
 
+        // Available status values for status selection
         public Array StatusOptions => Enum.GetValues(typeof(DeviceStatus));
 
+        // Device owner display name
         public string Owner
         {
             get => SelectedDevice?.OwnerFullName ?? string.Empty;
@@ -61,10 +68,13 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        // Needed-by date displayed as read-only information
         public DateTime? NeededByDate
         {
             get => SelectedDevice?.NeededByDate;
         }
+
+        // Device location
         public string Location
         {
             get => SelectedDevice?.Location ?? string.Empty;
@@ -81,6 +91,7 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        // Selected device status mapped between UI enum and underlying string value
         public DeviceStatus SelectedStatus
         {
             get
@@ -107,6 +118,8 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        // Device registration date
+        // Used as the basis for calculating a default expiration date
         public DateTime? RegistrationDate
         {
             get => SelectedDevice?.RegistrationDate;
@@ -119,10 +132,11 @@ namespace Presentation.Wpf.ViewModels
                 {
                     SelectedDevice.RegistrationDate = value;
 
-                    // Automatically set ExpirationDate = RegistrationDate + 3 years
                     if (value.HasValue)
                     {
-                        SelectedDevice.ExpirationDate = value.Value.AddYears(3);
+                        SelectedDevice.ExpirationDate =
+                            _deviceService.CalculateDefaultExpiryDate(value.Value);
+
                         OnPropertyChanged(nameof(ExpirationDate));
                     }
 
@@ -131,6 +145,7 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        // Device expiration date
         public DateTime? ExpirationDate
         {
             get => SelectedDevice?.ExpirationDate;
@@ -147,6 +162,7 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        // Indicates whether the device has been wiped
         public bool Wiped
         {
             get => SelectedDevice?.Wiped ?? false;
@@ -163,9 +179,11 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        // Commands
         public ICommand UpdateDeviceCommand { get; }
         public ICommand CancelCommand { get; }
 
+        // Constructor
         public UpdateDeviceViewModel(DeviceDisplayModel device, IDeviceService deviceService)
         {
             SelectedDevice = device;
@@ -175,9 +193,10 @@ namespace Presentation.Wpf.ViewModels
             CancelCommand = new RelayCommand(Cancel);
         }
 
+        // Handles updating the device by delegating validation and persistence
+        // to the service layer and notifying listeners on success
         private void UpdateDevice()
         {
-            // UI validation: show a friendly message first
             if (SelectedStatus == DeviceStatus.INSTOCK && !Wiped)
             {
                 MessageBox.Show(
@@ -206,7 +225,7 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
-
+        // Cancels the update operation and closes the overlay
         private void Cancel()
         {
             CloseOverlay();
