@@ -13,10 +13,13 @@ namespace Presentation.Wpf.ViewModels
 {
     public class TerminateEmployeeViewModel : OverlayPanelViewModelBase
     {
+        // Service
         private readonly IEmployeeService _employeeService;
 
+        // Employee being terminated
         public EmployeeDisplayModel Employee { get; }
 
+        // Selected termination date 
         private DateTime _terminationDate = DateTime.Today;
         public DateTime TerminationDate
         {
@@ -29,8 +32,10 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
+        // Command for confirming termination
         public ICommand ConfirmCommand { get; }
 
+        // Constructor
         public TerminateEmployeeViewModel(EmployeeDisplayModel employee,
                                       IEmployeeService employeeService)
         {
@@ -40,6 +45,7 @@ namespace Presentation.Wpf.ViewModels
             ConfirmCommand = new RelayCommand(Confirm, CanConfirm);
         }
 
+        // Executes the termination by delegating to the service layer
         private void Confirm()
         {
             var dateOnly = DateOnly.FromDateTime(TerminationDate);
@@ -47,6 +53,7 @@ namespace Presentation.Wpf.ViewModels
             CloseOverlay();
         }
 
+        // Determines if the termination date is valid, used to enable or disable confirm command
         private bool CanConfirm()
         {
             return TerminationDate.Date >= DateTime.Today;
