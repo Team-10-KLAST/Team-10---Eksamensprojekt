@@ -32,8 +32,7 @@
                        FontWeight="SemiBold"
                        Margin="0,0,0,4"/>
             <TextBox Style="{StaticResource ReadonlyInputFieldStyle}" 
-                     Text="{Binding TentativeAssigneeEmail, UpdateSourceTrigger=PropertyChanged}" 
-                     TextChanged="TextBox_TextChanged_4" 
+                     Text="{Binding TentativeAssigneeEmail, UpdateSourceTrigger=PropertyChanged}"
                      Height="33"
                      Margin="0,0,0,12"/>
 
