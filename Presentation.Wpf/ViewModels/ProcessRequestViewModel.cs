@@ -57,6 +57,7 @@ namespace Presentation.Wpf.ViewModels
                 OnPropertyChanged(nameof(NeededByDateString));
             }
         }
+
         public string NeededByDateString => NeededByDate != default
         ? NeededByDate.ToString("dd-MM-yyyy")
         : string.Empty;
@@ -133,22 +134,14 @@ namespace Presentation.Wpf.ViewModels
         // Approve and Reject methods
         private void Reject()
         {
-            var approver = _employeeService.GetEmployeeByEmail(Approver);
-            if (approver != null)
-            {
-                _requestService.RejectRequest(_requestId, approver.EmployeeID, Comment);
-                CloseOverlay();
-            }
+            _requestService.RejectRequest(_requestId, Approver, Comment);
+            CloseOverlay();
         }
 
         private void Approve()
         {
-            var approver = _employeeService.GetEmployeeByEmail(Approver);
-            if (approver != null)
-            {
-                _requestService.ApproveRequest(_requestId, approver.EmployeeID, Comment);
-                CloseOverlay();
-            }
+            _requestService.ApproveRequest(_requestId, Approver, Comment);
+            CloseOverlay();
         }
 
         // CanExecute methods for commands
