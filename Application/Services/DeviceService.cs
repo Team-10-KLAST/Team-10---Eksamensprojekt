@@ -57,13 +57,8 @@ namespace Application.Services
             var description = _deviceDescriptionService.GetByID(device.DeviceDescriptionID)
                               ?? throw new InvalidOperationException("Could not find description for device.");
 
-            // Find loan for this device
-            var loan = _loanRepository.GetAll()
-                .Where(loan => loan.DeviceID == device.DeviceID)
-                .OrderByDescending(l => l.LoanID)
-                .FirstOrDefault();
-
-            // Find borrower
+            var loan = GetMostRecentLoanForDevice(device.DeviceID);
+            
             var employee = loan is null
                 ? null
                 : _employeeRepository.GetByID(loan.BorrowerID);
@@ -261,11 +256,8 @@ namespace Application.Services
                 if (description == null)
                     continue;
 
-                var loan = _loanRepository.GetAll()
-                    .Where(loan => loan.DeviceID == device.DeviceID)
-                    .OrderByDescending(loan => loan.LoanID)
-                    .FirstOrDefault();
-
+                var loan = GetMostRecentLoanForDevice(device.DeviceID);
+                
                 var employee = loan != null
                     ? _employeeRepository.GetByID(loan.BorrowerID)
                     : null;
@@ -289,6 +281,15 @@ namespace Application.Services
                     OwnerEmail = ownerEmail
                 };
             }
+        }
+
+        // Helper method to find the most recent loan for a device
+        private Loan? GetMostRecentLoanForDevice(int deviceID)
+        {
+            return _loanRepository.GetAll()
+                .Where(loan => loan.DeviceID == deviceID)
+                .OrderByDescending(loan => loan.LoanID)
+                .FirstOrDefault();
         }
 
         // Helper method to map Device and DeviceDescription to DeviceDisplayModel

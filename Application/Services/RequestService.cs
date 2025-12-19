@@ -68,14 +68,7 @@ public class RequestService : IRequestService
         device.Status = DeviceStatus.PLANNED;
         _deviceRepository.Update(device);
 
-        var decision = new Decision
-        {
-            LoanID = loan.LoanID,
-            Status = DecisionStatus.APPROVED,
-            DecisionDate = DateOnly.FromDateTime(DateTime.Now),
-            Comment = string.IsNullOrWhiteSpace(comment) ? string.Empty : comment
-        };
-        _decisionRepository.Add(decision);
+        RecordDecision(loan.LoanID, DecisionStatus.APPROVED, comment);
     }
 
     // Rejects a request by updating the relevant entities and recording the decision
@@ -88,10 +81,16 @@ public class RequestService : IRequestService
         device.Status = DeviceStatus.CANCELLED;
         _deviceRepository.Update(device);
 
+        RecordDecision(loan.LoanID, DecisionStatus.REJECTED, comment);
+    }
+
+    // Helper method to record a decision
+    private void RecordDecision(int loanId, DecisionStatus status, string? comment)
+    {
         var decision = new Decision
         {
-            LoanID = loan.LoanID,
-            Status = DecisionStatus.REJECTED,
+            LoanID = loanId,
+            Status = status,
             DecisionDate = DateOnly.FromDateTime(DateTime.Now),
             Comment = string.IsNullOrWhiteSpace(comment) ? string.Empty : comment
         };

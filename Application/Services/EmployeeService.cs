@@ -22,8 +22,6 @@ namespace Application.Services
         private readonly IRepository<Role> _roleRepository;
         private readonly IRepository<Loan> _loanRepository;
 
-        private readonly List<Employee> _employees = new();
-
         public EmployeeService(IRepository<Employee> employeeRepository, IRepository<Department> departmentRepository, 
             IRepository<Role> roleRepository, IRepository<Loan> loanRepository)
         {
@@ -146,8 +144,9 @@ namespace Application.Services
                    .ToList();
         }
 
-        public Employee? GetEmployeeByEmail(string email)
-        {            
+        // Helper method to validate email format
+        private void ValidateEmailFormat(string email)
+        {
             try
             {
                 var addr = new MailAddress(email);
@@ -156,6 +155,11 @@ namespace Application.Services
             {
                 throw new ArgumentException("Invalid email");
             }
+        }
+
+        public Employee? GetEmployeeByEmail(string email)
+        {
+            ValidateEmailFormat(email);
             var employees = GetAllEmployees();
             return employees.FirstOrDefault(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
@@ -168,7 +172,7 @@ namespace Application.Services
 
             try
             {
-                var addr = new MailAddress(email);
+                ValidateEmailFormat(email);
             }
             catch
             {
