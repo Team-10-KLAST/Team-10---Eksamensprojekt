@@ -17,8 +17,7 @@ public class DecisionService : IDecisionService
     { }
 
     public void ApproveLoan(int id, string comment)
-    { 
-        
+    {
     }
 
     public void RejectLoan(int id, string comment)

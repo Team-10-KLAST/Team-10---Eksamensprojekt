@@ -48,7 +48,6 @@ public class LoanService : ILoanService
 
     public void CloseLoan(int loanID)
     {
-
     }
 
     // Updates the status of an existing loan
