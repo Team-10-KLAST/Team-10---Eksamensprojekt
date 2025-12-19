@@ -98,7 +98,7 @@ namespace Application.Services
 
                 var dateText = device.PurchaseDate?.ToString("dd.MM.yyyy") ?? "No date";
 
-                result.Add(MapDevice(device, employee, description, dateText));
+                result.Add(MapDevice(device, employee, description, $"Registered: {dateText}"));
             }
             return result;
         }
@@ -172,7 +172,7 @@ namespace Application.Services
         // Builds the subtext line
         private string BuildSubText(string employeeName, string location, string dateText)
         {
-            return $"{employeeName} · {location} · Registrated: {dateText}";
+            return $"{employeeName} · {location} · {dateText}";
         }
 
         // Builds employee name consistently
