@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Application.Interfaces.Service;
 using Application.Models;
@@ -13,6 +14,7 @@ namespace Presentation.Wpf.ViewModels
     {
         private readonly IDeviceDescriptionService _deviceDescriptionService;
         private readonly IDeviceService _deviceService;
+        public event EventHandler? DeviceUpdated;
 
         // ComboBox collections
         public ObservableCollection<string> DeviceTypeOptions { get; }
@@ -133,7 +135,7 @@ namespace Presentation.Wpf.ViewModels
         }
 
         // Actions
-
+        //Register a device and fire an event to update the devicelist
         private void RegisterDevice()
         {
             if (RegistrationDate is null || ExpiryDate is null)
@@ -152,9 +154,9 @@ namespace Presentation.Wpf.ViewModels
                 ExpectedEndDate = DateOnly.FromDateTime(ExpiryDate.Value)
             };
 
-            // 4) Save to DB via service
+            // 4) Save to DB via service and fire an event
             _deviceService.AddDevice(device);
-
+            DeviceUpdated?.Invoke(this, EventArgs.Empty);
             // 5) Clear form and close overlay panel
             ClearFields();
             CloseOverlay();
