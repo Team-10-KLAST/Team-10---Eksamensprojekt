@@ -104,12 +104,8 @@
                                 Height="33"
                                 Background="{StaticResource InputFieldBackgroundBrush}"
                                 BorderBrush="{StaticResource InputFieldBorderBrush}"/>
-                </StackPanel>                
+                </StackPanel>
             </Grid>
-            
-            
-
-
         </Grid>
 
         <!-- Footer -->
@@ -133,8 +129,5 @@
                         Command="{Binding RegisterCommand}"/>
             </StackPanel>
         </Grid>
-
-
-
     </Grid>
 </UserControl>

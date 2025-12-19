@@ -62,7 +62,7 @@ namespace Presentation.Wpf.ViewModels
 
         // Registration date selected by the user
         // Used as the basis for calculating a default expiration date
-        private DateTime? _registrationDate = DateTime.Today;
+        private DateTime? _registrationDate;
         public DateTime? RegistrationDate
         {
             get => _registrationDate;
@@ -82,10 +82,12 @@ namespace Presentation.Wpf.ViewModels
                             : (DateTime?)null;
 
                         if (!ExpiryDate.HasValue ||
-                            (oldAutoExpiry.HasValue && ExpiryDate == oldAutoExpiry))
+                           (oldAutoExpiry.HasValue && ExpiryDate == oldAutoExpiry))
                         {
                             ExpiryDate = newAutoExpiry;
+                            OnPropertyChanged(nameof(ExpiryDate));
                         }
+
                     }
 
                     (RegisterCommand as RelayCommand)?.RaiseCanExecuteChanged();
@@ -132,6 +134,9 @@ namespace Presentation.Wpf.ViewModels
             SelectedOS = OSOptions.FirstOrDefault() ?? string.Empty;
             SelectedCountry = CountryOptions.FirstOrDefault() ?? string.Empty;
 
+            RegistrationDate = DateTime.Today;
+            ExpiryDate = _deviceService.CalculateDefaultExpiryDate(DateTime.Today);
+
             RegisterCommand = new RelayCommand(RegisterDevice, CanRegisterDevice);
             CancelCommand = new RelayCommand(Cancel);
         }
@@ -173,7 +178,7 @@ namespace Presentation.Wpf.ViewModels
                 return false;
             }
 
-            return ExpiryDate.Value >= RegistrationDate.Value;
+            return ExpiryDate.Value.Date >= RegistrationDate.Value.Date;
         }
 
         // Cancels registration and closes the overlay
