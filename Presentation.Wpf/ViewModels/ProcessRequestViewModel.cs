@@ -78,27 +78,7 @@ namespace Presentation.Wpf.ViewModels
             {
                 SetProperty(ref _approver, value);
 
-                if (!ValidateEmailFormat(_approver))
-                {
-                    return;
-                }
-
-                if (!string.IsNullOrWhiteSpace(_approver))
-                {
-                    var employee = _employeeService.GetEmployeeByEmail(_approver);
-                    if (employee == null)
-                    {
-                        EmailErrorMsg = "Approver not found.";
-                    }
-                    else if (employee.RoleID != 1)
-                    {
-                        EmailErrorMsg = "Approver not found.";
-                    }
-                    else
-                    {
-                        EmailErrorMsg = string.Empty;
-                    }
-                }
+                EmailErrorMsg = _employeeService.ValidateApproverEmail(_approver);
 
                 (ApproveCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 (RejectCommand as RelayCommand)?.RaiseCanExecuteChanged();
@@ -150,37 +130,12 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
-        // Email format validation
-        private bool ValidateEmailFormat(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                EmailErrorMsg = "Email is required.";
-                return false;
-            }
-
-            try
-            {
-                var addr = new MailAddress(email);
-                bool isValid = addr.Address.Equals(email, StringComparison.OrdinalIgnoreCase);
-
-                EmailErrorMsg = isValid ? string.Empty : "Email format is incorrect";
-                return isValid;
-            }
-            catch (FormatException)
-            {
-                EmailErrorMsg = "Email format is incorrect";
-                return false;
-            }
-        }
-
         // Approve and Reject methods
         private void Reject()
         {
             var approver = _employeeService.GetEmployeeByEmail(Approver);
             if (approver != null)
             {
-                EmailErrorMsg = string.Empty;
                 _requestService.RejectRequest(_requestId, approver.EmployeeID, Comment);
                 CloseOverlay();
             }
@@ -191,7 +146,6 @@ namespace Presentation.Wpf.ViewModels
             var approver = _employeeService.GetEmployeeByEmail(Approver);
             if (approver != null)
             {
-                EmailErrorMsg = string.Empty;
                 _requestService.ApproveRequest(_requestId, approver.EmployeeID, Comment);
                 CloseOverlay();
             }

@@ -54,7 +54,7 @@ namespace Presentation.Wpf.ViewModels
             {
                 if (SetProperty(ref _email, value))
                 {
-                    ValidateEmailFormat(value);
+                    EmailErrorMsg = _employeeService.ValidateEmployeeEmail(value);
                     (SaveCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
@@ -142,47 +142,13 @@ namespace Presentation.Wpf.ViewModels
             SelectedRole = Roles.FirstOrDefault();
         }
 
-        private bool ValidateEmailFormat(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                EmailErrorMsg = string.Empty;
-                return false;
-            }
+        // CanExecute method for SaveCommand
+        private bool CanSaveEmployee() =>
+            !string.IsNullOrWhiteSpace(FirstName) &&
+            !string.IsNullOrWhiteSpace(LastName) &&
+            !string.IsNullOrWhiteSpace(Email) &&
+            string.IsNullOrEmpty(EmailErrorMsg);
 
-            try
-            {
-                var addr = new MailAddress(email);
-                bool isValid = addr.Address.Equals(email, StringComparison.OrdinalIgnoreCase);
-
-                if (isValid)
-                {
-                    EmailErrorMsg = string.Empty;
-                }
-                else
-                {
-                    EmailErrorMsg = "Email format is incorrect";
-                }
-                return isValid;
-            }
-            catch (FormatException)
-            {
-                EmailErrorMsg = "Email format is incorrect";
-                return false;
-            }
-        }
-
-        private bool CanSaveEmployee()
-        {
-            if (string.IsNullOrWhiteSpace(FirstName) ||
-                string.IsNullOrWhiteSpace(LastName) ||
-                string.IsNullOrWhiteSpace(Email))
-            {
-                return false;
-            }
-
-            return ValidateEmailFormat(Email);
-        }
 
         private void Cancel()
         {

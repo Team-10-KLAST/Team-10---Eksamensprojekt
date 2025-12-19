@@ -164,17 +164,9 @@ namespace Application.Services
         // Validates that the approver email exists and belongs to a manager
         public string ValidateApproverEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                return "Approver email is required.";
-
-            try
-            {
-                var addr = new MailAddress(email);
-            }
-            catch
-            {
-                return "Invalid email format.";
-            }
+            var formatError = ValidateEmailFormat(email);
+            if (!string.IsNullOrEmpty(formatError))
+                return formatError;
 
             var employee = GetEmployeeByEmail(email);
             if (employee == null)
@@ -182,6 +174,42 @@ namespace Application.Services
 
             if (employee.RoleID != 1)
                 return "Only managers can approve device assignments.";
+
+            return string.Empty;
+        }
+
+        // Validates a single employee email (format + uniqueness)
+        public string ValidateEmployeeEmail(string email)
+        {
+            var formatError = ValidateEmailFormat(email);
+            if (!string.IsNullOrEmpty(formatError))
+                return formatError;
+
+            var existing = GetAllEmployees()
+                .FirstOrDefault(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+
+            if (existing != null)
+                return "Email already exists in the system.";
+
+            return string.Empty;
+        }
+
+        // Basic email format validation for ValidateApproverEmail and ValidateEmployeeEmail
+        private string ValidateEmailFormat(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return "Email is required.";
+
+            try
+            {
+                var addr = new MailAddress(email);
+                if (!addr.Address.Equals(email, StringComparison.OrdinalIgnoreCase))
+                    return "Invalid email format.";
+            }
+            catch
+            {
+                return "Invalid email format.";
+            }
 
             return string.Empty;
         }
