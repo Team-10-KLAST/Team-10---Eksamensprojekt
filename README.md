@@ -1,9 +1,5 @@
 # Team-10---Eksamensprojekt
 
-## Team kode kvalitetskriterier
-
-//TODO
-
 ### Mappestruktur 
 - Presentation.Wpf/                        (*UI-lag (WPF, MVVM, ressourcer)*)
      - Views/
@@ -22,5 +18,5 @@
 
 
 - Data/                                   (*Infrastruktur og dataadgang*)
-  - AdoNet/                               (*Repositories fx DeviceRepository*)
+  - Repository/                               (*Repositories fx DeviceRepository*)
   - SqlConnectionFactory.cs               
