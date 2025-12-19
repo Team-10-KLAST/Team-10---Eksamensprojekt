@@ -119,9 +119,8 @@ namespace Presentation.Wpf.ViewModels
                 LastName = this.LastName,
                 Email = this.Email,
                 DepartmentID = SelectedDepartment?.DepartmentID ?? 0,
-                RoleID = SelectedRole?.RoleID ?? 0
-                
-            };                       
+                RoleID = SelectedRole?.RoleID ?? 0                
+            };
             
             try
             {

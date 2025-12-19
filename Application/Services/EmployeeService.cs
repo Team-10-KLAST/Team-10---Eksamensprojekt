@@ -211,7 +211,7 @@ namespace Application.Services
             return string.Empty;
         }
 
-        // Validates that the email exists in the system
+        // Validates that the email exists in the system & employee is not terminated
         public string ValidateExistingEmployeeEmail(string email)
         {
             var formatError = ValidateEmailFormat(email);
@@ -223,6 +223,9 @@ namespace Application.Services
 
             if (existing == null)
                 return "No employee found with that email.";
+
+            if (existing.TerminationDate.HasValue)
+                return "The employee is terminated.";
 
             return string.Empty;
         }
