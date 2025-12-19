@@ -18,31 +18,31 @@
 
                 <!-- Log out button at bottom -->
                 <Button Content="Log out"
-                DockPanel.Dock="Bottom"
-                Margin="4"
-                Width="120"
-                HorizontalAlignment="Center"
-                Command="{Binding LogoutCommand}" />
+                        DockPanel.Dock="Bottom"
+                        Margin="4"
+                        Width="120"
+                        HorizontalAlignment="Center"
+                        Command="{Binding LogoutCommand}" />
 
                 <!-- Menu items at top -->
                 <StackPanel DockPanel.Dock="Top">
                     <TextBlock Text="Menu"
-                       Foreground="White"
-                       Margin="4,4,4,12"
-                       FontSize="18"
-                       FontWeight="Bold" />
+                               Foreground="White"
+                               Margin="4,4,4,12"
+                               FontSize="18"
+                               FontWeight="Bold" />
 
                     <Button Content="Dashboard"
-                    Margin="4"
-                    Command="{Binding ShowDashboardCommand}" />
+                            Margin="4"
+                            Command="{Binding ShowDashboardCommand}" />
 
                     <Button Content="Employees"
-                    Margin="4"
-                    Command="{Binding ShowEmployeesCommand}" />
+                            Margin="4"
+                            Command="{Binding ShowEmployeesCommand}" />
 
                     <Button Content="Devices"
-                    Margin="4"
-                    Command="{Binding ShowDevicesCommand}" />
+                            Margin="4"
+                            Command="{Binding ShowDevicesCommand}" />
                 </StackPanel>
 
             </DockPanel>
