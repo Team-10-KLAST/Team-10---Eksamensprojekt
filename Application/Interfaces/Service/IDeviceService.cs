@@ -10,11 +10,9 @@ namespace Application.Interfaces.Service
         IEnumerable<Device> GetAllDevices();
         void AddDevice(Device device);
         void UpdateDevice(Device device);
-        void UpdateDevice(DeviceDisplayModel updatedDevice);
-        void DeleteDevice(int deviceID);
+        void UpdateDevice(DeviceDisplayModel updatedDevice);        
         int CreateVirtualDeviceID(string DeviceType, string OS, string country);
-        DeviceDisplayModel? GetDeviceDisplayByID(int deviceID);
-        IEnumerable<Device> GetAvailableDevicesByType(string deviceType);
+        DeviceDisplayModel? GetDeviceDisplayByID(int deviceID);        
         IEnumerable<DeviceDisplayModel> GetAvailableDeviceDisplayModels(string? deviceType);
         IEnumerable<DeviceDisplayModel> GetAllDeviceDisplayModels();
     }

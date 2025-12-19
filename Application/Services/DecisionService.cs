@@ -11,15 +11,5 @@ namespace Application.Services;
 
 public class DecisionService : IDecisionService
 {
-
-
-    public DecisionService()
-    { }
-
-    public void ApproveLoan(int id, string comment)
-    { }
-
-    public void RejectLoan(int id, string comment)
-    { }
-
+    //not yet implemented in current version
 }

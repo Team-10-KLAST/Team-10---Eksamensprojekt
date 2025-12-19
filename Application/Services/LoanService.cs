@@ -44,20 +44,7 @@ public class LoanService : ILoanService
             EndDate = null
         };
         AddLoan(loan);
-    }
-
-    public void CloseLoan(int loanID)
-    { }
-
-    // Updates the status of an existing loan
-    public void UpdateLoanStatus(int loanID, LoanStatus newStatus)
-    {
-        var loan = _loanRepository.GetByID(loanID)
-            ?? throw new InvalidOperationException("Loan not found.");
-
-        loan.Status = newStatus;
-        _loanRepository.Update(loan);
-    }
+    }        
 
     // Adds a new loan to the repository
     public void AddLoan(Loan loan)
@@ -69,24 +56,7 @@ public class LoanService : ILoanService
             throw new ArgumentException("DeviceID cannot be empty");
 
         _loanRepository.Add(loan);
-    }
-
-    // Retrieves all loans from the repository
-    public IEnumerable<Loan> GetAllLoans()
-    {
-        return _loanRepository.GetAll();
-    }
-
-    // Retrieves the most recent loan for a specific device
-    public Loan GetMostRecentLoanByDeviceID(int deviceID)
-    {
-        var loan = GetAllLoans()
-            .Where(d => d.DeviceID == deviceID)
-            .OrderByDescending(d => d.LoanID)
-            .FirstOrDefault();
-
-        return loan;
-    }
+    }    
 
     // Assigns a device to an employee without a request and updates the device status 
     public void AssignDeviceToEmployee(int deviceID, int employeeID, int approverID)

@@ -8,13 +8,8 @@ using Application.Models;
 namespace Application.Interfaces.Service;
 
 public interface ILoanService
-{
-    IEnumerable<Loan> GetAllLoans();
+{    
     void CreateLoan(int requestID, int borrowerID, int deviceID);
-    void CloseLoan(int loanID);
-    void UpdateLoanStatus(int loanID, LoanStatus newStatus);
-    void AddLoan (Loan loan);
-
-    Loan GetMostRecentLoanByDeviceID(int deviceID);
+    void AddLoan (Loan loan);    
     void AssignDeviceToEmployee(int deviceID, int employeeID, int approverID);
 }

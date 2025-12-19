@@ -11,15 +11,13 @@ namespace Application.Interfaces
     public interface IEmployeeService
     {
         void AddEmployee(Employee employee); 
-        IEnumerable<Employee> GetAllEmployees(); 
-        Employee GetEmployeeByID(int employeeID); 
+        IEnumerable<Employee> GetAllEmployees();
         Employee GetEmployeeByEmail(string email); 
         IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels();
         IEnumerable<Department> GetAllDepartments();
         IEnumerable<Role> GetAllRoles();
         IEnumerable<string> GetAllEmployeeEmails();
-        void TerminateEmployee(int employeeID, DateOnly terminationDate);
-        IEnumerable<Employee> GetTerminatedEmployees();
+        void TerminateEmployee(int employeeID, DateOnly terminationDate);        
         string ValidateApproverEmail(string email);
     }
 
