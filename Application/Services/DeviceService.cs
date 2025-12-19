@@ -123,6 +123,11 @@ namespace Application.Services
             if (device.DeviceID <= 0)
                 throw new ArgumentOutOfRangeException(nameof(device.DeviceID), "DeviceID must be greater than zero.");
 
+            if (device.Status == DeviceStatus.RECEIVED && device.PurchaseDate == default)
+            {
+                device.PurchaseDate = DateOnly.FromDateTime(DateTime.Today);
+            }
+
             if (device.Status == DeviceStatus.INSTOCK && !device.IsWiped)
             {
                 throw new InvalidOperationException(
