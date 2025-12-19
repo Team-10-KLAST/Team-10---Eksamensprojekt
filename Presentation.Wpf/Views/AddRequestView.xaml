@@ -45,7 +45,9 @@
                 HorizontalAlignment="Stretch"
                 Background="{StaticResource InputFieldBackgroundBrush}"
                 BorderBrush="{StaticResource InputFieldBorderBrush}"
-                Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalContentAlignment="Center"/>
+                    
                     <!-- Email validering -->
                     <TextBlock Text="{Binding EmailErrorMsg}" Foreground="Red" Style="{StaticResource BaseTextStyle}"/>
 
