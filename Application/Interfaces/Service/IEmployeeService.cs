@@ -12,8 +12,8 @@ namespace Application.Interfaces
     {
         void AddEmployee(Employee employee); 
         IEnumerable<Employee> GetAllEmployees(); 
-        Employee GetEmployeeByID(int employeeID); 
-        Employee GetEmployeeByEmail(string email); 
+        Employee? GetEmployeeByID(int employeeID); 
+        Employee? GetEmployeeByEmail(string email); 
         IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels();
         IEnumerable<Department> GetAllDepartments();
         IEnumerable<Role> GetAllRoles();

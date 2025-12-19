@@ -88,7 +88,7 @@ namespace Application.Services
         }
 
         //Gets employee by unique ID
-        public Employee GetEmployeeByID(int id)
+        public Employee? GetEmployeeByID(int id)
         {
             if (id <= 0)
             {
@@ -146,7 +146,7 @@ namespace Application.Services
                    .ToList();
         }
 
-        public Employee GetEmployeeByEmail(string email)
+        public Employee? GetEmployeeByEmail(string email)
         {            
             try
             {

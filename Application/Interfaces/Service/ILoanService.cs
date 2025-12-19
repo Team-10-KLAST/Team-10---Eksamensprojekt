@@ -16,6 +16,6 @@ public interface ILoanService
     void UpdateLoanStatus(int loanID, LoanStatus newStatus);
     void AddLoan (Loan loan);
 
-    Loan GetMostRecentLoanByDeviceID(int deviceID);
+    Loan? GetMostRecentLoanByDeviceID(int deviceID);
     void AssignDeviceToEmployee(int deviceID, int employeeID, int approverID);
 }

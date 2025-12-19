@@ -84,7 +84,7 @@ public class LoanService : ILoanService
     }
 
     // Retrieves the most recent loan for a specific device
-    public Loan GetMostRecentLoanByDeviceID(int deviceID)
+    public Loan? GetMostRecentLoanByDeviceID(int deviceID)
     {
         var loan = GetAllLoans()
             .Where(d => d.DeviceID == deviceID)
