@@ -142,12 +142,10 @@ namespace Application.Services
             try
             {
                 var addr = new MailAddress(email);
-                // Sikrer at MailAddress har normaliseret formatet
                 email = addr.Address;
             }
             catch (Exception)
             {
-                // Alt der ikke kan parses som email anses som “ikke fundet”
                 return null;
             }
 
