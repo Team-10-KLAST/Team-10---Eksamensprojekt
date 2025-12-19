@@ -186,8 +186,8 @@ namespace Presentation.Wpf.ViewModels
         // Constructor
         public UpdateDeviceViewModel(DeviceDisplayModel device, IDeviceService deviceService)
         {
-            SelectedDevice = device;
-            _deviceService = deviceService;
+            _selectedDevice = device ?? throw new ArgumentNullException(nameof(device));
+            _deviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
 
             UpdateDeviceCommand = new RelayCommand(UpdateDevice);
             CancelCommand = new RelayCommand(Cancel);

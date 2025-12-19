@@ -45,7 +45,7 @@ namespace Application.Services
         //Get DeviceDescriptionID from input parameter
         public int GetDeviceDescriptionID(string DeviceType, string OS, string Country)
         {
-            DeviceDescription matchingDeviceDescription =
+            DeviceDescription? matchingDeviceDescription =
                 _deviceDescriptions.FirstOrDefault(d =>
                 d.DeviceType.Equals(DeviceType, System.StringComparison.OrdinalIgnoreCase) &&
                 d.OperatingSystem.Equals(OS, System.StringComparison.OrdinalIgnoreCase) &&

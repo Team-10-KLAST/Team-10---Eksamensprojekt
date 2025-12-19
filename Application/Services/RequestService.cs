@@ -159,7 +159,11 @@ public class RequestService : IRequestService
             Status = RequestStatus.PENDING,
         };
         AddRequest(_request);
-        int _borrowerID = _employeeService.GetEmployeeByEmail(email).EmployeeID;
+        var borrower = _employeeService.GetEmployeeByEmail(email)
+                  ?? throw new InvalidOperationException($"No employee found with email {email}");
+
+        int _borrowerID = borrower.EmployeeID;
+
         int _deviceID = _deviceService.CreateVirtualDeviceID(deviceType, OS, country);
 
         _loanService.CreateLoan(_request.RequestID, _borrowerID, _deviceID);

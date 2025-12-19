@@ -67,15 +67,15 @@ namespace Presentation.Wpf.ViewModels
             set => SetProperty(ref _emailErrorMsg, value);
         }
 
-        private Department _selectedDepartment;
-        public Department SelectedDepartment
+        private Department? _selectedDepartment;
+        public Department? SelectedDepartment
         {
             get => _selectedDepartment;
             set => SetProperty(ref _selectedDepartment, value);
         }
 
-        private Role _selectedRole;
-        public Role SelectedRole
+        private Role? _selectedRole;
+        public Role? SelectedRole
         {
             get => _selectedRole;
             set => SetProperty(ref _selectedRole, value);
@@ -92,7 +92,6 @@ namespace Presentation.Wpf.ViewModels
         public ICommand CancelCommand { get; }
 
         //Constructor
-
         public AddEmployeeViewModel(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
