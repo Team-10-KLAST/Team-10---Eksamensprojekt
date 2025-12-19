@@ -61,27 +61,24 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
-        // Date fields
         private DateTime? _registrationDate = DateTime.Today;
+
+        // When RegistrationDate changes, auto-update ExpiryDate to 3 years later
         public DateTime? RegistrationDate
         {
             get => _registrationDate;
             set
             {
-                // Keep track of old registration date for expiry date logic
                 var oldRegistrationDate = _registrationDate;
 
                 if (SetProperty(ref _registrationDate, value))
                 {
-                    // Auto-update ExpiryDate based on new RegistrationDate
                     if (_registrationDate.HasValue)
                     {
-                        // If ExpiryDate is not set or was previously auto-set to 3 years after old RegistrationDate
                         if (!ExpiryDate.HasValue ||
                             (oldRegistrationDate.HasValue &&
                              ExpiryDate.Value == oldRegistrationDate.Value.AddYears(3)))
                         {
-                            // Auto-set ExpiryDate to 3 years after new RegistrationDate
                             ExpiryDate = _registrationDate.Value.AddYears(3);
                         }
                     }
@@ -125,7 +122,6 @@ namespace Presentation.Wpf.ViewModels
             CountryOptions = new ObservableCollection<string>(
                 _deviceDescriptionService.GetAllCountryOptions());
 
-            // Set default selections
             SelectedDeviceType = DeviceTypeOptions.FirstOrDefault() ?? string.Empty;
             SelectedOS = OSOptions.FirstOrDefault() ?? string.Empty;
             SelectedCountry = CountryOptions.FirstOrDefault() ?? string.Empty;
@@ -134,18 +130,16 @@ namespace Presentation.Wpf.ViewModels
             CancelCommand = new RelayCommand(Cancel);
         }
 
-        // Actions
+
         //Register a device and fire an event to update the devicelist
         private void RegisterDevice()
         {
             if (RegistrationDate is null || ExpiryDate is null)
                 return;
 
-            // 1) Get DeviceDescriptionID from selected options
             int deviceDescriptionId = _deviceDescriptionService
                 .GetDeviceDescriptionID(SelectedDeviceType, SelectedOS, SelectedCountry);
 
-            // 3) Create Device object
             var device = new Device
             {
                 DeviceDescriptionID = deviceDescriptionId,
@@ -154,17 +148,15 @@ namespace Presentation.Wpf.ViewModels
                 ExpectedEndDate = DateOnly.FromDateTime(ExpiryDate.Value)
             };
 
-            // 4) Save to DB via service and fire an event
             _deviceService.AddDevice(device);
             DeviceUpdated?.Invoke(this, EventArgs.Empty);
-            // 5) Clear form and close overlay panel
+
             ClearFields();
             CloseOverlay();
         }
 
         private bool CanRegisterDevice()
         {
-            // All required selections must be made
             if (string.IsNullOrWhiteSpace(SelectedDeviceType) ||
                 string.IsNullOrWhiteSpace(SelectedOS) ||
                 string.IsNullOrWhiteSpace(SelectedCountry) ||
@@ -173,8 +165,6 @@ namespace Presentation.Wpf.ViewModels
             {
                 return false;
             }
-
-            // Expiry date must be after or on registration date
             return ExpiryDate.Value >= RegistrationDate.Value;
         }
 

@@ -11,7 +11,7 @@ namespace Presentation.Wpf.ViewModels
     // ViewModel for managing overlay panels in the application. It handles displaying and closing overlays.
     public class OverlayHostViewModel : ViewModelBase
     {
-        // The currently displayed overlay panel. Null if no overlay is shown.
+        // The currently displayed overlay panel.
         private object? _currentOverlay;
         public object? CurrentOverlay
         {
@@ -23,7 +23,7 @@ namespace Presentation.Wpf.ViewModels
             }
         }
 
-        // Indicates whether an overlay panel is currently open. Used for controlling overlay visibility.
+        //Used for controlling overlay visibility.
         private bool _isOverlayOpen;
         public bool IsOverlayOpen
         {
