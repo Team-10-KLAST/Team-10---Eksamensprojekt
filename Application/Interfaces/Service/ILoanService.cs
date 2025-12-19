@@ -9,7 +9,6 @@ namespace Application.Interfaces.Service;
 
 public interface ILoanService
 {
-   // Loan GetLoanByID(int loanID);
     IEnumerable<Loan> GetAllLoans();
     void CreateLoan(int requestID, int borrowerID, int deviceID);
     void CloseLoan(int loanID);

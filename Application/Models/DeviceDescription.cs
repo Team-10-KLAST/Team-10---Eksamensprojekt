@@ -13,9 +13,7 @@ namespace Application.Models
         public string OperatingSystem { get; set; } = "";
         public string Location { get; set; } = "";
 
-        public DeviceDescription()
-        {
-        }
+        public DeviceDescription() { }
 
         // Constructor with parameters (excluding DeviceDescriptionID).
         public DeviceDescription(string deviceType, string operatingSystem, string location)

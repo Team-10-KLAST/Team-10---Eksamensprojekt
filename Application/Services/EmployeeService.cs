@@ -101,6 +101,7 @@ namespace Application.Services
         public IEnumerable<Department> GetAllDepartments() => _departmentRepository.GetAll();
         public IEnumerable<Role> GetAllRoles() => _roleRepository.GetAll();
 
+        
         // Gets employee display models with full details for EmployeeViewModel
         public IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels()
         {
