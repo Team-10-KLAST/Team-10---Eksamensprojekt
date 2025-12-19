@@ -142,8 +142,8 @@ public class RequestService : IRequestService
             OperatingSystem = description.OperatingSystem,
             Location = description.Location,
             Justification = request.Justification,
-            NeededByDate = request.NeededByDate.ToDateTime(TimeOnly.MinValue),
-};
+            NeededByDate = request.NeededByDate.ToDateTime(TimeOnly.MinValue)
+        };
     }
 
     // pass on the information from AddRequest form

@@ -21,10 +21,6 @@ public class LoanService : ILoanService
         _deviceService = deviceService;
     }
 
-
-    // Loan GetLoanByID(int loanID) { }
-    // IEnumerable<Loan> GetAllLoans() { }
-
     // Creates a new loan based on a request
     public void CreateLoan(int requestID, int borrowerID, int deviceID)
     {

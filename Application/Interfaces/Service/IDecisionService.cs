@@ -9,7 +9,6 @@ namespace Application.Interfaces.Service;
 
 public interface IDecisionService
 {
-    //Decision GetDecisionByID(int decisionID);
     void ApproveLoan(int loanID, string comment);
     void RejectLoan(int loanID, string comment);
 }
