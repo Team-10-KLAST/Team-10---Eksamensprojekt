@@ -126,6 +126,8 @@ namespace Application.Services
             if (device.Status == DeviceStatus.RECEIVED && device.PurchaseDate == default)
             {
                 device.PurchaseDate = DateOnly.FromDateTime(DateTime.Today);
+                var expiry = CalculateDefaultExpiryDate(DateTime.Today);
+                device.ExpectedEndDate = DateOnly.FromDateTime(expiry);
             }
 
             if (device.Status == DeviceStatus.INSTOCK && !device.IsWiped)
