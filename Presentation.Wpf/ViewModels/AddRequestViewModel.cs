@@ -29,7 +29,7 @@ namespace Presentation.Wpf.ViewModels
             {
                 if (SetProperty(ref _email, value))
                 {
-                    EmailErrorMsg = _employeeService.ValidateEmployeeEmail(value);
+                    EmailErrorMsg = _employeeService.ValidateExistingEmployeeEmail(value);
                     (SubmitCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }

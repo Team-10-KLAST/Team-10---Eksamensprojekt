@@ -12,7 +12,7 @@ namespace Application.Interfaces
     {
         void AddEmployee(Employee employee); 
         IEnumerable<Employee> GetAllEmployees();
-        Employee GetEmployeeByEmail(string email); 
+        Employee? GetEmployeeByEmail(string email); 
         IEnumerable<EmployeeDisplayModel> GetEmployeeDisplayModels();
         IEnumerable<Department> GetAllDepartments();
         IEnumerable<Role> GetAllRoles();
@@ -20,6 +20,7 @@ namespace Application.Interfaces
         void TerminateEmployee(int employeeID, DateOnly terminationDate);        
         string ValidateApproverEmail(string email);
         string ValidateEmployeeEmail(string email);
+        string ValidateExistingEmployeeEmail(string email);
     }
 
 }

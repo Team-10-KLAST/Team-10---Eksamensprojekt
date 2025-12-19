@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -131,19 +132,31 @@ namespace Application.Services
                    .ToList();
         }
 
-        public Employee GetEmployeeByEmail(string email)
-        {            
+        public Employee? GetEmployeeByEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return null;
+
+            email = email.Trim();
+
             try
             {
                 var addr = new MailAddress(email);
+                // Sikrer at MailAddress har normaliseret formatet
+                email = addr.Address;
             }
-            catch (FormatException)
+            catch (Exception)
             {
-                throw new ArgumentException("Invalid email");
+                // Alt der ikke kan parses som email anses som “ikke fundet”
+                return null;
             }
-            var employees = GetAllEmployees();
-            return employees.FirstOrDefault(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+
+            var employees = GetAllEmployees() ?? Enumerable.Empty<Employee>();
+            return employees.FirstOrDefault(e =>
+                !string.IsNullOrEmpty(e.Email) &&
+                e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
+
 
         // Validates that the approver email exists and belongs to a manager
         public string ValidateApproverEmail(string email)
@@ -194,6 +207,22 @@ namespace Application.Services
             {
                 return "Invalid email format.";
             }
+
+            return string.Empty;
+        }
+
+        // Validates that the email exists in the system
+        public string ValidateExistingEmployeeEmail(string email)
+        {
+            var formatError = ValidateEmailFormat(email);
+            if (!string.IsNullOrEmpty(formatError))
+                return formatError;
+
+            var existing = GetAllEmployees()
+                .FirstOrDefault(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+
+            if (existing == null)
+                return "No employee found with that email.";
 
             return string.Empty;
         }
