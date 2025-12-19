@@ -20,9 +20,7 @@ namespace Application.Models
         public int DeviceID { get; set; }
 
         // Parameterless constructor for ADO.NET.
-        public Loan()
-        {
-        }
+        public Loan() { }
 
         // Constructor with parameters (excluding LoanID).
         public Loan(LoanStatus loanStatus, DateOnly startDate, DateOnly? endDate,

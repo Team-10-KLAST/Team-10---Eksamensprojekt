@@ -18,8 +18,6 @@ namespace Application.Models
         public int LoanID { get; set; }
 
         // Parameterless constructor for ADO.NET.
-        public Decision()
-        {
-        }
+        public Decision() { }
     }
 }
