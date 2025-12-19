@@ -136,9 +136,9 @@ namespace Presentation.Wpf.ViewModels
             DeviceTypeOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllDeviceTypeOptions());
             CountryOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllCountryOptions());
 
-            SelectedOS = OSOptions.FirstOrDefault();
-            SelectedDeviceType = DeviceTypeOptions.FirstOrDefault();
-            SelectedCountry = CountryOptions.FirstOrDefault();
+            SelectedOS = OSOptions.FirstOrDefault() ?? string.Empty;
+            SelectedDeviceType = DeviceTypeOptions.FirstOrDefault() ?? string.Empty;
+            SelectedCountry = CountryOptions.FirstOrDefault() ?? string.Empty;
 
             SubmitCommand = new RelayCommand(SubmitRequest, CanSubmitRequest);
             CancelCommand = new RelayCommand(Cancel);
@@ -182,9 +182,9 @@ namespace Presentation.Wpf.ViewModels
             RequestComment = string.Empty;
             NeededByDate = DateTime.Today;
 
-            SelectedOS = OSOptions.FirstOrDefault();
-            SelectedDeviceType = DeviceTypeOptions.FirstOrDefault();
-            SelectedCountry = CountryOptions.FirstOrDefault();
+            SelectedOS = OSOptions.FirstOrDefault() ?? string.Empty;
+            SelectedDeviceType = DeviceTypeOptions.FirstOrDefault() ?? string.Empty;
+            SelectedCountry = CountryOptions.FirstOrDefault() ?? string.Empty;
 
             (SubmitCommand as RelayCommand)?.RaiseCanExecuteChanged();
         }
