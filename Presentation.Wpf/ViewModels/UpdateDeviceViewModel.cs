@@ -14,6 +14,10 @@ namespace Presentation.Wpf.ViewModels
         private readonly IDeviceService _deviceService;
 
         private DeviceDisplayModel _selectedDevice;
+
+        //event triggered when device is updated
+        public event EventHandler? DeviceUpdated;
+
         public DeviceDisplayModel SelectedDevice
         {
             get => _selectedDevice;
@@ -189,6 +193,7 @@ namespace Presentation.Wpf.ViewModels
             try
             {
                 _deviceService.UpdateDevice(SelectedDevice);
+                DeviceUpdated?.Invoke(this, EventArgs.Empty);
                 CloseOverlay();
             }
             catch (Exception ex)

@@ -155,14 +155,18 @@ namespace Presentation.Wpf.ViewModels
             var deviceDisplayModel = _deviceService.GetDeviceDisplayByID(row.DeviceID);
             if (deviceDisplayModel == null)
                 return;
-
-            ShowOverlay(new UpdateDeviceViewModel(deviceDisplayModel, _deviceService));
+            var updateDeviceVM= new UpdateDeviceViewModel(deviceDisplayModel, _deviceService);
+            updateDeviceVM.DeviceUpdated += (s, e) => LoadDevices();
+            
+            ShowOverlay(updateDeviceVM);
         }
 
-        // Opens the register device overlay
+        // Opens the register device overlay, if the event DeviceUpdate fires, VM will LoadDevices
         private void OpenRegisterDeviceOverlay()
         {
-            ShowOverlay(new RegisterDeviceViewModel(_deviceDescriptionService, _deviceService));
+            var registerDeviceVM = new RegisterDeviceViewModel(_deviceDescriptionService, _deviceService);
+            registerDeviceVM.DeviceUpdated += (s, e) => LoadDevices();
+            ShowOverlay(registerDeviceVM);
         }
     }
 }
