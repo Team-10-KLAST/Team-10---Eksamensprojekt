@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Presentation.Wpf.Views"
              mc:Ignorable="d" 
              Background="{StaticResource PageBackgroundBrush}"
-             d:DesignHeight="500" d:DesignWidth="400">
+             d:DesignHeight="800" d:DesignWidth="450">
 
     <Grid Margin="20" Background="White">
         <Grid.RowDefinitions>
@@ -29,7 +29,7 @@
         </TextBlock>
 
         <!-- Form Fields -->
-        <Grid Grid.Row="1" Margin="0,0,0,10">
+        <Grid Grid.Row="1" Margin="0,0,0,24">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -39,7 +39,7 @@
             <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,0,16,0">
 
                 <!-- Type -->
-                <TextBlock Text="Type" 
+                <TextBlock Text="Device Type" 
                            Style="{StaticResource BaseTextStyle}" 
                            FontWeight="SemiBold"
                            Margin="0,0,0,4"/>
@@ -83,7 +83,9 @@
                             HorizontalAlignment="Stretch"
                             VerticalContentAlignment="Center"
                             Height="33"
-                            Margin="0,0,0,12"/>
+                            Margin="0,0,0,12"
+                            Background="{StaticResource InputFieldBackgroundBrush}"
+                            BorderBrush="{StaticResource InputFieldBorderBrush}"/>
 
                 <!-- Wiped flag -->
                 <TextBlock Text="Wiped"
@@ -98,7 +100,7 @@
             <StackPanel Grid.Column="1" Orientation="Vertical" Margin="16,0,0,0">
 
                 <!-- OS -->
-                <TextBlock Text="OS"
+                <TextBlock Text="Operative System"
                            Style="{StaticResource BaseTextStyle}" 
                            FontWeight="SemiBold"
                            Margin="0,0,0,4"/>
@@ -142,14 +144,17 @@
                 <DatePicker SelectedDate="{Binding ExpirationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             VerticalContentAlignment="Center"
                             HorizontalAlignment="Stretch"
-                            Height="33"/>
+                            Height="33"
+                            Margin="0,0,0,12"
+                            Background="{StaticResource InputFieldBackgroundBrush}"
+                            BorderBrush="{StaticResource InputFieldBorderBrush}"/>
             </StackPanel>
         </Grid>
 
        
 
         <!-- Action Buttons -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Cancel"
                     Style="{StaticResource RejectButtonStyle}"
                     Command="{Binding CancelCommand}"

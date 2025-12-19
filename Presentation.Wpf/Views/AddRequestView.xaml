@@ -16,7 +16,7 @@
                 <!-- Header -->
                 <RowDefinition Height="Auto"/>
                 <!-- UI input -->
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
                 <!-- UI comments -->
                 <RowDefinition Height="Auto"/>
                 <!-- Buttons -->
@@ -35,10 +35,11 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <!-- Left -->
-                <StackPanel Grid.Column="0" Margin="0,0,8,0">                    
+                <StackPanel Grid.Column="0" Margin="0,0,16,0">                    
                     <TextBlock Text="Requester (e-mail)"
                 Style="{StaticResource BaseTextStyle}" 
-                FontWeight="SemiBold"/>
+                FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
                      
                     <TextBox Height="33"
                 HorizontalAlignment="Stretch"
@@ -49,24 +50,25 @@
                     <TextBlock Text="{Binding EmailErrorMsg}" Foreground="Red" Style="{StaticResource BaseTextStyle}"/>
 
                     <!-- ComboBox -->
-                    <TextBlock Text="OS"
+                    <TextBlock Text="Operative System"
                     Style="{StaticResource BaseTextStyle}" 
                     FontWeight="SemiBold"
-                    Margin="0,12,0,4"/>
+                    Margin="0,0,0,4"/>
                     <ComboBox Style="{StaticResource InputFieldComboStyle}"
                     ItemsSource="{Binding OSOptions}"
                     SelectedItem="{Binding SelectedOS, Mode=TwoWay}"
-                    Width="240" Height="33"/>
+                    Height="33"/>
                 </StackPanel>
                 <!-- Right -->
-                <StackPanel Grid.Column="1" Margin="8,0,0,0">
-                    <TextBlock Text="Type"
+                <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                    <TextBlock Text="Device Type"
                     Style="{StaticResource BaseTextStyle}" 
-                    FontWeight="SemiBold"/>
+                    FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
                     <ComboBox Style="{StaticResource InputFieldComboStyle}"
                     ItemsSource="{Binding DeviceTypeOptions}"
                     SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}"
-                    Width="240" Height="33"/>
+                    Height="33"/>
                     <!-- Tom spacer for at matche valideringsfejlen i venstre side -->
                     <TextBlock Text="" Style="{StaticResource BaseTextStyle}"/>
 
@@ -74,12 +76,13 @@
                     <TextBlock Text="Location (country)"
                     Style="{StaticResource BaseTextStyle}" 
                     FontWeight="SemiBold"
-                    Margin="0,12,0,4"/>
+                    Margin="0,0,0,4"/>
                     <ComboBox Style="{StaticResource InputFieldComboStyle}"
                     ItemsSource="{Binding CountryOptions}"
                     SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"
-                    Width="240" Height="33"/>
-                    
+                    Height="33"/>
+
+                    <!-- Needed by date -->
                     <TextBlock Text="Needed by date"
                      Style="{StaticResource BaseTextStyle}"
                      FontWeight="SemiBold"
@@ -88,14 +91,17 @@
 
 <DatePicker SelectedDate="{Binding NeededByDate, Mode=TwoWay}"
      Height="33"
-     HorizontalAlignment="Stretch"/>
+     HorizontalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+Background="{StaticResource InputFieldBackgroundBrush}"
+BorderBrush="{StaticResource InputFieldBorderBrush}"/>
                     <TextBlock Text="{Binding DateErrorMsg}" Foreground="Red" Style="{StaticResource BaseTextStyle}"/>
                 </StackPanel>
             </Grid>
 
             <!-- Comments -->
             <Border Grid.Row="2" Background="Transparent"/>
-            <StackPanel Grid.Row="2" Margin="0,16,0,16">
+            <StackPanel Grid.Row="2" Margin="0,0,0,24">
                 <TextBlock Text="Comment / justification"
                        Style="{StaticResource BaseTextStyle}" 
                         FontWeight="SemiBold"/>
@@ -108,7 +114,7 @@
             </StackPanel>
 
             <!-- Buttons -->
-            <Grid Grid.Row="3" Margin="0,3,0,4">
+            <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto"/>
@@ -118,20 +124,14 @@
                 <!-- Cancel button -->
                 <Button Grid.Column="1"
                     Margin="0,0,8,0"
-                    Padding="12,6"
                     Content="Cancel"
-                    FontWeight="Bold"
-                    BorderBrush="{StaticResource BorderBrush}"
-                    BorderThickness="1" 
+                        Style="{StaticResource RejectButtonStyle}"
                     Command="{Binding CancelCommand}"/>
                 <!-- Submit button  -->
                 <Button Grid.Column="2"
-                    Padding="12,6"
                     Content="Submit request"
-                    FontWeight="Bold"
-                    BorderBrush="{StaticResource BorderBrush}"
-                    BorderThickness="1"
-                    Command="{Binding SubmitCommand}" Margin="0,0,4,0"/>
+                    Command="{Binding SubmitCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}"/>
                 
             </Grid>
         </Grid>

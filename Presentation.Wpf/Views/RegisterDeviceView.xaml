@@ -5,31 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Presentation.Wpf.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="400">
+             Background="{StaticResource PageBackgroundBrush}"
+             d:DesignHeight="800" d:DesignWidth="450">
     
-    <Grid Background="{StaticResource PageBackgroundBrush}">
+    <Grid Margin="20" Background="White">
         <Grid.RowDefinitions>
             <!-- Header-->
             <RowDefinition Height="auto"/>
             <!-- Form-->
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
             <!-- Footer-->
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         
         <!-- Header-->
-        <Grid Grid.Row = "0"
-              Background="{StaticResource HeaderBackgroundBrush}">
-            <TextBlock Text="Register device"
-                       FontSize="20"
-                       FontWeight="Bold"
-                       Height="30"
-                       Style="{StaticResource BaseHeaderTextStyle}"
-                       Foreground="{StaticResource HeaderTextBrush}"/>
-        </Grid>
-        
+        <TextBlock Text="Register device"
+                       Style="{StaticResource HeaderTextStyle}"
+                   Margin="0,0,0,20"
+                   Grid.Row="0"/>
+
         <!-- Form-->
-        <Grid Grid.Row="1" Margin="10,10,0,10">
+        <Grid Grid.Row="1" Margin="0,0,0,0">
             <Grid.RowDefinitions>
                 <!-- Type-->
                 <RowDefinition Height="auto"/>
@@ -42,74 +38,73 @@
             </Grid.RowDefinitions>
 
             <!-- Type-->
-            <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-                <TextBlock Text="Type" 
-                           Style="{StaticResource BaseHeaderTextStyle}"
-                           FontSize="12"/>
-                <ComboBox Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
-                         Width="375"
-                         Height="30"
-                         Margin="0,5,0,10"
-                         ItemsSource="{Binding DeviceTypeOptions}"
-                         SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}" />
+            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch">
+                <TextBlock Text="Device Type" 
+                           Style="{StaticResource BaseTextStyle}"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding DeviceTypeOptions}"
+                         SelectedItem="{Binding SelectedDeviceType, Mode=TwoWay}"
+                          Style="{StaticResource InputFieldComboStyle}"
+                          Margin="0,0,0,12"/>
             </StackPanel>
             
             <!-- OS-->
-            <StackPanel Grid.Row="1" HorizontalAlignment="Left">
-                <TextBlock Text="OS" 
-                           Style="{StaticResource BaseHeaderTextStyle}"
-                           FontSize="12"/>
-                <ComboBox Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
-                         Width="375"
-                         Height="30"
-                         Margin="0,5,0,10"
-                         ItemsSource="{Binding OSOptions}"
-                         SelectedItem="{Binding SelectedOS, Mode=TwoWay}"/>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Stretch">
+                <TextBlock Text="Operative System" 
+                           Style="{StaticResource BaseTextStyle}"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding OSOptions}"
+                         SelectedItem="{Binding SelectedOS, Mode=TwoWay}"
+                          Style="{StaticResource InputFieldComboStyle}"
+                          Margin="0,0,0,12"/>
 
             </StackPanel>
 
             <!-- Location-->
-            <StackPanel Grid.Row="2" HorizontalAlignment="Left">
+            <StackPanel Grid.Row="2" HorizontalAlignment="Stretch">
                 <TextBlock Text="Location (country)" 
-                            Style="{StaticResource BaseHeaderTextStyle}"
-                            FontSize="12"/>
-                <ComboBox Background="{StaticResource InputFieldBackgroundBrush}"
-                         BorderBrush="{StaticResource InputFieldBorderBrush}"
-                         Width="375"
-                         Height="30"
-                         Margin="0,5,0,10"
-                         ItemsSource="{Binding CountryOptions}"
-                         SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"/>
+                            Style="{StaticResource BaseTextStyle}"
+                            FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding CountryOptions}"
+                         SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"
+                          Style="{StaticResource InputFieldComboStyle}"
+                          Margin="0,0,0,12"/>
 
             </StackPanel>
 
             <!-- Dates-->
-            <Grid Grid.Row="3">
+            <Grid Grid.Row="3" Margin="0,0,0,24">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Registration date-->
-                <StackPanel Grid.Column="0" Margin="5,5,5,5">
+                <StackPanel Grid.Column="0">
                     <TextBlock Text="Registration date"
-                               Style="{StaticResource BaseHeaderTextStyle}"
-                               FontSize="12"
-                               Margin="0,0,0,5"/>
-                    <DatePicker SelectedDate="{Binding RegistrationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                               Style="{StaticResource BaseTextStyle}"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
+                    <DatePicker SelectedDate="{Binding RegistrationDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Height="33"
+                                Background="{StaticResource InputFieldBackgroundBrush}"
+                                BorderBrush="{StaticResource InputFieldBorderBrush}"/>
                 </StackPanel>
 
                 <!-- Expiry date-->
-                <StackPanel Grid.Column="1" Margin="5,5,5,5">
+                <StackPanel Grid.Column="1" >
                     <TextBlock Text="Expiry date"
-                               Style="{StaticResource BaseHeaderTextStyle}"
-                               FontSize="12"
-                               Margin="0,0,0,5"/>
-                    <DatePicker SelectedDate="{Binding ExpiryDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-                
+                               Style="{StaticResource BaseTextStyle}"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
+                    <DatePicker SelectedDate="{Binding ExpiryDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                Height="33"
+                                Background="{StaticResource InputFieldBackgroundBrush}"
+                                BorderBrush="{StaticResource InputFieldBorderBrush}"/>
+                </StackPanel>                
             </Grid>
             
             
@@ -130,20 +125,11 @@
 
                 <Button Content="Cancel"
                         Style="{StaticResource RejectButtonStyle}"
-                        Width="65"
-                        Height="25"
-                        BorderBrush="{StaticResource BorderBrush}"
-                        FontWeight="Bold"
-                        Margin="0,5,5,5"
+                        Margin="0,0,8,0"
                         Command="{Binding CancelCommand}"/>
 
                 <Button Content="Register"
                         Style="{StaticResource PrimaryButtonStyle}"
-                        Width="65"
-                        Height="25"
-                        BorderBrush="{StaticResource BorderBrush}"
-                        FontWeight="Bold"
-                        Margin="0,5,5,5"
                         Command="{Binding RegisterCommand}"/>
             </StackPanel>
         </Grid>

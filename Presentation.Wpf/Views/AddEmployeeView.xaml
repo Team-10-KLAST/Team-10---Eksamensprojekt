@@ -6,90 +6,131 @@
              xmlns:local="clr-namespace:Presentation.Wpf.Views"
              mc:Ignorable="d" 
              Background="{StaticResource PageBackgroundBrush}"
-             d:DesignHeight="500" d:DesignWidth="400">
-   
-        <Grid Margin="16" Background="{StaticResource PanelBackgroundBrush}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+             d:DesignHeight="500" d:DesignWidth="450">
 
+    <Grid Margin="20" Background="White">
+        <Grid.RowDefinitions>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Name Row -->
+            <RowDefinition Height="Auto"/>
+            <!-- Email Row -->
+            <RowDefinition Height="Auto"/>
+            <!-- Dept & Role Row -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Text="Add employee"
+                   Style="{StaticResource HeaderTextStyle}"
+                   Margin="0,0,0,20"
+                   Grid.Row="0"/>
+
+        <!-- FirstName & LastName -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-        <!-- Header -->
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
-                       FontSize="20"
-                       Style="{StaticResource BaseHeaderTextStyle}" Margin="0,0,0,16" ><Run Language="da-dk" Text="Add"/><Run Text=" Employee"/></TextBlock>
-        <!-- FirstName & LastName -->
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="First Name*" Margin="0,0,0,16" 
-                   Style="{StaticResource BaseTextStyle}" 
-                   FontWeight="SemiBold"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="Last Name*" Margin="0,0,0,16"
-                       Style="{StaticResource BaseTextStyle}" 
-                       FontWeight="SemiBold"/>
-        <!-- FirstName & LastName TextBoxes-->
-        <TextBox Grid.Row="2" Grid.Column="0"  Height="30" 
-                     Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" 
-                     Background="{StaticResource InputFieldBackgroundBrush}"
-                     BorderBrush="{StaticResource InputFieldBorderBrush}"
-                     Margin="0,0,0,16"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Height="30" 
-                     Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" 
-                     Background="{StaticResource InputFieldBackgroundBrush}"
-                     BorderBrush="{StaticResource InputFieldBorderBrush}"
-                     Margin="0,0,0,16"/>
-        <!-- Email & EmailErrorMsg -->
-        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
-            <TextBlock Text="Email*" Margin="0,0,0,16" 
-                       Style="{StaticResource BaseTextStyle}"                    
-                       FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding EmailErrorMsg}" Foreground="Red"/>
-            </StackPanel>
-        <!-- Email TextBox -->
-        <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Height="30" 
-                     Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" 
-                     Background="{StaticResource InputFieldBackgroundBrush}"
-                     BorderBrush="{StaticResource InputFieldBorderBrush}"
-                     Margin="0,0,0,16"/>
-        <!-- Department & Role -->
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Department" Margin="0,0,0,16"
-                       Style="{StaticResource BaseTextStyle}" 
-                       FontWeight="SemiBold"/>
-            <ComboBox Grid.Row="6" Grid.Column="0" Style="{StaticResource InputFieldComboStyle}"
-                      ItemsSource="{Binding Departments}"
-                      SelectedItem="{Binding SelectedDepartment}"
-                      DisplayMemberPath="Name"
-                      Margin="0,0,0,16"/>
 
-            <TextBlock Grid.Row="5" Grid.Column="1" Text="Role" Margin="0,0,0,16"
-                       Style="{StaticResource BaseTextStyle}" 
-                       FontWeight="SemiBold"/>
-            <ComboBox Grid.Row="6" Grid.Column="1" Style="{StaticResource InputFieldComboStyle}"
-                      ItemsSource="{Binding Roles}"
-                      SelectedItem="{Binding SelectedRole}" 
-                      DisplayMemberPath="Name"
-                      Margin="0,0,0,16"/>
-        <!-- Buttons Cancel & Save -->
-        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" 
-                        Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Cancel"  Command="{Binding CancelCommand}" 
-                        Margin="0,0,8,0" Padding="12,6" FontWeight="Bold"
-                        BorderBrush="{StaticResource BorderBrush}"
-                        BorderThickness="1" />
-                <Button Content="Add Employee"
-                        Command="{Binding SaveCommand}"
-                        Margin="0,0,8,0" Padding="12,6" FontWeight="Bold"
-                        BorderBrush="{StaticResource BorderBrush}"
-                        BorderThickness="1" Click="Button_Click" />
+            <!-- First Name -->
+            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                <TextBlock Text="First Name*"
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" 
+                         Height="33"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         VerticalContentAlignment="Center"
+                         Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <!-- Last Name -->
+            <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                <TextBlock Text="Last Name*"
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" 
+                         Height="33"
+                         Background="{StaticResource InputFieldBackgroundBrush}"
+                         BorderBrush="{StaticResource InputFieldBorderBrush}"
+                         VerticalContentAlignment="Center"
+                         Margin="0,0,0,0"/>
             </StackPanel>
         </Grid>
-    
+
+        <!-- Email Section -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Email*"
+                           Style="{StaticResource BaseTextStyle}"                       
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBlock Text="{Binding EmailErrorMsg}" 
+                           Foreground="Red" 
+                           FontSize="11" 
+                           Margin="10,0,0,0" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" 
+                     Height="33"
+                     Background="{StaticResource InputFieldBackgroundBrush}"
+                     BorderBrush="{StaticResource InputFieldBorderBrush}"
+                     VerticalContentAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Department & Role Section -->
+        <Grid Grid.Row="3" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Department -->
+            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                <TextBlock Text="Department"
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding Departments}"
+                          SelectedItem="{Binding SelectedDepartment}"
+                          DisplayMemberPath="Name"
+                          Height="33"
+                          Style="{StaticResource InputFieldComboStyle}"/>
+            </StackPanel>
+
+            <!-- Role -->
+            <StackPanel Grid.Column="1" Margin="16,0,0,0">
+                <TextBlock Text="Role"
+                           Style="{StaticResource BaseTextStyle}" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding Roles}"
+                          SelectedItem="{Binding SelectedRole}" 
+                          DisplayMemberPath="Name"
+                          Height="33"
+                          Style="{StaticResource InputFieldComboStyle}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Footer Buttons -->
+        <StackPanel Grid.Row="4" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right">
+
+            <Button Content="Cancel" 
+                    Command="{Binding CancelCommand}" 
+                    Style="{StaticResource RejectButtonStyle}"
+                    Margin="0,0,8,0"/>
+
+            <Button Content="Add Employee"
+                    Command="{Binding SaveCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}"/>
+        </StackPanel>
+    </Grid>
 </UserControl>
