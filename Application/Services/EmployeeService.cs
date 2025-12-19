@@ -144,22 +144,26 @@ namespace Application.Services
                    .ToList();
         }
 
-        // Helper method to validate email format
-        private void ValidateEmailFormat(string email)
+        // Helper method to validate email format - returns true if valid, false otherwise
+        private bool IsValidEmailFormat(string email)
         {
             try
             {
                 var addr = new MailAddress(email);
+                return true;
             }
             catch (FormatException)
             {
-                throw new ArgumentException("Invalid email");
+                return false;
             }
         }
 
         public Employee? GetEmployeeByEmail(string email)
         {
-            ValidateEmailFormat(email);
+            if (!IsValidEmailFormat(email))
+            {
+                throw new ArgumentException("Invalid email");
+            }
             var employees = GetAllEmployees();
             return employees.FirstOrDefault(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
@@ -170,14 +174,8 @@ namespace Application.Services
             if (string.IsNullOrWhiteSpace(email))
                 return "Approver email is required.";
 
-            try
-            {
-                ValidateEmailFormat(email);
-            }
-            catch
-            {
+            if (!IsValidEmailFormat(email))
                 return "Invalid email format.";
-            }
 
             var employee = GetEmployeeByEmail(email);
             if (employee == null)
