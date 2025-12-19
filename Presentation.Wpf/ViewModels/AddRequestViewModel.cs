@@ -20,9 +20,6 @@ namespace Presentation.Wpf.ViewModels
         private readonly IEmployeeService _employeeService;
         private readonly Action _navigateBack;
 
-        //Collection for all employee emails, populated when VM constructor is run
-        private List<string> AllowedEmails;
-
         //form fields
         private string _email = string.Empty;
         public string Email
@@ -32,7 +29,7 @@ namespace Presentation.Wpf.ViewModels
             {
                 if (SetProperty(ref _email, value))
                 {
-                    ValidateEmail(value);
+                    EmailErrorMsg = _employeeService.ValidateEmployeeEmail(value);
                     (SubmitCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
@@ -138,7 +135,6 @@ namespace Presentation.Wpf.ViewModels
             OSOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllOSOptions());
             DeviceTypeOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllDeviceTypeOptions());
             CountryOptions = new ObservableCollection<string>(_deviceDescriptionService.GetAllCountryOptions());
-            AllowedEmails = new List<string>(_employeeService.GetAllEmployeeEmails());
 
             SelectedOS = OSOptions.FirstOrDefault();
             SelectedDeviceType = DeviceTypeOptions.FirstOrDefault();
@@ -156,52 +152,22 @@ namespace Presentation.Wpf.ViewModels
             Cancel();
         }
 
-       
+
 
         //Comment must not be empty, email must exists in DB.
         private bool CanSubmitRequest()
         {
-            if (string.IsNullOrEmpty(Email) ||
-                string.IsNullOrEmpty(RequestComment))
-            {
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(RequestComment))
                 return false;
-            }
+
             if (NeededByDate.Date < DateTime.Today.Date)
             {
                 DateErrorMsg = "Date must not be in the past.";
                 return false;
             }
-            return ValidateEmail (Email);
+
+            return string.IsNullOrEmpty(EmailErrorMsg);
         }
-
-        
-        //Validate if email exists in DB
-        private bool ValidateEmail(string email)
-        {
-            EmailErrorMsg = string.Empty;
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                return false;
-            }
-
-            try
-            {
-                var mailAddress = new MailAddress(email);                
-            }
-            catch (FormatException)
-            {
-                EmailErrorMsg = "Invalid email format.";
-                return false;
-            }
-
-            if ( !AllowedEmails.Contains(email) )
-            {
-                EmailErrorMsg = "Email doesn't exist in Database.";
-                return false;
-            }
-            return true;
-        }
-        
 
         private void Cancel()
         {
