@@ -48,6 +48,7 @@ namespace Application.Services
             return _deviceRepository.GetByID(deviceID);
         }
 
+        //Display a device with additional information like loan, borrower, neededbydate, 
         public DeviceDisplayModel? GetDeviceDisplayByID(int deviceID)
         {
             var device = GetDeviceByID(deviceID);
@@ -56,14 +57,12 @@ namespace Application.Services
 
             var description = _deviceDescriptionService.GetByID(device.DeviceDescriptionID)
                               ?? throw new InvalidOperationException("Could not find description for device.");
-
-            // Find loan for this device
+                        
             var loan = _loanRepository.GetAll()
                 .Where(loan => loan.DeviceID == device.DeviceID)
                 .OrderByDescending(l => l.LoanID)
                 .FirstOrDefault();
 
-            // Find borrower
             var employee = loan is null
                 ? null
                 : _employeeRepository.GetByID(loan.BorrowerID);
@@ -72,7 +71,6 @@ namespace Application.Services
                 ? string.Empty
                 : $"{employee.FirstName} {employee.LastName}";
 
-            // Find original request to get NeededByDate
             Request? request = (loan?.RequestID is int requestId)
                 ? _requestRepository.GetByID(requestId)
                 : null;
@@ -147,28 +145,23 @@ namespace Application.Services
             _deviceRepository.Update(device);
         }
 
+        //UpdateDevice with information from DeviceDisplayModel
         public void UpdateDevice(DeviceDisplayModel updatedDevice)
         {
             if (updatedDevice is null)
                 throw new ArgumentNullException(nameof(updatedDevice));
 
-            // Load the real Device from the repository
             var device = _deviceRepository.GetByID(updatedDevice.DeviceID);
             if (device is null)
                 throw new KeyNotFoundException($"Device with ID {updatedDevice.DeviceID} not found.");
 
-            // Map mutable fields from display model back to entity
-
-            // Status
             if (!Enum.TryParse<DeviceStatus>(updatedDevice.Status, out var status))
                 throw new ArgumentException("Invalid status value on updatedDevice.", nameof(updatedDevice));
 
             device.Status = status;
 
-            // Wiped flag
             device.IsWiped = updatedDevice.Wiped;
 
-            // Dates 
             device.PurchaseDate = updatedDevice.RegistrationDate.HasValue
                 ? DateOnly.FromDateTime(updatedDevice.RegistrationDate.Value)
                 : null;
@@ -177,22 +170,10 @@ namespace Application.Services
                 ? DateOnly.FromDateTime(updatedDevice.ExpirationDate.Value)
                 : null;
 
-            // Reuse existing validation and persistence logic
             UpdateDevice(device);
         }
 
-
-        // Deletes a device by its DeviceID
-        public void DeleteDevice(int deviceID)
-        {
-            if (deviceID <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(deviceID), "DeviceID must be greater than zero.");
-            }
-
-            _deviceRepository.Delete(deviceID);
-        }
-
+        //Create a virtual device for new request
         public int CreateVirtualDeviceID(string DeviceType, string OS, string country)
         {
             Device device = new Device
@@ -204,23 +185,7 @@ namespace Application.Services
             AddDevice(device);
             return device.DeviceID;
         }
-
-        // Gets all devices by type that are currently in stock
-        public IEnumerable<Device> GetAvailableDevicesByType(string deviceType)
-        {
-            if (string.IsNullOrWhiteSpace(deviceType))
-                throw new ArgumentException("Device type cannot be empty.", nameof(deviceType));
-
-            return GetAllDevices()
-                .Where(device => device.Status == DeviceStatus.INSTOCK)
-                .Where(device =>
-                {
-                    var deviceDescription = _deviceDescriptionService.GetByID(device.DeviceDescriptionID);
-                    return deviceDescription != null &&
-                           deviceDescription.DeviceType.Equals(deviceType, StringComparison.OrdinalIgnoreCase);
-                })
-                .ToList();
-        }
+        
 
         // Gets all available device display models, optionally filtered by device type
         public IEnumerable<DeviceDisplayModel> GetAvailableDeviceDisplayModels(string? deviceType)

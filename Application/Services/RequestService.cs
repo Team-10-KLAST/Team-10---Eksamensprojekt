@@ -42,12 +42,7 @@ public class RequestService : IRequestService
         _loanService = loanService;
         _employeeService = employeeService;
     }
-
-    // Retrieves a request by its ID
-    public Request? GetRequestByID(int requestID)
-    {
-        return _requestRepository.GetByID(requestID);
-    }
+        
 
     // Retrieves all requests
     public IEnumerable<Request> GetAllRequests()

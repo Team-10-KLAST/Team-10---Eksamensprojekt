@@ -86,16 +86,7 @@ namespace Application.Services
         {
             return _employeeRepository.GetAll();
         }
-
-        //Gets employee by unique ID
-        public Employee GetEmployeeByID(int id)
-        {
-            if (id <= 0)
-            {
-                throw new ArgumentException("Invalid employee ID.");
-            }
-            return _employeeRepository.GetByID(id);
-        }
+                
 
         // Gets all departments and roles
         public IEnumerable<Department> GetAllDepartments() => _departmentRepository.GetAll();
@@ -130,13 +121,6 @@ namespace Application.Services
             }
 
             return employeeDisplayModels;
-        }
-
-        public IEnumerable<Employee> GetTerminatedEmployees()
-        {
-            return _employeeRepository
-                .GetAll()
-                .Where(e => e.TerminationDate != null);
         }
 
         public IEnumerable<string> GetAllEmployeeEmails()

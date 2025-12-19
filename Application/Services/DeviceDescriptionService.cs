@@ -22,7 +22,7 @@ namespace Application.Services
             _deviceDescriptions = _deviceDescriptionRepository.GetAll();
         }
 
-        //Extract the unique values of OS
+        //Extract the unique values of OS / Types / Countries
         public IEnumerable<string> GetAllOSOptions()
         {
             return _deviceDescriptions.Select(d => d.OperatingSystem).Distinct();
@@ -42,6 +42,7 @@ namespace Application.Services
             return _deviceDescriptions.Select(d => d.Location).Distinct();
         }
 
+        //Get DeviceDescriptionID from input parameter
         public int GetDeviceDescriptionID(string DeviceType, string OS, string Country)
         {
             DeviceDescription matchingDeviceDescription =
